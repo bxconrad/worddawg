@@ -24,7 +24,7 @@ namespace EasyUI.Helpers {
       [Header ("Toast Fade In/Out Duration :")]
       [Range (.1f, .8f)]
       [SerializeField] private float fadeDuration = .3f ;
-
+//hello
 
       private int maxTextLength = 300 ;
 
