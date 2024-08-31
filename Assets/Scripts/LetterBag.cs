@@ -11,13 +11,13 @@ public class LetterBag : MonoBehaviour {
     [SerializeField] private BetterRack betterRack;
     private readonly int consMax = 5;
     private readonly int consMin = 3;
+    private readonly List<string> letters = new();
     private Random aRandom;
-    private List<string> letters;
 
     private int numLetters;
+    private int numLettersDealt;
     private int numLettersInRack;
     private int? randomSeed;
-    private int startingNumberOfLetters;
 
     public void End() {
         SetNumLetters(0);
@@ -25,18 +25,21 @@ public class LetterBag : MonoBehaviour {
     }
 
     public void Initialize() {
-        letters = new List<string>();
+        numLettersDealt = 0;
+        AddLetters();
+    }
+
+    private void AddLetters() {
+        print("LetterBag.AddLetters *start* #letters  " + letters.Count + "\n");
         foreach (var letterInfo in LetterInfo.allLetterInfos) {
-            for (var i = 0; i < letterInfo.getDistribution() * 5; i++) {
+            for (var i = 0; i < letterInfo.getDistribution(); i++) {
                 letters.Add(letterInfo.getTheLetter());
             }
         }
-        startingNumberOfLetters = letters.Count;
         Shuffle(letters);
 
         //letters.RemoveRange(GetNumLetters(), letters.Count - GetNumLetters());
-        print("LetterBag.Initialize #letters  " + letters.Count + " prefs" + MyPrefs.GetNumLetters() + " firstCount " +
-              startingNumberOfLetters + "\n");
+        print("LetterBag.AddLetters #letters  " + letters.Count + "\n");
     }
 
     private void Shuffle<T>(IList<T> list) {
@@ -51,7 +54,13 @@ public class LetterBag : MonoBehaviour {
 
 
     private string Deal() {
+        // print("LetterBag.Deal timed? " + gameManager.IsTimed() + " left " + letters.Count() + " lt " +
+        //       (letters.Count() <= MyPrefs.NUM_RACK_LETTERS) + "\n");
+        if (gameManager.IsTimed() && letters.Count() < MyPrefs.NUM_RACK_LETTERS) {
+            AddLetters();
+        }
         if (IsDealable()) {
+            numLettersDealt++;
             var letter = letters[0];
             letters.RemoveAt(0);
             // print("LetterBag.Deal return" + letter + " next: " + letters[0] + "\n");
@@ -67,7 +76,7 @@ public class LetterBag : MonoBehaviour {
         for (var i = 0; i < numDeal; i++) {
             s += Deal();
         }
-        print("LetterBag.Deal #lettersUsed " + GetNumLettersUsed() + "\n");
+        print("LetterBag.Deal #numLettersDealt " + numLettersDealt + "\n");
         return s;
     }
 
@@ -207,8 +216,7 @@ public class LetterBag : MonoBehaviour {
         letters[lettersIndex] = dealLetter;
         sb[sbIndex] = aLetter.ToCharArray()[0];
         print("LetterBag.SwitchLetters replace  " + dealLetter + " with " + aLetter + " lettersIndex " +
-              lettersIndex +
-              "\n");
+              lettersIndex + "\n");
     }
 
     private bool IsAllConsonant(string compareString) {
@@ -233,9 +241,10 @@ public class LetterBag : MonoBehaviour {
     // 50 letters dealt, 7 in rack. 500-450-7 = 43 good
 
     // This factors in letters in rack
-    public int GetNumLettersUsed() {
+    private int GetNumLettersUsed() {
         //print("LetterBag.GetNumLettersUsed numLettersInRack " + numLettersInRack + "\n");
-        return startingNumberOfLetters - letters.Count - numLettersInRack;
+        //return startingNumberOfLetters - letters.Count - numLettersInRack;
+        return numLettersDealt - numLettersInRack;
     }
 
     // this includes letters in rack
@@ -244,7 +253,7 @@ public class LetterBag : MonoBehaviour {
     }
 
     private int GetNumLetters() {
-        return numLetters == 0 ? 300 : numLetters;
+        return numLetters == 0 ? 99999 : numLetters;
     }
 
     public void SetNumLetters(int value) {

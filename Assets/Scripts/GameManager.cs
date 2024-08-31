@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour {
         print("GameManager.NewTimedGame \n");
         countdownTimer.isTimerEnabled = true;
         countdownTimer.SetCountdown(4);
-        letterBag.SetNumLetters(600);
+        letterBag.SetNumLetters(0);
         gameMode = Stats.PREFS_ST_MODE_TIMED_4;
         NewGame();
     }
@@ -79,7 +79,12 @@ public class GameManager : MonoBehaviour {
         gameObject.SetActive(true);
         countdownTimer.isTimerEnabled = MyPrefs.IsTimer();
         countdownTimer.SetCountdown(MyPrefs.GetTimerDuration());
-        letterBag.SetNumLetters(MyPrefs.GetNumLetters());
+        if (!MyPrefs.IsTimer()) {
+            letterBag.SetNumLetters(MyPrefs.GetNumLetters());
+        }
+        else {
+            letterBag.SetNumLetters(0);
+        }
         gameMode = Stats.PREFS_ST_MODE_CUSTOM;
 
         NewGame();
@@ -88,7 +93,7 @@ public class GameManager : MonoBehaviour {
     public void RepeatGame() {
         print("GameManager.RepeatGame \n");
         if (Stats.PREFS_ST_MODE_CUSTOM.Equals(gameMode)) {
-            NewCustomGamePrefs();
+            NewCustomGamePlay();
         }
         else if (Stats.PREFS_ST_MODE_GOTD.Equals(gameMode)) {
             NewGameOfTheDay();
@@ -132,5 +137,9 @@ public class GameManager : MonoBehaviour {
     public void ExitApplication() {
         Debug.Log("GameManager.ExitApplication");
         Application.Quit();
+    }
+
+    public bool IsTimed() {
+        return true.Equals(countdownTimer.isTimerEnabled);
     }
 }
