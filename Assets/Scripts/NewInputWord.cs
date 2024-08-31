@@ -16,7 +16,7 @@ public class NewInputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, I
 
 
     public void OnDrag(PointerEventData eventData) {
-        print("NewInputWord.OnDrag " + eventData.position.x + "\n");
+        // print("NewInputWord.OnDrag " + eventData.position.x + "\n");
         if (isFirstDrag) {
             isFirstDrag = false;
             firstPos = eventData.position.x;
@@ -45,13 +45,12 @@ public class NewInputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, I
         if (eventData.clickCount == 2) {
             Debug.Log("double click");
             updateBoard.SubmitInputWordButton();
-            // CameraShakeManager.instance.CameraShake(impulseSource);
-        }
+         }
     }
 
-
+    //bcdo, extra call to this?
     public void Initialize() {
-        print("NewInputWord.InitializeTiles tiles " + tiles.Length + "\n");
+        print("NewInputWord.Initialize tiles " + tiles.Length + "\n");
 
         for (var i = 0; i < tiles.Length; i++) {
             var tile = tiles[i];
