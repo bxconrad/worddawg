@@ -11,7 +11,7 @@ public class InputWordTile : BaseTile {
     protected new void Awake() {
         AwakeMe();
         newInputWord = GetComponentInParent<NewInputWord>();
-        print("InputWordTile.Awake {" + newInputWord + "} \n");
+        // print("InputWordTile.Awake {" + newInputWord + "} \n");
     }
 
     public override void OnButtonClick(string buttonString) {

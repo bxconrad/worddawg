@@ -13,7 +13,7 @@ public abstract class BaseTile : MonoBehaviour {
     public BTile originTile { get; set; }
 
     protected void Awake() {
-        print("BaseTile.Awake\n");
+        //print("BaseTile.Awake\n");
         AwakeMe();
     }
 

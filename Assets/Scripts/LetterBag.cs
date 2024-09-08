@@ -26,6 +26,7 @@ public class LetterBag : MonoBehaviour {
 
     public void Initialize() {
         numLettersDealt = 0;
+        letters.Clear();
         AddLetters();
     }
 
@@ -38,13 +39,13 @@ public class LetterBag : MonoBehaviour {
         }
         Shuffle(letters);
 
-        //letters.RemoveRange(GetNumLetters(), letters.Count - GetNumLetters());
         print("LetterBag.AddLetters #letters  " + letters.Count + "\n");
     }
 
     private void Shuffle<T>(IList<T> list) {
         var n = list.Count;
         var aRandom = GetRandomSeed() == null ? new Random() : new Random((int)GetRandomSeed());
+        print("LetterBag.Shuffle randomSeed  " + GetRandomSeed() + " aRandom " + aRandom + "\n");
         while (n > 1) {
             n--;
             var k = aRandom.Next(n + 1);
@@ -76,7 +77,7 @@ public class LetterBag : MonoBehaviour {
         for (var i = 0; i < numDeal; i++) {
             s += Deal();
         }
-        print("LetterBag.Deal #numLettersDealt " + numLettersDealt + "\n");
+        print("LetterBag.Deal #numLettersDealt " + numLettersDealt + " count " + letters.Count + "\n");
         return s;
     }
 
@@ -111,7 +112,6 @@ public class LetterBag : MonoBehaviour {
                 return c.Key.ToString().Trim();
             }
         }
-
         print("LetterBag.FindTriplicateLetter no triplicates found \n");
         return "";
     }
@@ -240,10 +240,9 @@ public class LetterBag : MonoBehaviour {
     // 30 letters dealt, 7 in rack. 500-470-7 = 23 ... good
     // 50 letters dealt, 7 in rack. 500-450-7 = 43 good
 
-    // This factors in letters in rack
+    // This subtracts #letters in rack as they have not been used
     private int GetNumLettersUsed() {
         //print("LetterBag.GetNumLettersUsed numLettersInRack " + numLettersInRack + "\n");
-        //return startingNumberOfLetters - letters.Count - numLettersInRack;
         return numLettersDealt - numLettersInRack;
     }
 
@@ -252,6 +251,7 @@ public class LetterBag : MonoBehaviour {
         return GetNumLetters() - GetNumLettersUsed();
     }
 
+    // if it's timed game numLetters will be 0. would be better to ask GameManager if it is a timedGame or not.
     private int GetNumLetters() {
         return numLetters == 0 ? 99999 : numLetters;
     }
