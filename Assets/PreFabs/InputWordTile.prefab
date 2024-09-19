@@ -304,3 +304,7 @@ MonoBehaviour:
   state:
     fillColor: {r: 0, g: 0, b: 0, a: 0}
     outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  startX: 0
+  shakeWidth: 1
+  goingRight: 1
+  speed: 20

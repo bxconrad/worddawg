@@ -90,7 +90,7 @@ public class Stats : MonoBehaviour {
     }
 
     private void UpdateRow(string label, string var1, string var2, string bestMarker) {
-        print("Stats.UpdateRow" + label + var1 + var2 + " \n");
+        print("Stats.UpdateRow" + label + " " + var1 + " " + var2 + " \n");
         var statRow = transform.GetChild(rowNum);
         var textUpdaters = statRow.GetComponentsInChildren<TextUpdater>();
         textUpdaters[0].SetMyText(label);

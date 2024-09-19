@@ -26,7 +26,7 @@ public class ShakeTransform : MonoBehaviour {
             numShakes++;
             var deltaTime = Time.deltaTime;
             elapsedTime += deltaTime;
-            print("ShakeTransform.Shake elapsedTime " + elapsedTime + " deltaTime " + deltaTime + "\n");
+            // print("ShakeTransform.Shake elapsedTime " + elapsedTime + " deltaTime " + deltaTime + "\n");
             var _randomPos = _startPos + Random.insideUnitSphere * distance;
             transformToShake.position = _randomPos;
             if (delay > 0f) {

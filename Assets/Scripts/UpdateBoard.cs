@@ -4,30 +4,96 @@ using UnityEngine.UI;
 
 public class UpdateBoard : MonoBehaviour {
     [Header("UI")] [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject endGameButton;
     [SerializeField] private GameObject updateButtons;
+    [SerializeField] private GameObject leftPanel;
+    [SerializeField] private GameObject rightPanel;
+    [SerializeField] private GameObject exitButton;
     [SerializeField] private ValidatorManager validatorManager;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private LetterBag letterBag;
-    [SerializeField] private WordGrid wordGrid;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private NewInputWord newInputWord;
     [SerializeField] private ShakeTransform shakeTransform;
     private BetterRack betterRack;
-
+    private bool isPortrait = true;
+    private bool isRotating;
+    private ReplaceRackButton replaceRackButton;
     private SelectedWord selectedWord;
+    private WordGrid wordGrid;
 
     public void Start() {
         print("UpdateBoard.Start\n");
         AwakeIt();
     }
 
+    private void Update() {
+        if (Screen.height >= Screen.width && !isPortrait) {
+            DisplayPortrait();
+        }
+        else if (Screen.height < Screen.width && isPortrait) {
+            DisplayLandscape();
+        }
+    }
+
+
     // Problems with Awake event on Android
     public void AwakeIt() {
         selectedWord = GetComponentInChildren<SelectedWord>();
         betterRack = GetComponentInChildren<BetterRack>();
+        wordGrid = GetComponentInChildren<WordGrid>();
+        replaceRackButton = GetComponentInChildren<ReplaceRackButton>();
         print("UpdateBoard.AwakeIt\n");
     }
+
+    public void RotateUpdatePanel() {
+        isRotating = !isRotating;
+        if (isRotating) {
+            DisplayLandscape();
+        }
+        else {
+            DisplayPortrait();
+        }
+    }
+
+    private void DisplayPortrait() {
+        print("UpdateBoard.DisplayPortrait \n");
+        isPortrait = true;
+        GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        // offset max is Right*-1/Top 
+        GetComponent<RectTransform>().offsetMax = new Vector2(0, -275);
+
+        // offsetMin is Left/Bottom 
+        scrollRect.GetComponent<RectTransform>().offsetMin = new Vector2(0, 120);
+        scrollRect.GetComponent<RectTransform>().offsetMax = new Vector2(0, -975);
+        scrollRect.transform.SetParent(leftPanel.transform, false);
+
+        rightPanel.SetActive(false);
+        exitButton.transform.SetParent(transform, false);
+    }
+
+    private void DisplayLandscape() {
+        print("UpdateBoard.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
+        isPortrait = false;
+
+        // offsetMin is Left/Bottom 
+        // offset max is Right*-1/Top (right is negative in editor so positive here)
+        // To set Bottom same as editor it is (Bottom- offsetMax.b)
+        // so if you want bottom 940 and offsetMax.b = -700 set offsetMin.b t0 -1640
+
+        // Shrink left panel
+        GetComponent<RectTransform>().offsetMax = new Vector2(-900, -275);
+        // Set up right panel
+        rightPanel.SetActive(true);
+        rightPanel.GetComponent<RectTransform>().offsetMin = new Vector2(1100, 0);
+        rightPanel.GetComponent<RectTransform>().offsetMax = new Vector2(900, -150);
+        // set up wordList in right panel
+        scrollRect.GetComponent<RectTransform>().offsetMin = new Vector2(0, 120);
+        scrollRect.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+        // reparent wordList to right panel
+        scrollRect.transform.SetParent(rightPanel.transform, false);
+        exitButton.transform.SetParent(rightPanel.transform, false);
+    }
+
 
     public void NewGame() {
         print("UpdateBoard.NewGame \n");
@@ -37,7 +103,7 @@ public class UpdateBoard : MonoBehaviour {
         letterBag.Initialize();
         var rackLetters = letterBag.DealNewRack();
         betterRack.InitializeTiles(rackLetters);
-        endGameButton.SetActive(false);
+        replaceRackButton.Initialize();
         updateButtons.SetActive(MyPrefs.IsShowButtons());
         Toast.Show(
             "To start the game, create a word from the letters in the rack. After that, you can continue to create new words.\n\nBUT for more fun and points, modify the words you created.",
@@ -84,26 +150,6 @@ public class UpdateBoard : MonoBehaviour {
         scoreManager.UpdateScoreForReplaceRack();
     }
 
-    private bool HandleIfEndGame(string rackLetters) {
-        if (rackLetters.Trim().Length == 0) {
-            print("UpdateBoard.IsEndGame end game. wordLength " + rackLetters.Trim().Length + "\n");
-            gameManager.EndGame();
-            return true;
-        }
-        return false;
-    }
-
-    private void HandleNearEndGame() {
-        if (IsNearEndGame()) {
-            print("UpdateBoard.IsNearEndGame end game.  " + letterBag.GetNumLettersLeft() + "\n");
-            updateButtons.SetActive(false);
-            endGameButton.SetActive(true);
-        }
-    }
-
-    public bool IsNearEndGame() {
-        return letterBag.GetNumLettersLeft() <= MyPrefs.NUM_RACK_LETTERS;
-    }
 
     public void SubmitInputWordButton() {
         Toast.Dismiss();
@@ -134,6 +180,20 @@ public class UpdateBoard : MonoBehaviour {
         }
     }
 
+
+    public void ClearInputWordButton() {
+        print("UpdateBoard.ClearInputWordButton\n");
+        newInputWord.Initialize();
+        selectedWord.ResetStateUnselected();
+        betterRack.ResetStateUnselected();
+    }
+
+    public void CancelUpdateButton() {
+        print("UpdateBoard.CancelInputWordButton\n");
+        ClearInputWordButton();
+        RemoveSelectedWord();
+    }
+
     private void MessageToModify(string word, string originalWord) {
         if (scoreManager.numWords < 3 && scoreManager.numChangedWords == 0) {
             var msg = "See if you can modify " + word + ". Select " + word +
@@ -148,17 +208,26 @@ public class UpdateBoard : MonoBehaviour {
         }
     }
 
-    public void ClearInputWordButton() {
-        print("UpdateBoard.ClearInputWordButton\n");
-        newInputWord.Initialize();
-        selectedWord.ResetStateUnselected();
-        betterRack.ResetStateUnselected();
+    private bool HandleIfEndGame(string rackLetters) {
+        if (rackLetters.Trim().Length == 0) {
+            print("UpdateBoard.IsEndGame end game. wordLength " + rackLetters.Trim().Length + "\n");
+            gameManager.EndGame();
+            return true;
+        }
+        return false;
     }
 
-    public void CancelUpdateButton() {
-        print("UpdateBoard.CancelInputWordButton\n");
-        ClearInputWordButton();
-        RemoveSelectedWord();
+    private void HandleNearEndGame() {
+        if (IsNearEndGame()) {
+            print("UpdateBoard.IsNearEndGame end game.  " + letterBag.GetNumLettersLeft() + "\n");
+            //updateButtons.SetActive(false);
+            replaceRackButton.ChangeForEndGame();
+//            endGameButton.SetActive(true);
+        }
+    }
+
+    public bool IsNearEndGame() {
+        return letterBag.GetNumLettersLeft() <= MyPrefs.NUM_RACK_LETTERS;
     }
 
 //scoreManager.CalculateWordScore("", "HEARTEN");

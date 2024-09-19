@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class WordGrid : MonoBehaviour {
     [SerializeField] private GameObject displayButtonPrefab;
+    [SerializeField] private UpdateBoard updateBoard;
 
     public void Initialize() {
         print("WordGrid.Initialize beforeDestroy \n");
@@ -34,7 +35,7 @@ public class WordGrid : MonoBehaviour {
         displayButton.SetWord(newWord);
         newDisplayButton.transform.SetAsFirstSibling();
         newDisplayButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnButtonClick(newWord));
-        print("WordGrid.CreateDisplayButton " + newWord + "\n");
+        print("WordGrid.InstantiateDisplayButton " + newWord + "\n");
     }
 
     // An existing word was updated.
@@ -55,15 +56,15 @@ public class WordGrid : MonoBehaviour {
                     .AddListener(() => OnButtonClick(newWord));
                 // Display the modified word at the top of the list of words
                 displayButton.transform.SetAsFirstSibling();
-                print("DisplayBoard. UpdateExistingWord " + newWord + "\n");
+                print("WordGrid. UpdateExistingWord " + newWord + "\n");
                 return;
             }
-            print("DisplayBoard.UpdateExistingWord " + newWord + "\n");
+            print("WordGrid.UpdateExistingWord " + newWord + "\n");
         }
     }
 
     public void OnButtonClick(string buttonName) {
         print("WordGrid.OnButtonClick  name " + buttonName + "\n");
-        gameObject.GetComponentInParent<UpdateBoard>().LoadSelectedWord(buttonName);
+        updateBoard.LoadSelectedWord(buttonName);
     }
 }
