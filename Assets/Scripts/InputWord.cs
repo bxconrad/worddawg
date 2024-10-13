@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class NewInputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler {
+public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler {
     private float firstPos;
     private bool isFirstDrag = true;
     private UpdateBoard updateBoard;
@@ -45,7 +45,7 @@ public class NewInputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, I
         if (eventData.clickCount == 2) {
             Debug.Log("double click");
             updateBoard.SubmitInputWordButton();
-         }
+        }
     }
 
     //bcdo, extra call to this?

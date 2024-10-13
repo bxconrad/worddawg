@@ -1,22 +1,22 @@
 using EasyUI.Toast;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UpdateBoard : MonoBehaviour {
+    public static ToastPosition toastPosition = ToastPosition.BottomCenter;
     [Header("UI")] [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject updateButtons;
-    [SerializeField] private GameObject leftPanel;
-    [SerializeField] private GameObject rightPanel;
-    [SerializeField] private GameObject exitButton;
     [SerializeField] private ValidatorManager validatorManager;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private LetterBag letterBag;
     [SerializeField] private ScrollRect scrollRect;
-    [SerializeField] private NewInputWord newInputWord;
+
+    [FormerlySerializedAs("newInputWord")] [SerializeField]
+    private InputWord inputWord;
+
     [SerializeField] private ShakeTransform shakeTransform;
     private BetterRack betterRack;
-    private bool isPortrait = true;
-    private bool isRotating;
     private ReplaceRackButton replaceRackButton;
     private SelectedWord selectedWord;
     private WordGrid wordGrid;
@@ -25,16 +25,6 @@ public class UpdateBoard : MonoBehaviour {
         print("UpdateBoard.Start\n");
         AwakeIt();
     }
-
-    private void Update() {
-        if (Screen.height >= Screen.width && !isPortrait) {
-            DisplayPortrait();
-        }
-        else if (Screen.height < Screen.width && isPortrait) {
-            DisplayLandscape();
-        }
-    }
-
 
     // Problems with Awake event on Android
     public void AwakeIt() {
@@ -45,69 +35,19 @@ public class UpdateBoard : MonoBehaviour {
         print("UpdateBoard.AwakeIt\n");
     }
 
-    public void RotateUpdatePanel() {
-        isRotating = !isRotating;
-        if (isRotating) {
-            DisplayLandscape();
-        }
-        else {
-            DisplayPortrait();
-        }
-    }
-
-    private void DisplayPortrait() {
-        print("UpdateBoard.DisplayPortrait \n");
-        isPortrait = true;
-        GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
-        // offset max is Right*-1/Top 
-        GetComponent<RectTransform>().offsetMax = new Vector2(0, -275);
-
-        // offsetMin is Left/Bottom 
-        scrollRect.GetComponent<RectTransform>().offsetMin = new Vector2(0, 120);
-        scrollRect.GetComponent<RectTransform>().offsetMax = new Vector2(0, -975);
-        scrollRect.transform.SetParent(leftPanel.transform, false);
-
-        rightPanel.SetActive(false);
-        exitButton.transform.SetParent(transform, false);
-    }
-
-    private void DisplayLandscape() {
-        print("UpdateBoard.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
-        isPortrait = false;
-
-        // offsetMin is Left/Bottom 
-        // offset max is Right*-1/Top (right is negative in editor so positive here)
-        // To set Bottom same as editor it is (Bottom- offsetMax.b)
-        // so if you want bottom 940 and offsetMax.b = -700 set offsetMin.b t0 -1640
-
-        // Shrink left panel
-        GetComponent<RectTransform>().offsetMax = new Vector2(-900, -275);
-        // Set up right panel
-        rightPanel.SetActive(true);
-        rightPanel.GetComponent<RectTransform>().offsetMin = new Vector2(1100, 0);
-        rightPanel.GetComponent<RectTransform>().offsetMax = new Vector2(900, -150);
-        // set up wordList in right panel
-        scrollRect.GetComponent<RectTransform>().offsetMin = new Vector2(0, 120);
-        scrollRect.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
-        // reparent wordList to right panel
-        scrollRect.transform.SetParent(rightPanel.transform, false);
-        exitButton.transform.SetParent(rightPanel.transform, false);
-    }
-
-
     public void NewGame() {
         print("UpdateBoard.NewGame \n");
         wordGrid.Initialize();
         RemoveSelectedWord();
-        newInputWord.Initialize();
+        inputWord.Initialize();
         letterBag.Initialize();
         var rackLetters = letterBag.DealNewRack();
         betterRack.InitializeTiles(rackLetters);
         replaceRackButton.Initialize();
         updateButtons.SetActive(MyPrefs.IsShowButtons());
         Toast.Show(
-            "To start the game, create a word from the letters in the rack. After that, you can continue to create new words.\n\nBUT for more fun and points, modify the words you created.",
-            15f, Color.magenta, ToastPosition.BottomCenter);
+            "To start the game, create a word from the letters in the rack. After that, you can create or modify new words.",
+            15f, Color.magenta, toastPosition);
     }
 
     // Called 3 different ways:
@@ -120,7 +60,7 @@ public class UpdateBoard : MonoBehaviour {
         // Update same tile in BetterRack to Selected and set InputWord to the letter at that location
         // SelectedWord is blank as no word was passed
         ClearInputWordButton();
-        newInputWord.Initialize();
+        inputWord.Initialize();
         if (word.Length > 1) {
             selectedWord.InitializeTiles(word);
         }
@@ -153,9 +93,9 @@ public class UpdateBoard : MonoBehaviour {
 
     public void SubmitInputWordButton() {
         Toast.Dismiss();
-        var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, newInputWord.GetWord());
+        var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, inputWord.GetWord());
         if ("TRUE".Equals(validationResult)) {
-            scoreManager.UpdateScore(selectedWord.GetWord(), newInputWord.GetWord());
+            scoreManager.UpdateScore(selectedWord.GetWord(), inputWord.GetWord());
 
             var numRemoved = betterRack.RemoveSelectedLetters();
             // bc could pass rack letters so letterBag could fix distribution
@@ -168,22 +108,24 @@ public class UpdateBoard : MonoBehaviour {
             if (HandleIfEndGame(rackLetters)) {
                 return;
             }
-            wordGrid.UpdateDisplayButton(selectedWord.GetWord(), newInputWord.GetWord());
+            wordGrid.UpdateDisplayButton(selectedWord.GetWord(), inputWord.GetWord());
             scrollRect.verticalNormalizedPosition = 1.0f;
             HandleNearEndGame();
-            MessageToModify(newInputWord.GetWord(), selectedWord.GetWord());
+            MessageToModify(inputWord.GetWord(), selectedWord.GetWord());
             CancelUpdateButton();
         }
         else {
-            Toast.Show(validationResult, 2f, Color.red, ToastPosition.BottomCenter);
-            shakeTransform.Begin(newInputWord.transform);
+            Toast.Show(validationResult, 2f, Color.red, toastPosition);
+            shakeTransform.Begin(inputWord.transform);
         }
     }
 
 
     public void ClearInputWordButton() {
         print("UpdateBoard.ClearInputWordButton\n");
-        newInputWord.Initialize();
+        print("UpdateBoard.ClearInputWordButton " + ComplimentHandler.instance.GetRandomCompliment() + "\n");
+
+        inputWord.Initialize();
         selectedWord.ResetStateUnselected();
         betterRack.ResetStateUnselected();
     }
@@ -199,12 +141,12 @@ public class UpdateBoard : MonoBehaviour {
             var msg = "See if you can modify " + word + ". Select " + word +
                       " from the list of words. You must use ALL the letters in " + word +
                       " plus at least ONE letter from the rack.";
-            Toast.Show(msg, 15, ToastColor.Green, ToastPosition.BottomCenter);
+            Toast.Show(msg, 15, ToastColor.Green, toastPosition);
         }
         else if (scoreManager.numChangedWords == 1 && originalWord.Length > 0) {
             var msg = "Congratulations! You turned " + originalWord + " into " + word + ". And you scored " +
                       scoreManager.wordScore + " points.\n\n Well done!";
-            Toast.Show(msg, 15, ToastColor.Green, ToastPosition.BottomCenter);
+            Toast.Show(msg, 15, ToastColor.Green, toastPosition);
         }
     }
 
@@ -220,9 +162,7 @@ public class UpdateBoard : MonoBehaviour {
     private void HandleNearEndGame() {
         if (IsNearEndGame()) {
             print("UpdateBoard.IsNearEndGame end game.  " + letterBag.GetNumLettersLeft() + "\n");
-            //updateButtons.SetActive(false);
             replaceRackButton.ChangeForEndGame();
-//            endGameButton.SetActive(true);
         }
     }
 
@@ -232,6 +172,7 @@ public class UpdateBoard : MonoBehaviour {
 
 //scoreManager.CalculateWordScore("", "HEARTEN");
 //scoreManager.CalculateWordScore("HOOD", "HOODED");
+    //  Stragglers 310disjointed 284
 
 //  letterBag.FixLetterDistribution("BCDFAAA");
 // letterBag.FixLetterDistribution("BCDFGHJ");

@@ -6,17 +6,17 @@ public class InputWordTile : BaseTile {
     public float shakeWidth = 1f;
     public bool goingRight = true;
     public float speed = 20f;
-    private NewInputWord newInputWord;
+    private InputWord inputWord;
 
     protected new void Awake() {
         AwakeMe();
-        newInputWord = GetComponentInParent<NewInputWord>();
+        inputWord = GetComponentInParent<InputWord>();
         // print("InputWordTile.Awake {" + newInputWord + "} \n");
     }
 
     public override void OnButtonClick(string buttonString) {
         print("InputWordTile.OnButtonClick \n");
-        newInputWord.RemoveLetter(GetOriginTile());
+        inputWord.RemoveLetter(GetOriginTile());
         //StartCoroutine(CoroutineShake());
     }
 
