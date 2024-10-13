@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour {
         countdownTimer.EndTimer();
         scoreManager.End();
         letterBag.End();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void InactivateOtherCanvases() {

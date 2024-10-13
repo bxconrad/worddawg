@@ -37,6 +37,10 @@ public class ScoreManager : MonoBehaviour {
 
     public void UpdateScore(string originalWord, string newWord) {
         currentScore += CalculateWordScore(originalWord, newWord);
+        if (wordScore > 10) {
+            Toast.Show(ComplimentHandler.instance.GetRandomCompliment(), 2f, new Color(0, .5f, 0, 1),
+                UpdateBoard.toastPosition);
+        }
         numLettersUsed += newWord.Length - originalWord.Length;
         UpdateHighScores(originalWord, newWord);
         updateScoreText();

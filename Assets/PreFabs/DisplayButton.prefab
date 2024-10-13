@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8191838311816024641}
   - component: {fileID: 6941915001872927499}
   - component: {fileID: 1747392128920095358}
+  - component: {fileID: 4106818300610471334}
   m_Layer: 0
   m_Name: DisplayButton
   m_TagString: Untagged
@@ -37,8 +38,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -93.5, y: 96.5}
-  m_SizeDelta: {x: 8, y: -368}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: -786.0659}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1775594945609971644
 CanvasRenderer:
@@ -147,6 +148,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 2588729891304566035}
+--- !u!114 &4106818300610471334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2341121521361411885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: 465
+  m_MinHeight: -1
+  m_PreferredWidth: 465
+  m_PreferredHeight: -786.0659
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &4759244419162111948
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,8 +237,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 58c7117d84a8e8d4b9f2e8edf221c9c2, type: 2}
+  m_sharedMaterial: {fileID: -7570881998808621712, guid: 58c7117d84a8e8d4b9f2e8edf221c9c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -241,7 +262,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 58
+  m_fontSize: 18
   m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 1
