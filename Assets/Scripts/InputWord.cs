@@ -11,12 +11,12 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
         tiles = GetComponentsInChildren<InputWordTile>();
         updateBoard = GetComponentInParent<UpdateBoard>();
 
-        print("NewInputWord.Awake updateBoard (" + updateBoard + "} tiles (" + tiles + "}\n");
+        print("InputWord.Awake updateBoard (" + updateBoard + "} tiles (" + tiles + "}\n");
     }
 
 
     public void OnDrag(PointerEventData eventData) {
-        // print("NewInputWord.OnDrag " + eventData.position.x + "\n");
+        // print("InputWord.OnDrag " + eventData.position.x + "\n");
         if (isFirstDrag) {
             isFirstDrag = false;
             firstPos = eventData.position.x;
@@ -25,7 +25,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     public void OnEndDrag(PointerEventData eventData) {
         var distance = eventData.position.x - firstPos;
-        print("NewInputWord.OnEndDrag pos " + eventData.position.x + " distance " + distance + " firstpos " + firstPos +
+        print("InputWord.OnEndDrag pos " + eventData.position.x + " distance " + distance + " firstpos " + firstPos +
               "\n");
         isFirstDrag = true;
         if (distance < -50) {
@@ -50,7 +50,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     //bcdo, extra call to this?
     public void Initialize() {
-        print("NewInputWord.Initialize tiles " + tiles.Length + "\n");
+        print("InputWord.Initialize tiles " + tiles.Length + "\n");
 
         for (var i = 0; i < tiles.Length; i++) {
             var tile = tiles[i];
@@ -62,19 +62,19 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     public void AddLetter(BTile tile) {
         var loc = GetWord().Length;
-        print("NewInputWord.AddLetter loc " + loc + " word {" + GetWord() + "} \n");
+        print("InputWord.AddLetter loc " + loc + " word {" + GetWord() + "} \n");
         tiles[loc].gameObject.SetActive(true);
         tiles[loc].SetLetter(tile.letter);
         tiles[loc].SetOriginTile(tile);
     }
 
     public void RemoveLetter(BTile originTile) {
-        print("NewInputWord.RemoveLetter \n");
+        print("InputWord.RemoveLetter \n");
         originTile.SetState(Tile.State.unselectedState);
         for (var i = 0; i < tiles.Length; i++) {
             var tile = tiles[i];
             if (ReferenceEquals(originTile, tile.originTile)) {
-                print("NewInputWord.RemoveLetter ** found ** originTile " + originTile + "\n");
+                print("InputWord.RemoveLetter ** found ** originTile " + originTile + "\n");
                 tile.gameObject.SetActive(false);
                 tile.SetOriginTile(null);
                 // shift subsequent tiles to the left
@@ -82,16 +82,16 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
                 return;
             }
         }
-        print("NewInputWord.RemoveLetter ** notfound ** \n");
+        print("InputWord.RemoveLetter ** notfound ** \n");
     }
 
     private void ShiftTilesToLeft(int startIndex) {
-        print("NewInputWord.ShiftTilesToLeft " + startIndex + " \n");
+        print("InputWord.ShiftTilesToLeft " + startIndex + " \n");
         for (var i = startIndex; i < tiles.Length - 1; i++) {
             var currentTile = tiles[i];
             var nextTile = tiles[i + 1];
             if (nextTile.GetOriginTile() == null || !nextTile.isActiveAndEnabled) {
-                print("NewInputWord.ShiftTilesToLeft return  i " + i + " \n");
+                print("InputWord.ShiftTilesToLeft return  i " + i + " \n");
                 return;
             }
             // move the originTile from the next tile to this tile

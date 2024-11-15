@@ -32,11 +32,10 @@ public class LetterBag : MonoBehaviour {
 
     private void AddLetters() {
         print("LetterBag.AddLetters *start* #letters  " + letters.Count + "\n");
-        foreach (var letterInfo in LetterInfo.allLetterInfos) {
-            for (var i = 0; i < letterInfo.getDistribution(); i++) {
-                letters.Add(letterInfo.getTheLetter());
-            }
-        }
+        while (letters.Count < GetNumLetters())
+            foreach (var letterInfo in LetterInfo.allLetterInfos)
+                for (var i = 0; i < letterInfo.getDistribution(); i++)
+                    letters.Add(letterInfo.getTheLetter());
         Shuffle(letters);
 
         print("LetterBag.AddLetters #letters  " + letters.Count + "\n");
@@ -57,9 +56,7 @@ public class LetterBag : MonoBehaviour {
     private string Deal() {
         // print("LetterBag.Deal timed? " + gameManager.IsTimed() + " left " + letters.Count() + " lt " +
         //       (letters.Count() <= MyPrefs.NUM_RACK_LETTERS) + "\n");
-        if (gameManager.IsTimed() && letters.Count() < MyPrefs.NUM_RACK_LETTERS) {
-            AddLetters();
-        }
+        if (gameManager.IsTimed() && letters.Count() < MyPrefs.NUM_RACK_LETTERS) AddLetters();
         if (IsDealable()) {
             numLettersDealt++;
             var letter = letters[0];
@@ -67,6 +64,7 @@ public class LetterBag : MonoBehaviour {
             // print("LetterBag.Deal return" + letter + " next: " + letters[0] + "\n");
             return letter;
         }
+
         print("Illegal deal request. No letters in bag. keep playing\n");
         return " ";
     }
@@ -74,9 +72,7 @@ public class LetterBag : MonoBehaviour {
     public string Deal(int numDeal) {
         print("LetterBag.Deal " + numDeal + " \n");
         var s = "";
-        for (var i = 0; i < numDeal; i++) {
-            s += Deal();
-        }
+        for (var i = 0; i < numDeal; i++) s += Deal();
         print("LetterBag.Deal #numLettersDealt " + numLettersDealt + " count " + letters.Count + "\n");
         return s;
     }
@@ -90,28 +86,32 @@ public class LetterBag : MonoBehaviour {
     }
 
     public string FixLetterDistribution(string dealString) {
-        //dealString = dealString.Trim(); // this causes problems
-        dealString = FixConsonantOrVowels(dealString);
-        dealString = FixTriplicates(dealString);
         numLettersInRack =
             dealString.Trim().Length; // dealString can have blanks and dangerous to trim it and reset dealString
+        //bcdo small bug here. we should fix distribution when we first hit last rack
+        if (numLettersInRack == MyPrefs.NUM_RACK_LETTERS) {
+            // dont reset letters at end of untimed game
+            dealString = FixConsonantOrVowels(dealString);
+            dealString = FixTriplicates(dealString);
+            //   dealString = FixDoubleDuplicates(dealString);
+        }
+
         countDown.SetText(GetNumLettersLeft().ToString());
         return dealString;
     }
 
-    // See if there are three of any one letter in the string
     private string FindTriplicateLetter(string dealString) {
         // print("LetterBag.FindTriplicateLetter dealString " + dealString + "\n");
         var charLookup = dealString.ToLookup(c => c);
 
-        foreach (var c in charLookup) {
+        foreach (var c in charLookup)
             //print("LetterBag.FindTriplicateLetter " + c.Key + " " + charLookup[c.Key].Count());
             if (charLookup[c.Key].Count() > 2) {
                 print("LetterBag.FindTriplicateLetter ret {" + c.Key + "}\n");
                 // trim in case dups are blanks
                 return c.Key.ToString().Trim();
             }
-        }
+
         print("LetterBag.FindTriplicateLetter no triplicates found \n");
         return "";
     }
@@ -129,10 +129,9 @@ public class LetterBag : MonoBehaviour {
             var isVowel = IsAllVowels(dealLetter);
             // if letter is vowel, find different vowel. if consonant, find a different consonant
             lettersIndex = BuyMeAVowelOrConsonant(isVowel, lettersIndex + 1);
-            if (lettersIndex < 0) {
+            if (lettersIndex < 0)
                 // didn't find a suitable letter to swap in the letter bag
                 return updatedDealString.ToString();
-            }
 
             if (!letters[lettersIndex].Equals(dealLetter)) {
                 // found a different letter of same type (vowel or consonant)
@@ -147,9 +146,10 @@ public class LetterBag : MonoBehaviour {
             }
             // if letters match look for another starting at the updated lettersIndex
 
-            print("LetterBag.FixTriplicates *** updatedDealString " + updatedDealString + " original " + dealString +
-                  "\n");
+            print("LetterBag.FixTriplicates *** updatedDealString " + updatedDealString + " original " +
+                  dealString + "\n");
         } // end while
+
         return updatedDealString.ToString();
     }
 
@@ -157,9 +157,8 @@ public class LetterBag : MonoBehaviour {
     private string FixConsonantOrVowels(string dealString) {
         // calculate number of consonants in dealString
         var numCons = 0;
-        foreach (var dealLetter in dealString.Trim()) {
+        foreach (var dealLetter in dealString.Trim())
             numCons = IsAllConsonant(dealLetter.ToString()) ? numCons + 1 : numCons;
-        }
 
         print("LetterBag.FixLetterDistribution dealString " + dealString + " numCons  " + numCons + "\n");
         var updatedDealString = new StringBuilder(dealString);
@@ -178,9 +177,7 @@ public class LetterBag : MonoBehaviour {
                 (!IsAllConsonant(dealLetter) && !isConsMax)) {
                 // find a consonant or vowel in our bag of letters starting at the index we left off on our last Buy
                 lettersIndex = BuyMeAVowelOrConsonant(isConsMax, lettersIndex);
-                if (lettersIndex >= 0) {
-                    SwitchLetters(lettersIndex, dealLetter, updatedDealString, dsIndex);
-                }
+                if (lettersIndex >= 0) SwitchLetters(lettersIndex, dealLetter, updatedDealString, dsIndex);
 
                 print("LetterBag.FixLetterDistribution  *** dealString  " + dealString + " updatedDealString " +
                       updatedDealString + "\n");
@@ -197,16 +194,14 @@ public class LetterBag : MonoBehaviour {
     // iterate over our array of letters and find a consonant or vowel as requested.
     // We pass in the start index so we continue where we left off
     private int BuyMeAVowelOrConsonant(bool isVowel, int startIndex) {
-        //print("LetterBag.FindMeAVowelOrConsonant  isVowel " + isVowel + " startIndex " + startIndex + "\n");
+        // print("LetterBag.BuyMeAVowelOrConsonant  isVowel " + isVowel + " startIndex " + startIndex + "\n");
         for (var lettersIndex = startIndex; lettersIndex < letters.Count && startIndex >= 0; lettersIndex++) {
             var letter = letters[lettersIndex];
-            // print("LetterBag.FindMeAVowelOrConsonant  letter " + letter + " index " + lettersIndex + "\n");
-            if ((isVowel && IsAllVowels(letter)) || (!isVowel && !IsAllVowels(letter))) {
-                return lettersIndex;
-            }
+            //print("LetterBag.BuyMeAVowelOrConsonant  letter " + letter + " index " + lettersIndex + "\n");
+            if ((isVowel && IsAllVowels(letter)) || (!isVowel && !IsAllVowels(letter))) return lettersIndex;
         }
 
-        print("LetterBag.FindMeAVowelOrConsonant  *** Unable to find vowel or consonant in letters[]\n");
+        print("LetterBag.BuyMeAVowelOrConsonant  *** Unable to find vowel or consonant in letters[]\n");
         return -1;
     }
 
@@ -233,7 +228,7 @@ public class LetterBag : MonoBehaviour {
     // lettersLeft includes #letters in rack. 
     // We can only deal to rack when our #left exceeds number needed for rack
     private bool IsDealable() {
-        return GetNumLettersLeft() > MyPrefs.NUM_RACK_LETTERS;
+        return letters.Count > 0 && GetNumLettersLeft() > MyPrefs.NUM_RACK_LETTERS;
     }
 
     // after first deal, snl =500, lc = 493, nlr = 7. 500-493+7 = 0, good
@@ -251,7 +246,7 @@ public class LetterBag : MonoBehaviour {
         return GetNumLetters() - GetNumLettersUsed();
     }
 
-    // if it's timed game numLetters will be 0. would be better to ask GameManager if it is a timedGame or not.
+    //O0aklandif it's timed game numLetters will be 0. would be better to ask GameManager if it is a timedGame or not.
     private int GetNumLetters() {
         return numLetters == 0 ? 99999 : numLetters;
     }
@@ -267,4 +262,115 @@ public class LetterBag : MonoBehaviour {
     public void SetRandomSeed(int? value) {
         randomSeed = value;
     }
+
+    /*
+   // See if there are more than one duplicate letters, ie AABBCDE or AABBCCE
+    public string xFixDoubleDuplicates(string dealString) {
+        print("LetterBag.FixDoubleDuplicates dealString " + dealString + "\n");
+        var updatedDealString = new StringBuilder(dealString);
+        var lettersIndex = 0;
+        var distinctCount = dealString.Distinct().Count();
+        while (distinctCount < 6) {
+            print("LetterBag.FixDoubleDuplicates FIX distinctCount " + distinctCount + "\n");
+            var charLookup = dealString.Reverse().ToLookup(c => c); // reverse so we go from end of dealString
+
+            foreach (var c in charLookup) {
+                // var c = charLookup.First();
+                //print("LetterBag.FixDoubleDuplicates " + c.Key + " keyCount " + charLookup[c.Key].Count() + "\n");
+                if (charLookup[c.Key].Count() == 2 && distinctCount < 6) {
+                    // need to check distinctCount here as well since we allow one dup
+                    // trim in case dups are blanks
+                    var dealLetter = c.Key.ToString().Trim();
+
+                    if (!dealLetter.Equals("")) { // bc different than triplicate
+                        // we found a doubleDups
+                        var dsIndex = updatedDealString.ToString().LastIndexOf(dealLetter);
+                        var isVowel = IsAllVowels(dealLetter);
+                        print("LetterBag.FixDoubleDuplicates doubleDups Found *** " + dealLetter +
+                              " dsIndex " + dsIndex + " isVowel " + isVowel + "\n");
+                        // if letter is vowel, find different vowel. if consonant, find a different consonant
+                        lettersIndex = BuyMeAVowelOrConsonant(isVowel, lettersIndex + 1);
+                        if (lettersIndex < 0) {
+                            // didn't find a suitable letter to swap in the letter bag
+                            return updatedDealString.ToString();
+                        }
+
+                        if (!letters[lettersIndex].Equals(dealLetter)) {
+                            // found a different letter of same type (vowel or consonant)
+                            print("LetterBag.FixDoubleDuplicates SWITCH newLetter {" + letters[lettersIndex] +
+                                  "} original {" + dealLetter + " lettersIndex " + lettersIndex + " dsIndex " +
+                                  dsIndex + "}\n");
+                            // switch letters. put the old one back in the bag
+                            SwitchLetters(lettersIndex, dealLetter, updatedDealString, dsIndex);
+                            distinctCount = updatedDealString.ToString().Distinct().Count();
+                            print("LetterBag.FixDoubleDuplicates switched updatedDealString " + updatedDealString +
+                                  "distinctCount " + distinctCount + "}\n");
+                        }
+                        else {
+                            print("LetterBag.FixDoubleDuplicates No Switch same letter " + dealLetter + "}\n");
+                        }
+                    }
+                }
+            }
+            print("LetterBag.FixDoubleDuplicates end distinctCount " + distinctCount + " updatedDealString " +
+                  updatedDealString + " dealString " + dealString + "\n");
+        }
+        // print("LetterBag.FixDoubleDuplicates return " + updatedDealString + " dealString " + dealString + "\n");
+        return updatedDealString.ToString().Trim();
+    }
+
+    public string xxFixDoubleDuplicates(string dealString) {
+        print("LetterBag.FixDoubleDuplicates dealString " + dealString + "\n");
+        var updatedDealString = new StringBuilder(dealString);
+        var lettersIndex = 0;
+        var distinctCount = dealString.Distinct().Count();
+        while (distinctCount < 6) {
+            print("LetterBag.FixDoubleDuplicates FIX distinctCount " + distinctCount + "\n");
+            var charLookup = dealString.Reverse().ToLookup(c => c); // reverse so we go from end of dealString
+
+            //  foreach (var c in charLookup) {
+            var c = charLookup.First();
+            //print("LetterBag.FixDoubleDuplicates " + c.Key + " keyCount " + charLookup[c.Key].Count() + "\n");
+            if (charLookup[c.Key].Count() == 2 && distinctCount < 6) {
+                // need to check distinctCount here as well since we allow one dup
+                // trim in case dups are blanks
+                var dealLetter = c.Key.ToString().Trim();
+
+                if (!dealLetter.Equals("")) { // bc different than triplicate
+                    // we found a doubleDups
+                    var dsIndex = updatedDealString.ToString().LastIndexOf(dealLetter);
+                    var isVowel = IsAllVowels(dealLetter);
+                    print("LetterBag.FixDoubleDuplicates doubleDups Found *** " + dealLetter +
+                          " dsIndex " + dsIndex + " isVowel " + isVowel + "\n");
+                    // if letter is vowel, find different vowel. if consonant, find a different consonant
+                    lettersIndex = BuyMeAVowelOrConsonant(isVowel, lettersIndex + 1);
+                    if (lettersIndex < 0) {
+                        // didn't find a suitable letter to swap in the letter bag
+                        return updatedDealString.ToString();
+                    }
+
+                    if (!letters[lettersIndex].Equals(dealLetter)) {
+                        // found a different letter of same type (vowel or consonant)
+                        print("LetterBag.FixDoubleDuplicates SWITCH newLetter {" + letters[lettersIndex] +
+                              "} original {" + dealLetter + " lettersIndex " + lettersIndex + " dsIndex " +
+                              dsIndex + "}\n");
+                        // switch letters. put the old one back in the bag
+                        SwitchLetters(lettersIndex, dealLetter, updatedDealString, dsIndex);
+                        distinctCount = updatedDealString.ToString().Distinct().Count();
+                        print("LetterBag.FixDoubleDuplicates switched updatedDealString " + updatedDealString +
+                              "distinctCount " + distinctCount + "}\n");
+                    }
+                    else {
+                        print("LetterBag.FixDoubleDuplicates No Switch same letter " + dealLetter + "}\n");
+                    }
+                }
+            }
+            // }
+            print("LetterBag.FixDoubleDuplicates end distinctCount " + distinctCount + " updatedDealString " +
+                  updatedDealString + " dealString " + dealString + "\n");
+        }
+        // print("LetterBag.FixDoubleDuplicates return " + updatedDealString + " dealString " + dealString + "\n");
+        return updatedDealString.ToString().Trim();
+    }
+*/
 }

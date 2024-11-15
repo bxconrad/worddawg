@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ShakeTransform : MonoBehaviour {
+public class TransformShaker : MonoBehaviour {
     private readonly float _delay = .05f;
     private readonly float _distance = 6f;
     private readonly float _shakeTime = .15f;

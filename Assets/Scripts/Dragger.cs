@@ -16,7 +16,6 @@ public class Dragger : MonoBehaviour, IDragHandler, IEndDragHandler {
         if (isFirstDrag) {
             isFirstDrag = false;
             firstPos = eventData.position.x;
-            //print("Dragger.OnDrag setting " + eventData.position.x + isFirstDrag + "\n");
         }
     }
 
@@ -25,8 +24,6 @@ public class Dragger : MonoBehaviour, IDragHandler, IEndDragHandler {
         print("Dragger.OnEndDrag pos " + eventData.position.x + " distance " + distance + " firstpos " + firstPos +
               "\n");
         isFirstDrag = true;
-        if (distance < -75) {
-            updateBoard.CancelUpdateButton();
-        }
+        if (distance < -75) updateBoard.CancelUpdateButton();
     }
 }

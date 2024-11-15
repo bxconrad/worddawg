@@ -1,6 +1,5 @@
 using EasyUI.Toast;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UpdateBoard : MonoBehaviour {
@@ -11,11 +10,9 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private LetterBag letterBag;
     [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private InputWord inputWord;
+    [SerializeField] private TransformShaker transformShaker;
 
-    [FormerlySerializedAs("newInputWord")] [SerializeField]
-    private InputWord inputWord;
-
-    [SerializeField] private ShakeTransform shakeTransform;
     private BetterRack betterRack;
     private ReplaceRackButton replaceRackButton;
     private SelectedWord selectedWord;
@@ -82,9 +79,7 @@ public class UpdateBoard : MonoBehaviour {
         var rackLetters = letterBag.DealNewRack();
         print("UpdateBoard.ReplaceRackButton check for end game. wordLength " + rackLetters.Trim().Length + "\n");
         betterRack.InitializeTiles(rackLetters);
-        if (HandleIfEndGame(rackLetters)) {
-            return;
-        }
+        if (HandleIfEndGame(rackLetters)) return;
         HandleNearEndGame();
         ClearInputWordButton();
         scoreManager.UpdateScoreForReplaceRack();
@@ -101,29 +96,31 @@ public class UpdateBoard : MonoBehaviour {
             // bc could pass rack letters so letterBag could fix distribution
             betterRack.AddLetters(letterBag.Deal(numRemoved));
             HandleNearEndGame();
-            print("UpdateBoard.SubmitInputWordButton ~~~ fix distro again\n");
+            print("UpdateBoard.SubmitInputWordButton ~~~ fix distribution again\n");
             var rackLetters = letterBag.FixLetterDistribution(betterRack.GetWord());
             betterRack.InitializeTiles(rackLetters);
 
-            if (HandleIfEndGame(rackLetters)) {
+            if (HandleIfEndGame(rackLetters)) // bcdo move this up
                 return;
-            }
             wordGrid.UpdateDisplayButton(selectedWord.GetWord(), inputWord.GetWord());
             scrollRect.verticalNormalizedPosition = 1.0f;
             HandleNearEndGame();
-            MessageToModify(inputWord.GetWord(), selectedWord.GetWord());
             CancelUpdateButton();
         }
         else {
             Toast.Show(validationResult, 2f, Color.red, toastPosition);
-            shakeTransform.Begin(inputWord.transform);
+            transformShaker.Begin(inputWord.transform);
         }
     }
 
 
     public void ClearInputWordButton() {
         print("UpdateBoard.ClearInputWordButton\n");
-        print("UpdateBoard.ClearInputWordButton " + ComplimentHandler.instance.GetRandomCompliment() + "\n");
+        //  scoreManager.CalculateWordScore("", "XXXXXX");
+        //        scoreManager.CalculateWordScore("", "HEARTEN");
+        //scoreManager.CalculateWordScore("", "BULLDOG");
+        // letterBag.FixDoubleDuplicates("EOYEOJH"); //AARRNNE");
+        //   letterBag.FixDoubleDuplicates("AABBCDE"); //AARRNNE");
 
         inputWord.Initialize();
         selectedWord.ResetStateUnselected();
@@ -136,19 +133,6 @@ public class UpdateBoard : MonoBehaviour {
         RemoveSelectedWord();
     }
 
-    private void MessageToModify(string word, string originalWord) {
-        if (scoreManager.numWords < 3 && scoreManager.numChangedWords == 0) {
-            var msg = "See if you can modify " + word + ". Select " + word +
-                      " from the list of words. You must use ALL the letters in " + word +
-                      " plus at least ONE letter from the rack.";
-            Toast.Show(msg, 15, ToastColor.Green, toastPosition);
-        }
-        else if (scoreManager.numChangedWords == 1 && originalWord.Length > 0) {
-            var msg = "Congratulations! You turned " + originalWord + " into " + word + ". And you scored " +
-                      scoreManager.wordScore + " points.\n\n Well done!";
-            Toast.Show(msg, 15, ToastColor.Green, toastPosition);
-        }
-    }
 
     private bool HandleIfEndGame(string rackLetters) {
         if (rackLetters.Trim().Length == 0) {
@@ -156,8 +140,10 @@ public class UpdateBoard : MonoBehaviour {
             gameManager.EndGame();
             return true;
         }
+
         return false;
     }
+
 
     private void HandleNearEndGame() {
         if (IsNearEndGame()) {
@@ -166,7 +152,7 @@ public class UpdateBoard : MonoBehaviour {
         }
     }
 
-    public bool IsNearEndGame() {
+    private bool IsNearEndGame() {
         return letterBag.GetNumLettersLeft() <= MyPrefs.NUM_RACK_LETTERS;
     }
 

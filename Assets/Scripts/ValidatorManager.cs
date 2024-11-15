@@ -13,7 +13,7 @@ public class ValidatorManager : MonoBehaviour {
 
     public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWordString) {
         print("ValidatorManager.ValidateInputWord {" + inputWordString + "}\n");
-        // return true;
+        //return true;
         // check all letters from currentWord are used
         if (!selectedWord.isAllLettersUsed()) {
             print("ValidatorManager.ValidateInputWord IsAllLettersUsed  false \n");

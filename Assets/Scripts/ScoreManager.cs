@@ -4,7 +4,13 @@ using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour {
+    [SerializeField] private GameObject gameLogo;
+    [SerializeField] private TransformShaker transformShaker;
+
     public TMP_Text scoreText;
+
+    private readonly Color toastColor = new(0, .5f, 0, 1);
+    private string[] dogBonusWords;
 
     private int letterScore;
     public int currentScore { get; private set; }
@@ -18,6 +24,14 @@ public class ScoreManager : MonoBehaviour {
 
     public void Awake() {
         Initialize();
+    }
+
+    public void Start() {
+        print("ScoreManager.Start\n");
+        var textFile = Resources.Load("dogwords") as TextAsset;
+        dogBonusWords = textFile.text.Split();
+
+        print("ScoreManager.LoadData dogBonusWords " + dogBonusWords.Length + "\n");
     }
 
     public void Initialize() {
@@ -37,13 +51,10 @@ public class ScoreManager : MonoBehaviour {
 
     public void UpdateScore(string originalWord, string newWord) {
         currentScore += CalculateWordScore(originalWord, newWord);
-        if (wordScore > 10) {
-            Toast.Show(ComplimentHandler.instance.GetRandomCompliment(), 2f, new Color(0, .5f, 0, 1),
-                UpdateBoard.toastPosition);
-        }
         numLettersUsed += newWord.Length - originalWord.Length;
         UpdateHighScores(originalWord, newWord);
         updateScoreText();
+        ShowToastMessage(originalWord, newWord);
         print("ScoreManager.UpdateScore " + currentScore + " wordScore " + wordScore + "\n");
     }
 
@@ -58,11 +69,16 @@ public class ScoreManager : MonoBehaviour {
         var multiplier = CalculateMultiplier(originalWord, newWord);
 
         wordScore = Convert.ToInt32(multiplier * letterScore);
+        if (IsDogBonusWord(newWord)) {
+            // bcdo calling IsDogBonusWord 2x, fix
+            wordScore += 100;
+            print("ScoreManager.CalculateWordScore IsDogBonusWord ");
+        }
+
         // If entire rack is used
         if (newWord.Length - originalWord.Length >= MyPrefs.NUM_RACK_LETTERS) {
             wordScore += 100;
             print("ScoreManager.CalculateWordScore 100 bonus ");
-            Toast.Show("100 Point Bonus!!! Great Job!", Color.blue, ToastPosition.BottomCenter);
         }
 
         print("ScoreManager.CalculateWordScore wordScore " + wordScore + "  letterScore " + letterScore +
@@ -71,11 +87,63 @@ public class ScoreManager : MonoBehaviour {
         return wordScore;
     }
 
+    private void ShowToastMessage(string originalWord, string newWord) {
+        var msg = "";
+        var toastTime = 15f;
+        Toast.Dismiss();
+        if (IsDogBonusWord(newWord)) {
+            msg = "Arooo! Special Word Dawg Bonus for " + newWord + "!!!\n";
+            transformShaker.Begin(gameLogo.transform, .25f, .1f, 12);
+            print("ScoreManager.SendToastMessage IsDogBonusWord ");
+        }
+
+        // If entire rack is used
+        if (newWord.Length - originalWord.Length >= MyPrefs.NUM_RACK_LETTERS) {
+            print("ScoreManager.SendToastMessage 100 bonus ");
+            msg += "100 Point Bonus for using all letters!!! Great Job!";
+            transformShaker.Begin(gameLogo.transform, .20f, .1f, 12);
+        }
+
+        if (wordScore > 100 && msg.Equals("")) {
+            toastTime = 2f;
+            msg = wordScore + " points! " + ComplimentHandler.instance.GetRandomCompliment();
+        }
+
+        if (msg.Equals("")) {
+            if (numWords < 3 && numChangedWords == 0)
+                msg = "See if you can modify " + newWord + ". Select " + newWord +
+                      " from the list of words. You must use ALL the letters in " + newWord +
+                      " plus at least ONE letter from the rack.";
+            else if (numChangedWords == 1 && originalWord.Length > 0)
+                msg = "Congratulations! You turned " + originalWord + " into " + newWord + ". And you scored " +
+                      wordScore + " points.\n\n Well done!";
+        }
+
+        if (wordScore > 10 && msg.Equals("")) {
+            toastTime = 2f;
+            msg = ComplimentHandler.instance.GetRandomCompliment();
+        }
+
+        print("ScoreManager.ShowToastMessage msg " + msg + "\n");
+
+        if (!msg.Equals("")) Toast.Show(msg, toastTime, toastColor, UpdateBoard.toastPosition);
+    }
+
+    private bool IsDogBonusWord(string word) {
+        print("ScoreManager.IsDogBonusWord word " + word + "\n");
+        for (var i = 0; i < dogBonusWords.Length; i++)
+            if (word.Equals(dogBonusWords[i].ToUpper())) {
+                print("ScoreManager.IsDogBonusWord " + i + " dogBonusWords[i] " + dogBonusWords[i] + "\n");
+                return true;
+            }
+
+        print("ScoreManager.IsDogBonusWord false  word " + word + "\n");
+        return false;
+    }
+
     private int CalculateLetterScore(string newWord) {
         var letterScore = 0;
-        foreach (var letter in newWord) {
-            letterScore += LetterInfo.letterDictionary[letter.ToString()];
-        }
+        foreach (var letter in newWord) letterScore += LetterInfo.letterDictionary[letter.ToString()];
         return letterScore;
     }
 
@@ -97,14 +165,10 @@ public class ScoreManager : MonoBehaviour {
             highestWordScoreWord = newWord;
         }
 
-        if (newWord.Length > longestWord.Length) {
-            longestWord = newWord;
-        }
+        if (newWord.Length > longestWord.Length) longestWord = newWord;
 
         numWords++;
-        if (originalWord.Length > 0) {
-            numChangedWords++;
-        }
+        if (originalWord.Length > 0) numChangedWords++;
     }
 
     private void updateScoreText() {
