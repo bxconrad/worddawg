@@ -130,20 +130,24 @@ public class ScoreManager : MonoBehaviour {
     }
 
     private bool IsDogBonusWord(string word) {
-        print("ScoreManager.IsDogBonusWord word " + word + "\n");
-        for (var i = 0; i < dogBonusWords.Length; i++)
+        //print("ScoreManager.IsDogBonusWord word " + word + "\n");
+        for (var i = 0; i < dogBonusWords.Length; i++) {
             if (word.Equals(dogBonusWords[i].ToUpper())) {
                 print("ScoreManager.IsDogBonusWord " + i + " dogBonusWords[i] " + dogBonusWords[i] + "\n");
                 return true;
             }
+        }
 
-        print("ScoreManager.IsDogBonusWord false  word " + word + "\n");
+        //print("ScoreManager.IsDogBonusWord false  word " + word + "\n");
         return false;
     }
 
     private int CalculateLetterScore(string newWord) {
         var letterScore = 0;
-        foreach (var letter in newWord) letterScore += LetterInfo.letterDictionary[letter.ToString()];
+        foreach (var letter in newWord) {
+            letterScore += LetterInfo.letterDictionary[letter.ToString()];
+        }
+
         return letterScore;
     }
 

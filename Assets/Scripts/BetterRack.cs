@@ -29,27 +29,26 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
         print("BetterRack.OnEndDrag pos " + eventData.position.x + " distance " + distance + " firstpos " + firstPos +
               "\n");
         isFirstDrag = true;
-        if (Mathf.Abs(distance) > 100) {
-            updateBoard.ReplaceRackButton();
-        }
+        if (Mathf.Abs(distance) > 100) updateBoard.ReplaceRackButton();
     }
 
-    // this only needs to happen once as we reuse the same tiles and origin and index does not change
-    // private void InitializeTilesOrigin() {
-    //     print("BetterRack.InitializeTilesOrigin\n");
-    //     for (var i = 0; i < tiles.Length; i++) {
-    //         tiles[i].SetOrigin((BaseTile.ORIGIN_RACK, i));
-    //     }
-    // }
 
     public void InitializeTiles(string word) {
         var wordChars = word.ToCharArray();
-        print("BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
-        for (var i = 0; i < wordChars.Length; i++) {
-            //print("BetterRack.InitializeTiles i " + i + "\n");
+        //print("BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
+        for (var i = 0; i < Mathf.Min(wordChars.Length, tiles.Length); i++) {
+            //    print("BetterRack.InitializeTiles i " + i + "\n");
             tiles[i].SetLetter(wordChars[i].ToString());
             tiles[i].SetState(Tile.State.unselectedState);
-            //  tiles[i].SetOrigin((BaseTile.ORIGIN_RACK, i));
+        }
+    }
+
+    public void ClearRack() {
+        print("BetterRack.InitializeTiles  #tiles " + tiles.Length + "\n");
+        for (var i = 0; i < tiles.Length; i++) {
+            //print("BetterRack.InitializeTiles i " + i + "\n");
+            tiles[i].SetLetter("");
+            tiles[i].SetState(Tile.State.unselectedState);
         }
     }
 
@@ -76,15 +75,10 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
         return myWord;
     }
 
-    public int GetTrimmedWordLength() {
-        return GetWord().Trim().Length;
-    }
-
     public bool isOneLetterUsed() {
         foreach (var tile in tiles) {
-            if (tile.IsSelected()) {
+            if (tile.IsSelected())
                 return true;
-            }
         }
 
         return false;
@@ -101,14 +95,13 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
             }
         }
 
-        for (var i = 0; i < tiles.Length; i++) {
-            for (var j = i + 1; j < tiles.Length; j++) {
-                // j is the index of the next tile to the right
-                if ("".Equals(tiles[i].letter)) {
-                    //bcdo compare to isSelected
-                    tiles[i].SetLetter(tiles[j].letter); // move the letter from the next tile to this tile
-                    tiles[j].SetLetter(""); // set to selected
-                }
+        for (var i = 0; i < tiles.Length; i++)
+        for (var j = i + 1; j < tiles.Length; j++) {
+            // j is the index of the next tile to the right
+            if ("".Equals(tiles[i].letter)) {
+                //bcdo compare to isSelected
+                tiles[i].SetLetter(tiles[j].letter); // move the letter from the next tile to this tile
+                tiles[j].SetLetter(""); // set to selected
             }
         }
 
@@ -125,13 +118,12 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
         }
     }
 
-    public bool IsLetterAvailable(string letter) {
-        foreach (var t in tiles) {
-            if (t.IsUnselected() && letter.Equals(t.letter)) {
-                return true;
+    public void AddLetter(string letter) {
+        foreach (var tile in tiles) {
+            if (tile.IsEmpty()) {
+                tile.SetLetter(letter);
+                return;
             }
         }
-
-        return false;
     }
 }

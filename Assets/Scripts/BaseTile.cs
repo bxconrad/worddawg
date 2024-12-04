@@ -33,7 +33,7 @@ public abstract class BaseTile : MonoBehaviour {
 
 
     public bool IsEmpty() {
-        return "".Equals(letter);
+        return letter == null || " ".Equals(letter) || "".Equals(letter) || "?".Equals(letter);
     }
 
     public void SetState(Tile.State state) {
@@ -56,9 +56,8 @@ public abstract class BaseTile : MonoBehaviour {
         text.text = letter;
 
         button.onClick.RemoveAllListeners();
-        if (!string.IsNullOrEmpty(inLetter)) { // can happen at end of game
+        if (!string.IsNullOrEmpty(inLetter)) // can happen at end of game
             button.onClick.AddListener(() => OnButtonClick(inLetter));
-        }
     }
 
     public abstract void OnButtonClick(string buttonString);

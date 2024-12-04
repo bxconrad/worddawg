@@ -29,16 +29,13 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
               "\n");
         isFirstDrag = true;
         if (distance < -50) {
-            if (GetWord().Length > 0) {
+            if (GetWord().Length > 0)
                 updateBoard.ClearInputWordButton();
-            }
-            else {
+            else
                 updateBoard.CancelUpdateButton();
-            }
         }
-        if (distance > 50) {
-            updateBoard.SubmitInputWordButton();
-        }
+
+        if (distance > 50) updateBoard.SubmitInputWordButton();
     }
 
     public virtual void OnPointerClick(PointerEventData eventData) {
@@ -50,7 +47,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     //bcdo, extra call to this?
     public void Initialize() {
-        print("InputWord.Initialize tiles " + tiles.Length + "\n");
+        //print("InputWord.Initialize tiles " + tiles.Length + "\n");
 
         for (var i = 0; i < tiles.Length; i++) {
             var tile = tiles[i];
@@ -82,6 +79,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
                 return;
             }
         }
+
         print("InputWord.RemoveLetter ** notfound ** \n");
     }
 
@@ -94,6 +92,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
                 print("InputWord.ShiftTilesToLeft return  i " + i + " \n");
                 return;
             }
+
             // move the originTile from the next tile to this tile
             currentTile.SetOriginTile(nextTile
                 .GetOriginTile());
@@ -108,10 +107,9 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
     public string GetWord() {
         var myWord = "";
         foreach (var tile in tiles) {
-            if (tile.isActiveAndEnabled) {
-                myWord += tile.letter;
-            }
+            if (tile.isActiveAndEnabled) myWord += tile.letter;
         }
+
         return myWord;
     }
 }

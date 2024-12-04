@@ -4,14 +4,16 @@ using UnityEngine.UI;
 
 public class UpdateBoard : MonoBehaviour {
     public static ToastPosition toastPosition = ToastPosition.BottomCenter;
-    [Header("UI")] [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject updateButtons;
+
+    [Header("UI")] [SerializeField] private GameObject updateButtons;
+
     [SerializeField] private ValidatorManager validatorManager;
+
     [SerializeField] private ScoreManager scoreManager;
-    [SerializeField] private LetterBag letterBag;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private InputWord inputWord;
     [SerializeField] private TransformShaker transformShaker;
+    [SerializeField] private Dealer dealer;
 
     private BetterRack betterRack;
     private ReplaceRackButton replaceRackButton;
@@ -37,9 +39,7 @@ public class UpdateBoard : MonoBehaviour {
         wordGrid.Initialize();
         RemoveSelectedWord();
         inputWord.Initialize();
-        letterBag.Initialize();
-        var rackLetters = letterBag.DealNewRack();
-        betterRack.InitializeTiles(rackLetters);
+        dealer.Initialize();
         replaceRackButton.Initialize();
         updateButtons.SetActive(MyPrefs.IsShowButtons());
         Toast.Show(
@@ -47,21 +47,16 @@ public class UpdateBoard : MonoBehaviour {
             15f, Color.magenta, toastPosition);
     }
 
-    // Called 3 different ways:
-    // 1) From clicking on a word on DisplayBoard - sends the string of that word
-    // 2) From clicking on a tile in the Rack on DisplayBoard - sends index of button
-    // 3) From clicking on the New Word button in DisplayBoard - sends an empty string
+    // Called onButtonClick from wordGrid
     public void LoadSelectedWord(string word) {
         print("UpdateBoard.LoadSelectedWord {" + word + "}\n");
-        // When tiles are clicked on DisplayBoard rack, they pass their index location
-        // Update same tile in BetterRack to Selected and set InputWord to the letter at that location
-        // SelectedWord is blank as no word was passed
         ClearInputWordButton();
         inputWord.Initialize();
         if (word.Length > 1) {
             selectedWord.InitializeTiles(word);
         }
         else {
+            // bcdo i dont think this is getting called any more
             var index = int.Parse(word);
             betterRack.SelectTileAtIndex(index);
         }
@@ -75,12 +70,10 @@ public class UpdateBoard : MonoBehaviour {
 
     // Called from UpdateBoard button and from drag
     public void ReplaceRackButton() {
-        print("UpdateBoard.ReplaceRackButton\n");
-        var rackLetters = letterBag.DealNewRack();
-        print("UpdateBoard.ReplaceRackButton check for end game. wordLength " + rackLetters.Trim().Length + "\n");
-        betterRack.InitializeTiles(rackLetters);
-        if (HandleIfEndGame(rackLetters)) return;
+        print("UpdateBoard.ReplaceRackButton x\n");
+        dealer.DealNewRack();
         HandleNearEndGame();
+
         ClearInputWordButton();
         scoreManager.UpdateScoreForReplaceRack();
     }
@@ -91,20 +84,12 @@ public class UpdateBoard : MonoBehaviour {
         var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, inputWord.GetWord());
         if ("TRUE".Equals(validationResult)) {
             scoreManager.UpdateScore(selectedWord.GetWord(), inputWord.GetWord());
-
-            var numRemoved = betterRack.RemoveSelectedLetters();
-            // bc could pass rack letters so letterBag could fix distribution
-            betterRack.AddLetters(letterBag.Deal(numRemoved));
+            betterRack.RemoveSelectedLetters();
+            dealer.Deal();
             HandleNearEndGame();
-            print("UpdateBoard.SubmitInputWordButton ~~~ fix distribution again\n");
-            var rackLetters = letterBag.FixLetterDistribution(betterRack.GetWord());
-            betterRack.InitializeTiles(rackLetters);
 
-            if (HandleIfEndGame(rackLetters)) // bcdo move this up
-                return;
             wordGrid.UpdateDisplayButton(selectedWord.GetWord(), inputWord.GetWord());
             scrollRect.verticalNormalizedPosition = 1.0f;
-            HandleNearEndGame();
             CancelUpdateButton();
         }
         else {
@@ -115,53 +100,30 @@ public class UpdateBoard : MonoBehaviour {
 
 
     public void ClearInputWordButton() {
-        print("UpdateBoard.ClearInputWordButton\n");
-        //  scoreManager.CalculateWordScore("", "XXXXXX");
-        //        scoreManager.CalculateWordScore("", "HEARTEN");
-        //scoreManager.CalculateWordScore("", "BULLDOG");
-        // letterBag.FixDoubleDuplicates("EOYEOJH"); //AARRNNE");
-        //   letterBag.FixDoubleDuplicates("AABBCDE"); //AARRNNE");
-
+        //print("UpdateBoard.ClearInputWordButton\n");
         inputWord.Initialize();
         selectedWord.ResetStateUnselected();
         betterRack.ResetStateUnselected();
     }
 
     public void CancelUpdateButton() {
-        print("UpdateBoard.CancelInputWordButton\n");
+        // print("UpdateBoard.CancelInputWordButton\n");
         ClearInputWordButton();
         RemoveSelectedWord();
     }
 
-
-    private bool HandleIfEndGame(string rackLetters) {
-        if (rackLetters.Trim().Length == 0) {
-            print("UpdateBoard.IsEndGame end game. wordLength " + rackLetters.Trim().Length + "\n");
-            gameManager.EndGame();
-            return true;
-        }
-
-        return false;
-    }
-
-
     private void HandleNearEndGame() {
-        if (IsNearEndGame()) {
-            print("UpdateBoard.IsNearEndGame end game.  " + letterBag.GetNumLettersLeft() + "\n");
+        if (dealer.IsNearEndGame()) {
+            print("UpdateBoard.IsNearEndGame end game.  " + dealer.GetTotalNumLettersLeft() + "\n");
             replaceRackButton.ChangeForEndGame();
         }
     }
 
-    private bool IsNearEndGame() {
-        return letterBag.GetNumLettersLeft() <= MyPrefs.NUM_RACK_LETTERS;
-    }
 
 //scoreManager.CalculateWordScore("", "HEARTEN");
 //scoreManager.CalculateWordScore("HOOD", "HOODED");
     //  Stragglers 310disjointed 284
-
-//  letterBag.FixLetterDistribution("BCDFAAA");
-// letterBag.FixLetterDistribution("BCDFGHJ");
-// letterBag.FixLetterDistribution("AAAAAAA");
-// letterBag.FixLetterDistribution("AAAEEEA");
+    //  scoreManager.CalculateWordScore("", "XXXXXX");
+    //        scoreManager.CalculateWordScore("", "HEARTEN");
+    //scoreManager.CalculateWordScore("", "BULLDOG");
 }

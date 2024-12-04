@@ -6791,10 +6791,10 @@ MonoBehaviour:
   updateButtons: {fileID: 880988820}
   validatorManager: {fileID: 618069927}
   scoreManager: {fileID: 57664982}
-  letterBag: {fileID: 978663607}
   scrollRect: {fileID: 1792496960}
   inputWord: {fileID: 583348232}
   transformShaker: {fileID: 271896978}
+  dealer: {fileID: 1867392557}
 --- !u!114 &578828914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11570,57 +11570,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 973381904}
   m_CullTransparentMesh: 1
---- !u!1 &978663605
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 978663606}
-  - component: {fileID: 978663607}
-  m_Layer: 5
-  m_Name: LetterBag
-  m_TagString: letterBag
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &978663606
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978663605}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1884578461}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -275.00006}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &978663607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978663605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5d1781bf3ee4db287b26fb093c2424b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  countDown: {fileID: 1916523729}
-  gameManager: {fileID: 2070063076}
-  betterRack: {fileID: 1285693172}
 --- !u!1 &981348083
 GameObject:
   m_ObjectHideFlags: 0
@@ -18864,6 +18813,57 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8969046879470839753, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
   m_PrefabInstance: {fileID: 645288300}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1867392555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1867392556}
+  - component: {fileID: 1867392557}
+  m_Layer: 5
+  m_Name: Dealer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1867392556
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867392555}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1884578461}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -275.00006}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1867392557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867392555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efc03dd79c2c4b92b5a12dc61f8eb96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countDown: {fileID: 1916523729}
+  gameManager: {fileID: 2070063076}
+  betterRack: {fileID: 1285693172}
 --- !u!1 &1884578460
 GameObject:
   m_ObjectHideFlags: 0
@@ -18900,7 +18900,7 @@ RectTransform:
   - {fileID: 540896982}
   - {fileID: 583348228}
   - {fileID: 1792496959}
-  - {fileID: 978663606}
+  - {fileID: 1867392556}
   - {fileID: 618069928}
   - {fileID: 1309730087}
   m_Father: {fileID: 1714180150}
@@ -20238,7 +20238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -29.499878, y: -161}
+  m_AnchoredPosition: {x: -29.499817, y: -161}
   m_SizeDelta: {x: -339, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &2048814328 stripped
@@ -20389,7 +20389,7 @@ MonoBehaviour:
   updateBoard: {fileID: 578828913}
   countdownTimer: {fileID: 1916523729}
   scoreManager: {fileID: 57664982}
-  letterBag: {fileID: 978663607}
+  dealer: {fileID: 1867392557}
   stats: {fileID: 884772259}
   helpDisplay: {fileID: 1633064300}
 --- !u!114 &2070063077

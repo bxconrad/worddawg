@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private ScoreManager scoreManager;
-    [SerializeField] private LetterBag letterBag;
+    [SerializeField] private Dealer dealer;
     [SerializeField] private Stats stats;
     [SerializeField] private HelpDisplay helpDisplay;
 
@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour {
         // end components
         countdownTimer.EndTimer();
         scoreManager.End();
-        letterBag.End();
+        dealer.End();
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -45,8 +46,8 @@ public class GameManager : MonoBehaviour {
     public void NewGameOfTheDay() {
         print("GameManager.NewGameOfTheDay \n");
         countdownTimer.isTimerEnabled = false;
-        letterBag.SetRandomSeed(DateTime.Today.DayOfYear);
-        letterBag.SetNumLetters(MyPrefs.DEFAULT_LETTERS);
+        dealer.SetRandomSeed(DateTime.Today.DayOfYear);
+        dealer.SetNumLetters(MyPrefs.DEFAULT_LETTERS);
         gameMode = Stats.PREFS_ST_MODE_GOTD;
         NewGame();
     }
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour {
     public void NewUntimedGame() {
         print("GameManager.NewUntimedGame \n");
         countdownTimer.isTimerEnabled = false;
-        letterBag.SetNumLetters(MyPrefs.DEFAULT_LETTERS);
+        dealer.SetNumLetters(MyPrefs.DEFAULT_LETTERS);
         gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
         NewGame();
     }
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour {
         print("GameManager.NewTimedGame \n");
         countdownTimer.isTimerEnabled = true;
         countdownTimer.SetCountdown(4);
-        letterBag.SetNumLetters(0);
+        dealer.SetNumLetters(0);
         gameMode = Stats.PREFS_ST_MODE_TIMED_4;
         NewGame();
     }
@@ -81,34 +82,26 @@ public class GameManager : MonoBehaviour {
         gameObject.SetActive(true);
         countdownTimer.isTimerEnabled = MyPrefs.IsTimer();
         countdownTimer.SetCountdown(MyPrefs.GetTimerDuration());
-        if (!MyPrefs.IsTimer()) {
-            letterBag.SetNumLetters(MyPrefs.GetNumLetters());
-        }
-        else {
-            letterBag.SetNumLetters(0);
-        }
+        if (!MyPrefs.IsTimer())
+            dealer.SetNumLetters(MyPrefs.GetNumLetters());
+        else
+            dealer.SetNumLetters(0);
         gameMode = Stats.PREFS_ST_MODE_CUSTOM;
-
         NewGame();
     }
 
     public void RepeatGame() {
         print("GameManager.RepeatGame \n");
-        if (Stats.PREFS_ST_MODE_CUSTOM.Equals(gameMode)) {
+        if (Stats.PREFS_ST_MODE_CUSTOM.Equals(gameMode))
             NewCustomGamePlay();
-        }
-        else if (Stats.PREFS_ST_MODE_GOTD.Equals(gameMode)) {
+        else if (Stats.PREFS_ST_MODE_GOTD.Equals(gameMode))
             NewGameOfTheDay();
-        }
-        else if (Stats.PREFS_ST_MODE_TIMED_4.Equals(gameMode)) {
+        else if (Stats.PREFS_ST_MODE_TIMED_4.Equals(gameMode))
             NewTimedGame();
-        }
-        else if (Stats.PREFS_ST_MODE_UNTIMED_50.Equals(gameMode)) {
+        else if (Stats.PREFS_ST_MODE_UNTIMED_50.Equals(gameMode))
             NewUntimedGame();
-        }
-        else {
+        else
             print("GameManager.RepeatGame Unknown gameMode " + gameMode);
-        }
     }
 
     private void NewGame() {

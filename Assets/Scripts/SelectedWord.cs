@@ -32,22 +32,19 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
             SelectAllLetters();
         }
         else if (distance < -50) {
-            if (HasSelectedLetter()) {
+            if (HasSelectedLetter())
                 updateBoard.ClearInputWordButton();
-            }
-            else {
+            else
                 updateBoard.CancelUpdateButton();
-            }
         }
     }
 
     private bool HasSelectedLetter() {
         print("SelectedWord.SelectAllLetters after drag\n");
         foreach (var tile in tiles) {
-            if (tile.IsSelected() && tile.isActiveAndEnabled) {
-                return true;
-            }
+            if (tile.IsSelected() && tile.isActiveAndEnabled) return true;
         }
+
         return false;
     }
 
@@ -78,12 +75,10 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     public void ResetStateUnselected() {
-        print("SelectedWord.ResetStateUnselected \n");
+        //print("SelectedWord.ResetStateUnselected \n");
 
         foreach (var tile in tiles) {
-            if ("".Equals(tile.letter)) {
-                return;
-            }
+            if ("".Equals(tile.letter)) return;
             tile.SetState(Tile.State.unselectedState);
         }
     }
