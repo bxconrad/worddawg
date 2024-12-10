@@ -107,23 +107,4 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
 
         return numRemoved;
     }
-
-    public void AddLetters(string letters) {
-        var numRemoved = 0;
-        foreach (var tile in tiles) {
-            if (tile.IsEmpty()) {
-                tile.SetLetter(letters.Substring(numRemoved, 1));
-                numRemoved++;
-            }
-        }
-    }
-
-    public void AddLetter(string letter) {
-        foreach (var tile in tiles) {
-            if (tile.IsEmpty()) {
-                tile.SetLetter(letter);
-                return;
-            }
-        }
-    }
 }

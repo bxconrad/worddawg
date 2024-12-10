@@ -5,19 +5,19 @@ public class LetterInfo {
     public static LetterInfo B = new("B", 4, 2);
     public static LetterInfo C = new("C", 4, 2);
     public static LetterInfo D = new("D", 2, 4);
-    public static LetterInfo E = new("E", 1, 13); //12 -1
+    public static LetterInfo E = new("E", 1, 12); //12  0
     public static LetterInfo F = new("F", 4, 3); //2   +1
     public static LetterInfo G = new("G", 4, 3);
     public static LetterInfo H = new("H", 5, 3); //2   +1
-    public static LetterInfo I = new("I", 1, 7); //9   +2
+    public static LetterInfo I = new("I", 1, 8); //9   +1
     public static LetterInfo J = new("J", 8, 1);
-    public static LetterInfo K = new("K", 6, 1);
+    public static LetterInfo K = new("K", 6, 1); //.48
     public static LetterInfo L = new("L", 3, 5); //4   +1
     public static LetterInfo M = new("M", 4, 3); //2   -1
     public static LetterInfo N = new("N", 2, 6);
     public static LetterInfo O = new("O", 1, 8);
-    public static LetterInfo P = new("P", 4, 3); //2   +1
-    public static LetterInfo Q = new("Q", 8, 0); //1   -1
+    public static LetterInfo P = new("P", 4, 2); //2   +0
+    public static LetterInfo Q = new("Q", 8, 1); //1   0
     public static LetterInfo R = new("R", 3, 6); //6    0
     public static LetterInfo S = new("S", 1, 5); //4   +1
     public static LetterInfo T = new("T", 2, 6);
@@ -34,7 +34,7 @@ public class LetterInfo {
     // 39 vowels, 64 consonants 38% vowel
     // vowels 36% https://en.wikipedia.org/wiki/Letter_frequency
     public static List<LetterInfo> allLetterInfos = new()
-        { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, R, S, T, U, V, W, X, Y, Z };
+        { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z };
 
     public static Dictionary<string, int> letterDictionary = new();
 
@@ -44,12 +44,10 @@ public class LetterInfo {
     private readonly int value;
 
     static LetterInfo() {
-        {
-            foreach (var letterInfo in allLetterInfos) {
-                letterDictionary.Add(letterInfo.theLetter, letterInfo.value);
-            }
+        letterDictionary.Clear();
+        foreach (var letterInfo in allLetterInfos) {
+            letterDictionary.Add(letterInfo.theLetter, letterInfo.value);
         }
-        //print("LetterInfo.static " + letterDictionary.Count);
     }
 
     public LetterInfo(string theLetter, int value, int distribution) {

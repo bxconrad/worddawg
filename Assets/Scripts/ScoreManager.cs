@@ -65,6 +65,8 @@ public class ScoreManager : MonoBehaviour {
     }
 
     public int CalculateWordScore(string originalWord, string newWord) {
+        originalWord = UpdateBoard.ExpandDoubleLetter(originalWord);
+        newWord = UpdateBoard.ExpandDoubleLetter(newWord);
         letterScore = CalculateLetterScore(newWord);
         var multiplier = CalculateMultiplier(originalWord, newWord);
 
@@ -91,6 +93,8 @@ public class ScoreManager : MonoBehaviour {
         var msg = "";
         var toastTime = 15f;
         Toast.Dismiss();
+        originalWord = UpdateBoard.ExpandDoubleLetter(originalWord);
+        newWord = UpdateBoard.ExpandDoubleLetter(newWord);
         if (IsDogBonusWord(newWord)) {
             msg = "Arooo! Special Word Dawg Bonus for " + newWord + "!!!\n";
             transformShaker.Begin(gameLogo.transform, .25f, .1f, 12);

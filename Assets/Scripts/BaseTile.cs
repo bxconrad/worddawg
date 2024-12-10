@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class BaseTile : MonoBehaviour {
-    public Tile.State state;
     private Image image;
+    public Tile.State state;
     private TextMeshProUGUI text;
     public Button button { get; set; }
 
@@ -32,10 +32,6 @@ public abstract class BaseTile : MonoBehaviour {
     }
 
 
-    public bool IsEmpty() {
-        return letter == null || " ".Equals(letter) || "".Equals(letter) || "?".Equals(letter);
-    }
-
     public void SetState(Tile.State state) {
         // print("BaseTile.SetState  " + state.name + "\n");
         this.state = state;
@@ -53,7 +49,11 @@ public abstract class BaseTile : MonoBehaviour {
     public void SetLetter(string inLetter) {
         //print("BaseTile.SetLetter  inLetter {" + inLetter + "}\n");
         letter = inLetter.ToUpper();
-        text.text = letter;
+        // quLogic
+        if ("Q".Equals(letter))
+            text.text = "Qu";
+        else
+            text.text = letter;
 
         button.onClick.RemoveAllListeners();
         if (!string.IsNullOrEmpty(inLetter)) // can happen at end of game

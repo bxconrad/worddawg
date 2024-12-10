@@ -52,14 +52,8 @@ public class UpdateBoard : MonoBehaviour {
         print("UpdateBoard.LoadSelectedWord {" + word + "}\n");
         ClearInputWordButton();
         inputWord.Initialize();
-        if (word.Length > 1) {
-            selectedWord.InitializeTiles(word);
-        }
-        else {
-            // bcdo i dont think this is getting called any more
-            var index = int.Parse(word);
-            betterRack.SelectTileAtIndex(index);
-        }
+        // quLogic
+        selectedWord.InitializeTiles(ContractDoubleLetter(word));
     }
 
     private void RemoveSelectedWord() {
@@ -78,6 +72,22 @@ public class UpdateBoard : MonoBehaviour {
         scoreManager.UpdateScoreForReplaceRack();
     }
 
+    //qulogic
+    public static string ExpandDoubleLetter(string word) {
+        return HandleDoubleLetter(true, word);
+    }
+
+    public static string ContractDoubleLetter(string word) {
+        return HandleDoubleLetter(false, word);
+    }
+
+    private static string HandleDoubleLetter(bool isAdding, string word) {
+        if (isAdding)
+            word = word.Replace("Q", "QU");
+        else
+            word = word.Replace("QU", "Q");
+        return word;
+    }
 
     public void SubmitInputWordButton() {
         Toast.Dismiss();
@@ -88,7 +98,8 @@ public class UpdateBoard : MonoBehaviour {
             dealer.Deal();
             HandleNearEndGame();
 
-            wordGrid.UpdateDisplayButton(selectedWord.GetWord(), inputWord.GetWord());
+            wordGrid.UpdateDisplayButton(ExpandDoubleLetter(selectedWord.GetWord()),
+                ExpandDoubleLetter(inputWord.GetWord()));
             scrollRect.verticalNormalizedPosition = 1.0f;
             CancelUpdateButton();
         }
