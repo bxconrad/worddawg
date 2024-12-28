@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using EasyUI.Toast;
 using UnityEngine;
 
@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private Dealer dealer;
     [SerializeField] private Stats stats;
     [SerializeField] private HelpDisplay helpDisplay;
+    [SerializeField] private GameParameters gameParameters;
+    [SerializeField] private ValidatorManager validatorManager;
+    [SerializeField] private TransformShaker transformShaker;
+    [SerializeField] private LogoImage logoImage;
 
     private string gameMode;
 
@@ -24,10 +28,12 @@ public class GameManager : MonoBehaviour {
         countdownTimer.EndTimer();
         scoreManager.End();
         dealer.End();
+        gameParameters.Initialize();
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
+
 
     private void InactivateOtherCanvases() {
         print("GameManager.InactivateOtherCanvases eg{" + endGameContainer + "}\n");
@@ -46,9 +52,14 @@ public class GameManager : MonoBehaviour {
     public void NewGameOfTheDay() {
         print("GameManager.NewGameOfTheDay \n");
         countdownTimer.isTimerEnabled = false;
-        dealer.SetRandomSeed(DateTime.Today.DayOfYear);
+        //dealer.SetRandomSeed(DateTime.Today.DayOfYear);
         dealer.SetNumLetters(MyPrefs.DEFAULT_LETTERS);
         gameMode = Stats.PREFS_ST_MODE_GOTD;
+
+        gameParameters.gameMode = Stats.PREFS_ST_MODE_GOTD;
+        gameParameters.isGameOfTheDay = true;
+        gameParameters.numLetters = MyPrefs.DEFAULT_LETTERS;
+        //gameParameters.language = MyPrefs.PREFS_LANG_SP;
         NewGame();
     }
 
@@ -87,6 +98,9 @@ public class GameManager : MonoBehaviour {
         else
             dealer.SetNumLetters(0);
         gameMode = Stats.PREFS_ST_MODE_CUSTOM;
+
+        gameParameters.language = MyPrefs.GetLanguage();
+        gameParameters.isGameOfTheDay = MyPrefs.IsGameOfTheDay();
         NewGame();
     }
 
@@ -109,6 +123,7 @@ public class GameManager : MonoBehaviour {
         InactivateOtherCanvases();
 
         scoreManager.Initialize();
+        validatorManager.Initialize();
         countdownTimer.gameObject.SetActive(true);
         countdownTimer.Initialize();
         updateBoard.gameObject.SetActive(true);
@@ -117,8 +132,18 @@ public class GameManager : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    public void EndGame() {
+    private async Task Spinit() {
+        var tasks = new Task[2];
+        tasks[0] = transformShaker.ASpin(logoImage.transform, .24f, 18, 3, false);
+        tasks[1] = transformShaker.ASpin(updateBoard.transform, .48f, 9, 1, true);
+
+        await Task.WhenAll(tasks);
+    }
+
+    public async Task EndGame() {
         print("GameManager.EndGame\n");
+        await Spinit();
+        gameParameters.isEndGame = true;
         InactivateOtherCanvases();
         countdownTimer.EndTimer();
         scoreManager.End();

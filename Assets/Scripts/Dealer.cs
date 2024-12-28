@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,6 +10,7 @@ public class Dealer : MonoBehaviour {
     [SerializeField] private CountdownTimer countDown;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private BetterRack betterRack;
+    [SerializeField] private GameParameters gameParameters;
     private readonly int consMax = 5;
     private readonly List<string> letters = new();
     private readonly int vowelMax = 4;
@@ -27,6 +29,7 @@ public class Dealer : MonoBehaviour {
     public void Initialize() {
         numLettersDealt = 0;
         letters.Clear();
+        if (gameParameters.isGameOfTheDay) SetRandomSeed(DateTime.Today.DayOfYear);
         FillLetterBag();
         betterRack.ClearRack();
         Deal();
@@ -34,14 +37,19 @@ public class Dealer : MonoBehaviour {
     }
 
     private void FillLetterBag() {
-        print("Dealer.AddLetters *start* #letters  " + letters.Count + "\n");
-        while (letters.Count < GetNumLetters()) {
-            foreach (var letterInfo in LetterInfo.allLetterInfos) {
-                for (var i = 0; i < letterInfo.getDistribution(); i++) {
-                    letters.Add(letterInfo.getTheLetter());
-                }
+        print("Dealer.AddLetters *start* #letters  " + letters.Count + " lang " + gameParameters.language + "\n");
+        var letterInfos = LetterInfo.letterInfosEN;
+        if (MyPrefs.PREFS_LANG_SP.Equals(gameParameters.language))
+            letterInfos = LetterInfo.letterInfosSP;
+        foreach (var letterInfo in letterInfos) {
+            for (var i = 0; i < letterInfo.getDistribution(); i++) {
+                letters.Add(letterInfo.getTheLetter());
             }
         }
+
+        // foreach (var group in letters.GroupBy(b => b).OrderBy(g => g.Key)) {
+        //     print("Dealer.AddLetters letter  " + $"{group.Key} ({group.Count()})" + "\n");
+        // }
 
         Shuffle(letters);
 
@@ -50,8 +58,8 @@ public class Dealer : MonoBehaviour {
 
     private void Shuffle<T>(IList<T> list) {
         var n = list.Count;
-        var aRandom = GetRandomSeed() == null ? new Random() : new Random((int)GetRandomSeed());
-        print("Dealer.Shuffle randomSeed  " + GetRandomSeed() + " aRandom " + aRandom + "\n");
+        aRandom = GetRandomSeed() == null ? new Random() : new Random((int)GetRandomSeed());
+        print("Dealer.Shuffle randomSeed  [" + GetRandomSeed() + "] aRandom " + aRandom + "\n");
         while (n > 1) {
             n--;
             var k = aRandom.Next(n + 1);
@@ -83,7 +91,8 @@ public class Dealer : MonoBehaviour {
 
         if (rackLetters.Length == 0) {
             print("Dealer.Deal calling endGame " + rackLetters + "\n");
-            gameManager.EndGame();
+            _ = gameManager.EndGame();
+            return;
         }
 
         betterRack.InitializeTiles(rackLetters);

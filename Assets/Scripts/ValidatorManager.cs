@@ -1,14 +1,17 @@
 using UnityEngine;
 
 public class ValidatorManager : MonoBehaviour {
+    [SerializeField] private GameParameters gameParameters;
     private string[] allWords;
 
-    public void Start() {
-        print("ValidatorManager.Start\n");
-        var textFile = Resources.Load("dictionary") as TextAsset;
+    public void Initialize() {
+        print("ValidatorManager.Initialize\n");
+        var dictionaryName = "dictionary-" + gameParameters.language;
+        // dictionaryName = "dictionary-spanishProcessed";
+        var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
 
-        print("ValidatorManager.LoadData allWords " + allWords.Length + "\n");
+        print("ValidatorManager.Initialize allWords " + allWords.Length + " dictionary " + dictionaryName + "\n");
     }
 
     public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWordString) {

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class Stats : MonoBehaviour {
@@ -30,9 +31,9 @@ public class Stats : MonoBehaviour {
 
     public void UpdateStats(string gameMode) {
         // Add the gameModeSuffix to the key to set different stats for each gameMode (timed, untimed, etc)
-        currentGameMode = gameMode;
         var currentGameModeSuffix = "_" + gameMode;
-        titleText.text = gameMode;
+        titleText.text = gameMode + '\n' + DateTime.Today.ToString("MMM dd, yyyy");
+
         rowNum = 0;
         UpdateStat(PREFS_ST_SCORE + currentGameModeSuffix, "Score", scoreManager.currentScore);
         UpdateStat(PREFS_ST_WORDS + currentGameModeSuffix, "Words", scoreManager.numWords);
@@ -71,6 +72,7 @@ public class Stats : MonoBehaviour {
             else {
                 allTimeBestWord = PlayerPrefs.GetString(bestWordKey);
             }
+
             UpdateRow("Best Word", currentBestWord, allTimeBestWord, bestMarker);
         }
     }
@@ -110,6 +112,7 @@ public class Stats : MonoBehaviour {
                 PlayerPrefs.DeleteKey(key);
             }
         }
+
         scoreManager.Initialize();
         UpdateStats(currentGameMode);
     }

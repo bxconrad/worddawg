@@ -795,7 +795,7 @@ PlayerSettings:
   monoEnv: 
   splashScreenBackgroundSourceLandscape: {fileID: 21300000, guid: e8dbe84f4ad3ab24dac8ff65ce1168f6, type: 3}
   splashScreenBackgroundSourcePortrait: {fileID: 21300000, guid: e8dbe84f4ad3ab24dac8ff65ce1168f6, type: 3}
-  blurSplashScreenBackground: 1
+  blurSplashScreenBackground: 0
   spritePackerPolicy: 
   webGLMemorySize: 32
   webGLExceptionSupport: 1
@@ -824,7 +824,7 @@ PlayerSettings:
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
-    Android: 0
+    Android: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   managedStrippingLevel:

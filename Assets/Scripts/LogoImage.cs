@@ -4,8 +4,6 @@ using UnityEngine.EventSystems;
 
 public class LogoImage : MonoBehaviour, IPointerClickHandler {
     public void OnPointerClick(PointerEventData eventData) {
-        if (eventData.clickCount == 2) {
-            Toast.Dismiss();
-        }
+        if (eventData.clickCount == 2) Toast.Dismiss();
     }
 }

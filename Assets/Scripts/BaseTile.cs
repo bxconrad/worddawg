@@ -50,8 +50,11 @@ public abstract class BaseTile : MonoBehaviour {
         //print("BaseTile.SetLetter  inLetter {" + inLetter + "}\n");
         letter = inLetter.ToUpper();
         // quLogic
+        // this just handles how QU and LL appear. It does not affect validation or how it appears in word list
         if ("Q".Equals(letter))
             text.text = "Qu";
+        else if ("*".Equals(letter))
+            text.text = "LL";
         else
             text.text = letter;
 

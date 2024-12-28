@@ -4,13 +4,16 @@ using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour {
-    [SerializeField] private GameObject gameLogo;
     [SerializeField] private TransformShaker transformShaker;
+    [SerializeField] private GameParameters gameParameters;
+    [SerializeField] private LogoImage logoImage;
 
     public TMP_Text scoreText;
 
     private readonly Color toastColor = new(0, .5f, 0, 1);
+
     private string[] dogBonusWords;
+    // private Dictionary<string, int> letterDictionary;
 
     private int letterScore;
     public int currentScore { get; private set; }
@@ -60,7 +63,7 @@ public class ScoreManager : MonoBehaviour {
 
     public void UpdateScoreForReplaceRack() {
         currentScore = Math.Max(0, currentScore -= 50);
-        updateScoreText();
+        if (!gameParameters.isEndGame) updateScoreText();
         print("ScoreManager.UpdateScoreForRack " + currentScore + "\n");
     }
 
@@ -97,7 +100,7 @@ public class ScoreManager : MonoBehaviour {
         newWord = UpdateBoard.ExpandDoubleLetter(newWord);
         if (IsDogBonusWord(newWord)) {
             msg = "Arooo! Special Word Dawg Bonus for " + newWord + "!!!\n";
-            transformShaker.Begin(gameLogo.transform, .25f, .1f, 12);
+            _ = transformShaker.ABeginRandomSpin(logoImage.transform, .3f, 4);
             print("ScoreManager.SendToastMessage IsDogBonusWord ");
         }
 
@@ -105,12 +108,13 @@ public class ScoreManager : MonoBehaviour {
         if (newWord.Length - originalWord.Length >= MyPrefs.NUM_RACK_LETTERS) {
             print("ScoreManager.SendToastMessage 100 bonus ");
             msg += "100 Point Bonus for using all letters!!! Great Job!";
-            transformShaker.Begin(gameLogo.transform, .20f, .1f, 12);
+            _ = transformShaker.ABeginRandomSpin(logoImage.transform, .3f, 4);
         }
 
         if (wordScore > 100 && msg.Equals("")) {
             toastTime = 2f;
             msg = wordScore + " points! " + ComplimentHandler.instance.GetRandomCompliment();
+            _ = transformShaker.ABeginRandomSpin(logoImage.transform, .3f, 2);
         }
 
         if (msg.Equals("")) {
@@ -148,8 +152,10 @@ public class ScoreManager : MonoBehaviour {
 
     private int CalculateLetterScore(string newWord) {
         var letterScore = 0;
+        var letterDictionary = LetterInfo.letterDictionaryDictionary[gameParameters.language];
+
         foreach (var letter in newWord) {
-            letterScore += LetterInfo.letterDictionary[letter.ToString()];
+            letterScore += letterDictionary[letter.ToString()];
         }
 
         return letterScore;

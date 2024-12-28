@@ -14,6 +14,8 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private InputWord inputWord;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private Dealer dealer;
+    [SerializeField] private LogoImage logoImage;
+    [SerializeField] private Canvas canvas;
 
     private BetterRack betterRack;
     private ReplaceRackButton replaceRackButton;
@@ -77,19 +79,29 @@ public class UpdateBoard : MonoBehaviour {
         return HandleDoubleLetter(true, word);
     }
 
+    //qulogic
     public static string ContractDoubleLetter(string word) {
         return HandleDoubleLetter(false, word);
     }
 
+    //qulogic
     private static string HandleDoubleLetter(bool isAdding, string word) {
-        if (isAdding)
+        if (isAdding) {
             word = word.Replace("Q", "QU");
-        else
+            word = word.Replace("*", "LL");
+        }
+        else {
             word = word.Replace("QU", "Q");
+            word = word.Replace("LL", "*");
+        }
+
         return word;
     }
 
     public void SubmitInputWordButton() {
+        //  transformShaker.BeginWaitSpin(logoImage.transform);
+        // transformShaker.ASpin(logoImage.transform);
+        // return;
         Toast.Dismiss();
         var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, inputWord.GetWord());
         if ("TRUE".Equals(validationResult)) {
@@ -105,7 +117,7 @@ public class UpdateBoard : MonoBehaviour {
         }
         else {
             Toast.Show(validationResult, 2f, Color.red, toastPosition);
-            transformShaker.Begin(inputWord.transform);
+            transformShaker.BeginShake(inputWord.transform);
         }
     }
 
