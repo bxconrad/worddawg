@@ -6,6 +6,7 @@ public class UpdateBoard : MonoBehaviour {
     public static ToastPosition toastPosition = ToastPosition.BottomCenter;
 
     [Header("UI")] [SerializeField] private GameObject updateButtons;
+    [SerializeField] private GameParameters gameParameters;
 
     [SerializeField] private ValidatorManager validatorManager;
 
@@ -15,7 +16,6 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private Dealer dealer;
     [SerializeField] private LogoImage logoImage;
-    [SerializeField] private Canvas canvas;
 
     private BetterRack betterRack;
     private ReplaceRackButton replaceRackButton;
@@ -54,8 +54,7 @@ public class UpdateBoard : MonoBehaviour {
         print("UpdateBoard.LoadSelectedWord {" + word + "}\n");
         ClearInputWordButton();
         inputWord.Initialize();
-        // quLogic
-        selectedWord.InitializeTiles(ContractDoubleLetter(word));
+        selectedWord.InitializeTiles(gameParameters.ContractDoubleLetter(word)); // quLogic
     }
 
     private void RemoveSelectedWord() {
@@ -75,28 +74,7 @@ public class UpdateBoard : MonoBehaviour {
     }
 
     //qulogic
-    public static string ExpandDoubleLetter(string word) {
-        return HandleDoubleLetter(true, word);
-    }
 
-    //qulogic
-    public static string ContractDoubleLetter(string word) {
-        return HandleDoubleLetter(false, word);
-    }
-
-    //qulogic
-    private static string HandleDoubleLetter(bool isAdding, string word) {
-        if (isAdding) {
-            word = word.Replace("Q", "QU");
-            word = word.Replace("*", "LL");
-        }
-        else {
-            word = word.Replace("QU", "Q");
-            word = word.Replace("LL", "*");
-        }
-
-        return word;
-    }
 
     public void SubmitInputWordButton() {
         //  transformShaker.BeginWaitSpin(logoImage.transform);
@@ -110,8 +88,8 @@ public class UpdateBoard : MonoBehaviour {
             dealer.Deal();
             HandleNearEndGame();
 
-            wordGrid.UpdateDisplayButton(ExpandDoubleLetter(selectedWord.GetWord()),
-                ExpandDoubleLetter(inputWord.GetWord()));
+            wordGrid.UpdateDisplayButton(gameParameters.ExpandDoubleLetter(selectedWord.GetWord()),
+                gameParameters.ExpandDoubleLetter(inputWord.GetWord()));
             scrollRect.verticalNormalizedPosition = 1.0f;
             CancelUpdateButton();
         }

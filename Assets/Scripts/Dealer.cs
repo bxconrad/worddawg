@@ -15,18 +15,11 @@ public class Dealer : MonoBehaviour {
     private readonly List<string> letters = new();
     private readonly int vowelMax = 4;
     private Random aRandom;
-
-    private int numLetters;
     private int numLettersDealt;
-    private int? randomSeed;
-
-
-    public void End() {
-        SetNumLetters(0);
-        SetRandomSeed(null);
-    }
+    private int randomSeed;
 
     public void Initialize() {
+        numLettersDealt = 0;
         numLettersDealt = 0;
         letters.Clear();
         if (gameParameters.isGameOfTheDay) SetRandomSeed(DateTime.Today.DayOfYear);
@@ -37,7 +30,7 @@ public class Dealer : MonoBehaviour {
     }
 
     private void FillLetterBag() {
-        print("Dealer.AddLetters *start* #letters  " + letters.Count + " lang " + gameParameters.language + "\n");
+        print("Dealer.FillLetterBag *start* #letters  " + letters.Count + " lang " + gameParameters.language + "\n");
         var letterInfos = LetterInfo.letterInfosEN;
         if (MyPrefs.PREFS_LANG_SP.Equals(gameParameters.language))
             letterInfos = LetterInfo.letterInfosSP;
@@ -47,10 +40,6 @@ public class Dealer : MonoBehaviour {
             }
         }
 
-        // foreach (var group in letters.GroupBy(b => b).OrderBy(g => g.Key)) {
-        //     print("Dealer.AddLetters letter  " + $"{group.Key} ({group.Count()})" + "\n");
-        // }
-
         Shuffle(letters);
 
         print("Dealer.AddLetters #letters  " + letters.Count + "\n");
@@ -58,7 +47,7 @@ public class Dealer : MonoBehaviour {
 
     private void Shuffle<T>(IList<T> list) {
         var n = list.Count;
-        aRandom = GetRandomSeed() == null ? new Random() : new Random((int)GetRandomSeed());
+        aRandom = !gameParameters.isGameOfTheDay ? new Random() : new Random(GetRandomSeed());
         print("Dealer.Shuffle randomSeed  [" + GetRandomSeed() + "] aRandom " + aRandom + "\n");
         while (n > 1) {
             n--;
@@ -73,7 +62,7 @@ public class Dealer : MonoBehaviour {
     }
 
     public void Deal() {
-        print("Dealer.Deal word {" + betterRack.GetWord().Trim() + "} timed? " + gameManager.IsTimed() +
+        print("Dealer.Deal word {" + betterRack.GetWord().Trim() + "} timed? " + gameParameters.isTimed +
               " letters.count " + letters.Count() + " lt? " + (letters.Count() <= MyPrefs.NUM_RACK_LETTERS) + "\n");
 
         // calculate how many letters are needed from the rack
@@ -103,7 +92,7 @@ public class Dealer : MonoBehaviour {
     }
 
 
-    public string FixLetterDistribution(string dealString) {
+    private string FixLetterDistribution(string dealString) {
         //bcdo small bug here. we should fix distribution when we first hit last rack
         // dont reset letters at end of untimed game
         dealString = FixConsonantOrVowels(dealString);
@@ -112,7 +101,7 @@ public class Dealer : MonoBehaviour {
     }
 
     // See if there are more than one duplicate letters, ie AABBCDE or AABBCCE
-    public string FixDuplicates(string dealString) {
+    private string FixDuplicates(string dealString) {
         if (dealString.Length < 3) return dealString;
         var updatedDealString = new StringBuilder(dealString);
         var lettersIndex = 0;
@@ -198,8 +187,8 @@ public class Dealer : MonoBehaviour {
         return dealString.Length >= consMax;
     }
 
-// iterate over our array of letters and find a consonant or vowel as requested.
-// We pass in the start index so we continue where we left off
+    // iterate over our array of letters and find a consonant or vowel as requested.
+    // We pass in the start index so we continue where we left off
     private int BuyMeAVowelOrConsonant(bool isVowel, int startIndex) {
         // print("Dealer.BuyMeAVowelOrConsonant  isVowel " + isVowel + " startIndex " + startIndex + "\n");
         for (var lettersIndex = startIndex; lettersIndex < letters.Count && startIndex >= 0; lettersIndex++) {
@@ -212,7 +201,7 @@ public class Dealer : MonoBehaviour {
         return -1;
     }
 
-// Switch a letter in the dealString with a letter from our letters array
+    // Switch a letter in the dealString with a letter from our letters array
     private void SwitchLetters(int lettersIndex, string dealLetter, StringBuilder sb, int sbIndex) {
         var aLetter = letters[lettersIndex];
         letters[lettersIndex] = dealLetter;
@@ -234,7 +223,7 @@ public class Dealer : MonoBehaviour {
 
     private bool IsDealable() {
         // for timed game, if we run out of letters add more and will return true
-        if (gameManager.IsTimed() && letters.Count() < MyPrefs.NUM_RACK_LETTERS) FillLetterBag();
+        if (gameParameters.isTimed && letters.Count() < MyPrefs.NUM_RACK_LETTERS) FillLetterBag();
         return letters.Count > 0 && GetNumLetters() - numLettersDealt > 0;
     }
 
@@ -248,23 +237,19 @@ public class Dealer : MonoBehaviour {
     }
 
     public bool IsNearEndGame() {
-        return GetTotalNumLettersLeft() <= MyPrefs.NUM_RACK_LETTERS;
+        return !gameParameters.isTimed && GetTotalNumLettersLeft() <= MyPrefs.NUM_RACK_LETTERS;
     }
 
-    // it's timed game numLetters will be 0. would be better to ask GameManager if it is a timedGame or not.
+    // it's timed game numLetters will be 999.
     private int GetNumLetters() {
-        return numLetters == 0 ? 99999 : numLetters;
+        return gameParameters.isTimed ? 999 : gameParameters.numLetters;
     }
 
-    public void SetNumLetters(int value) {
-        numLetters = value;
-    }
-
-    private int? GetRandomSeed() {
+    private int GetRandomSeed() {
         return randomSeed;
     }
 
-    public void SetRandomSeed(int? value) {
+    private void SetRandomSeed(int value) {
         randomSeed = value;
     }
 }
