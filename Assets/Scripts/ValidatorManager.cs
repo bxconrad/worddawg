@@ -18,9 +18,9 @@ public class ValidatorManager : MonoBehaviour {
         print("ValidatorManager.ValidateInputWord {" + inputWordString + "}\n");
         //return true;
         // qulogic
-        var selectedWordString = UpdateBoard.ExpandDoubleLetter(selectedWord.GetWord());
-        var rackWordString = UpdateBoard.ExpandDoubleLetter(betterRack.GetWord());
-        inputWordString = UpdateBoard.ExpandDoubleLetter(inputWordString);
+        var selectedWordString = gameParameters.ExpandDoubleLetter(selectedWord.GetWord());
+        var rackWordString = gameParameters.ExpandDoubleLetter(betterRack.GetWord());
+        inputWordString = gameParameters.ExpandDoubleLetter(inputWordString);
         // check all letters from currentWord are used
         if (!selectedWord.isAllLettersUsed()) {
             print("ValidatorManager.ValidateInputWord IsAllLettersUsed  false \n");
@@ -47,7 +47,7 @@ public class ValidatorManager : MonoBehaviour {
             return "Words must be at least 3 letters long";
         }
 
-        print("ValidatorManager.ValidateInputWord IsLenght true\n");
+        print("ValidatorManager.ValidateInputWord IsLength true\n");
 
         if (!IsInDictionary(inputWordString)) {
             print("ValidatorManager.ValidateInputWord " + inputWordString + " IsInDictionary  isValidNew false\n");
@@ -59,6 +59,8 @@ public class ValidatorManager : MonoBehaviour {
         return "TRUE";
     }
 
+    //verify that all the letters in the selectedWord have been used in the inputWord and at least one from the rack
+    // if not, return the first letter that was not used. If so, return blank.
     private char IsLettersContained(string inputWordString, string selectedWordString, string letterRackWord) {
         print("IsLettersContained sel " + selectedWordString + " letterRackWord " + letterRackWord);
         foreach (var letter in inputWordString) {
@@ -69,8 +71,6 @@ public class ValidatorManager : MonoBehaviour {
                 //print("IsLettersContained " + index + " selectedWordString " + selectedWordString);
                 continue;
             }
-
-            //print("IsLettersContained after continue");
 
             index = letterRackWord.IndexOf(letter);
             if (index >= 0) {
@@ -89,6 +89,7 @@ public class ValidatorManager : MonoBehaviour {
         print("ValidatorManager.IsInDictionary word " + word + "\n");
         for (var i = 0; i < allWords.Length; i++) {
             if (word.Equals(allWords[i].ToUpper())) {
+                //bcdo make allWords upper at initialization
                 print("ValidatorManager.IsInDictionary " + i + " allWords[i] " + allWords[i] + "\n");
                 return true;
             }

@@ -17,6 +17,30 @@ public class GameParameters : MonoBehaviour {
         isTimed = false;
         isGameOfTheDay = false;
         isEndGame = false;
-        gameMode = "";
+        //gameMode = ""; don't init gameMode, need it for same game replay
+    }
+
+    public string ContractDoubleLetter(string word) {
+        return HandleDoubleLetter(false, word);
+    }
+
+    public string ExpandDoubleLetter(string word) {
+        return HandleDoubleLetter(true, word);
+    }
+
+    //qulogic
+    private string HandleDoubleLetter(bool isAdding, string word) {
+        if (isAdding) {
+            word = word.Replace("Q", "QU");
+            if (MyPrefs.PREFS_LANG_SP.Equals(language))
+                word = word.Replace("*", "LL");
+        }
+        else {
+            word = word.Replace("QU", "Q");
+            if (MyPrefs.PREFS_LANG_SP.Equals(language))
+                word = word.Replace("LL", "*");
+        }
+
+        return word;
     }
 }

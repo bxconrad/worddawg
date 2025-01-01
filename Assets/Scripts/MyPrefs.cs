@@ -33,13 +33,11 @@ public class MyPrefs : MonoBehaviour {
     [SerializeField] private GameParameters gameParameters;
 
     private void Start() {
+        print("MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
         timerToggle.onValueChanged.AddListener(delegate { TimerToggleValueChanged(timerToggle); });
         timerToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
-        print("MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
+        print("MyPrefs.Start2 " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " ttog " + timerToggle + " \n");
 
-        showButtonsToggle.onValueChanged.AddListener(delegate { ShowButtonsToggleValueChanged(showButtonsToggle); });
-        showButtonsToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_SHOW_BUTTON, DEFAULT_IS_SHOW_BUTTON).ToUpper()
-            .Equals("TRUE");
 
         gameOfTheDayToggle.onValueChanged.AddListener(delegate { GameOfTheDayToggleValueChanged(gameOfTheDayToggle); });
         gameOfTheDayToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_GOTD, DEFAULT_IS_GOTD).ToUpper()
@@ -51,7 +49,12 @@ public class MyPrefs : MonoBehaviour {
 
         ShowTimerOnOff();
         Toast.Dismiss();
+
+        showButtonsToggle.onValueChanged.AddListener(delegate { ShowButtonsToggleValueChanged(showButtonsToggle); });
+        showButtonsToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_SHOW_BUTTON, DEFAULT_IS_SHOW_BUTTON).ToUpper()
+            .Equals("TRUE");
     }
+
 
     public void DurationDropdown(int index) {
         print("MyPrefs.DurationDropdown " + index + " \n");
@@ -74,6 +77,7 @@ public class MyPrefs : MonoBehaviour {
     private void TimerToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(PREFS_RT_IS_TIMER, val.ToString());
+        gameParameters.isTimed = val;
         ShowTimerOnOff();
         print("MyPrefs.TimerToggleValueChanged " + val + " \n");
     }
@@ -105,13 +109,6 @@ public class MyPrefs : MonoBehaviour {
         Start();
     }
 
-    public static string GetLanguage() {
-        return PlayerPrefs.GetString(PREFS_RT_LANGUAGE, DEFAULT_LANG);
-    }
-
-    public static int GetTimerDuration() {
-        return PlayerPrefs.GetInt(PREFS_RT_DURATION, DEFAULT_DURATION);
-    }
 
     public static int GetNumLetters() {
         var numLetters = DEFAULT_LETTERS;
@@ -126,9 +123,5 @@ public class MyPrefs : MonoBehaviour {
 
     public static bool IsTimer() {
         return PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
-    }
-
-    public static bool IsGameOfTheDay() {
-        return PlayerPrefs.GetString(PREFS_RT_IS_GOTD, DEFAULT_IS_GOTD).ToUpper().Equals("TRUE");
     }
 }

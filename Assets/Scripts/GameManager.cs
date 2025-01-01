@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private ScoreManager scoreManager;
-    [SerializeField] private Dealer dealer;
     [SerializeField] private Stats stats;
     [SerializeField] private HelpDisplay helpDisplay;
     [SerializeField] private GameParameters gameParameters;
@@ -27,7 +26,6 @@ public class GameManager : MonoBehaviour {
         // end components
         countdownTimer.EndTimer();
         scoreManager.End();
-        dealer.End();
         gameParameters.Initialize();
 
         Cursor.lockState = CursorLockMode.None;
@@ -51,32 +49,33 @@ public class GameManager : MonoBehaviour {
 
     public void NewGameOfTheDay() {
         print("GameManager.NewGameOfTheDay \n");
-        countdownTimer.isTimerEnabled = false;
-        //dealer.SetRandomSeed(DateTime.Today.DayOfYear);
-        dealer.SetNumLetters(MyPrefs.DEFAULT_LETTERS);
         gameMode = Stats.PREFS_ST_MODE_GOTD;
 
         gameParameters.gameMode = Stats.PREFS_ST_MODE_GOTD;
         gameParameters.isGameOfTheDay = true;
         gameParameters.numLetters = MyPrefs.DEFAULT_LETTERS;
-        //gameParameters.language = MyPrefs.PREFS_LANG_SP;
         NewGame();
     }
 
     public void NewUntimedGame() {
         print("GameManager.NewUntimedGame \n");
-        countdownTimer.isTimerEnabled = false;
-        dealer.SetNumLetters(MyPrefs.DEFAULT_LETTERS);
         gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
+
+        gameParameters.isTimed = false;
+        gameParameters.numLetters = MyPrefs.DEFAULT_LETTERS;
+        gameParameters.gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
         NewGame();
     }
 
     public void NewTimedGame() {
         print("GameManager.NewTimedGame \n");
-        countdownTimer.isTimerEnabled = true;
-        countdownTimer.SetCountdown(4);
-        dealer.SetNumLetters(0);
         gameMode = Stats.PREFS_ST_MODE_TIMED_4;
+
+        gameParameters.isTimed = true;
+        gameParameters.numSeconds = MyPrefs.DEFAULT_DURATION * 60;
+        gameParameters.numLetters = 999;
+        gameParameters.gameMode = Stats.PREFS_ST_MODE_TIMED_4;
+
         NewGame();
     }
 
@@ -87,20 +86,23 @@ public class GameManager : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    private void InitializeCustomGameParameters() {
+        print("GameManager.NewCustomGamePlay " + PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_TIMER) + " \n");
+
+        gameParameters.gameMode = Stats.PREFS_ST_MODE_CUSTOM;
+        gameParameters.isTimed = PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_TIMER).ToUpper().Equals("TRUE");
+        gameParameters.isGameOfTheDay = PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_GOTD).ToUpper().Equals("TRUE");
+        gameParameters.numSeconds = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_DURATION) * 60;
+        gameParameters.numLetters = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_LETTERS);
+        gameParameters.language = PlayerPrefs.GetString(MyPrefs.PREFS_RT_LANGUAGE);
+    }
+
     public void NewCustomGamePlay() {
         print("GameManager.NewCustomGamePlay \n");
         prefsContainer.SetActive(false);
         gameObject.SetActive(true);
-        countdownTimer.isTimerEnabled = MyPrefs.IsTimer();
-        countdownTimer.SetCountdown(MyPrefs.GetTimerDuration());
-        if (!MyPrefs.IsTimer())
-            dealer.SetNumLetters(MyPrefs.GetNumLetters());
-        else
-            dealer.SetNumLetters(0);
         gameMode = Stats.PREFS_ST_MODE_CUSTOM;
-
-        gameParameters.language = MyPrefs.GetLanguage();
-        gameParameters.isGameOfTheDay = MyPrefs.IsGameOfTheDay();
+        InitializeCustomGameParameters();
         NewGame();
     }
 
@@ -124,8 +126,13 @@ public class GameManager : MonoBehaviour {
 
         scoreManager.Initialize();
         validatorManager.Initialize();
-        countdownTimer.gameObject.SetActive(true);
-        countdownTimer.Initialize();
+        countdownTimer.enabled = false;
+        if (gameParameters.isTimed) {
+            countdownTimer.Initialize();
+            countdownTimer.gameObject.SetActive(true);
+            countdownTimer.enabled = true;
+        }
+
         updateBoard.gameObject.SetActive(true);
         updateBoard.AwakeIt(); // bcdo fix but be careful
         updateBoard.NewGame();
@@ -159,7 +166,7 @@ public class GameManager : MonoBehaviour {
         Application.Quit();
     }
 
-    public bool IsTimed() {
-        return true.Equals(countdownTimer.isTimerEnabled);
+    public void OpenHowToPlayVideo() {
+        Application.OpenURL("https://sites.google.com/view/worddawg/howtoplayvideo");
     }
 }

@@ -7,14 +7,10 @@ public class ScoreManager : MonoBehaviour {
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] private LogoImage logoImage;
-
     public TMP_Text scoreText;
 
     private readonly Color toastColor = new(0, .5f, 0, 1);
-
     private string[] dogBonusWords;
-    // private Dictionary<string, int> letterDictionary;
-
     private int letterScore;
     public int currentScore { get; private set; }
     public int wordScore { get; private set; }
@@ -64,12 +60,12 @@ public class ScoreManager : MonoBehaviour {
     public void UpdateScoreForReplaceRack() {
         currentScore = Math.Max(0, currentScore -= 50);
         if (!gameParameters.isEndGame) updateScoreText();
-        print("ScoreManager.UpdateScoreForRack " + currentScore + "\n");
+        print("ScoreManager.UpdateScoreForReplaceRack " + currentScore + "\n");
     }
 
     public int CalculateWordScore(string originalWord, string newWord) {
-        originalWord = UpdateBoard.ExpandDoubleLetter(originalWord);
-        newWord = UpdateBoard.ExpandDoubleLetter(newWord);
+        originalWord = gameParameters.ExpandDoubleLetter(originalWord);
+        newWord = gameParameters.ExpandDoubleLetter(newWord);
         letterScore = CalculateLetterScore(newWord);
         var multiplier = CalculateMultiplier(originalWord, newWord);
 
@@ -96,8 +92,8 @@ public class ScoreManager : MonoBehaviour {
         var msg = "";
         var toastTime = 15f;
         Toast.Dismiss();
-        originalWord = UpdateBoard.ExpandDoubleLetter(originalWord);
-        newWord = UpdateBoard.ExpandDoubleLetter(newWord);
+        originalWord = gameParameters.ExpandDoubleLetter(originalWord);
+        newWord = gameParameters.ExpandDoubleLetter(newWord);
         if (IsDogBonusWord(newWord)) {
             msg = "Arooo! Special Word Dawg Bonus for " + newWord + "!!!\n";
             _ = transformShaker.ABeginRandomSpin(logoImage.transform, .3f, 4);
@@ -151,14 +147,14 @@ public class ScoreManager : MonoBehaviour {
     }
 
     private int CalculateLetterScore(string newWord) {
-        var letterScore = 0;
+        var newWordLetterScore = 0;
         var letterDictionary = LetterInfo.letterDictionaryDictionary[gameParameters.language];
 
         foreach (var letter in newWord) {
-            letterScore += letterDictionary[letter.ToString()];
+            newWordLetterScore += letterDictionary[letter.ToString()];
         }
 
-        return letterScore;
+        return newWordLetterScore;
     }
 
     private double CalculateMultiplier(string originalWord, string newWord) {
