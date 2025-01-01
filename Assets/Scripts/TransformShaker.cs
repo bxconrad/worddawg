@@ -4,15 +4,15 @@ using UnityEngine;
 using Random = System.Random;
 
 public class TransformShaker : MonoBehaviour {
-    private readonly float _delay = .05f;
     private readonly float _distance = 6f;
 
     private readonly float _duration = .15f;
     private readonly Random rnd = new();
+    private readonly float tDelay = .05f;
 
 
     public void BeginShake(Transform theTransform) {
-        BeginShake(theTransform, _duration, _delay, _distance);
+        BeginShake(theTransform, _duration, tDelay, _distance);
     }
 
     private void BeginShake(Transform theTransform, float duration, float delay, float distance) {
