@@ -5,12 +5,13 @@ public class BTile : BaseTile {
 
     private new void Awake() {
         base.Awake();
-        inputWord = GameObject.FindGameObjectWithTag("newInputWord").GetComponent<InputWord>();
+        // inputWord = GameObject.FindGameObjectWithTag("newInputWord").GetComponent<InputWord>();
         //    print("BTile.Awake newInputWord {" + newInputWord + "} inputText " + inputText + "}\n");
     }
 
 
     public override void OnButtonClick(string buttonString) {
+        inputWord = GameObject.FindGameObjectWithTag("newInputWord").GetComponent<InputWord>();
         print("BTile.OnButtonClick  buttonString {" + buttonString + "} IsUnselected " + state.name +
               " inputword {" + inputWord.GetWord() + "\n");
         if (IsSelected()) {
@@ -23,6 +24,7 @@ public class BTile : BaseTile {
     }
 
     public void SelectLetter() {
+        inputWord = GameObject.FindGameObjectWithTag("newInputWord").GetComponent<InputWord>();
         if (IsUnselected()) {
             inputWord.AddLetter(this);
             // print("BTile.SelectLetter  inputText " + inputText + " inputText.text {" + inputText.text + "}\n");

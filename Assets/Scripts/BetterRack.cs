@@ -3,17 +3,19 @@ using UnityEngine.EventSystems;
 
 public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
     [SerializeField] private UpdateBoard updateBoard;
+    [SerializeField] private GameParameters gameParameters;
+    [SerializeField] private BTile bTilePrefab;
 
     private float firstPos;
     private bool isFirstDrag = true;
     private BTile[] tiles { get; set; }
 
-    private void Awake() {
-        //print("BetterRack.Awake \n");
-        tiles = GetComponentsInChildren<BTile>();
-        //InitializeTilesOrigin();
-        print("BetterRack.Awake tiles" + tiles + "\n");
-    }
+    // private void Awake() {
+    //     //print("BetterRack.Awake \n");
+    //     Initialize();
+    //     print("BetterRack.Awake tiles" + tiles + "\n");
+    // }
+
 
     public void OnDrag(PointerEventData eventData) {
         //print("BetterRack.OnDrag " + eventData.position.x + "\n");
@@ -30,6 +32,30 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
               "\n");
         isFirstDrag = true;
         if (Mathf.Abs(distance) > 100) updateBoard.ReplaceRackButton();
+    }
+
+    public void Initialize() {
+        print("BetterRack.Initialize " + gameParameters.numRackLetters + " \n");
+        var tilesx = GetComponentsInChildren<BTile>();
+        foreach (var child in tilesx) {
+            //print("WordGrid.BetterRack destroying " + child.gameObject.name + "\n");
+            Destroy(child.gameObject);
+        }
+
+        // old tiles are still there even though they are destroyed so can't use getComponentsInChildren, need to re-create array
+        tiles = new BTile[gameParameters.numRackLetters];
+        for (var i = 0; i < gameParameters.numRackLetters; i++) {
+            var newTile = InstantiateButton();
+            tiles[i] = newTile;
+        }
+    }
+
+
+    private BTile InstantiateButton() {
+        var newDisplayButton = Instantiate(bTilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        newDisplayButton.transform.SetParent(transform, false);
+        return newDisplayButton;
+        //    print("BetterRack.InstantiateDisplayButton " + newDisplayButton + "\n");
     }
 
 
@@ -60,18 +86,13 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
         }
     }
 
-    public void SelectTileAtIndex(int index) {
-        tiles[index].SetState(Tile.State.selectedState);
-    }
-
-
     public string GetWord() {
         var myWord = "";
         foreach (var tile in tiles) {
             myWord += tile.letter;
         }
 
-        myWord = myWord.PadRight(MyPrefs.NUM_RACK_LETTERS); // ?? why do we pad?
+        myWord = myWord.PadRight(gameParameters.numRackLetters); // ?? why do we pad?
         return myWord;
     }
 

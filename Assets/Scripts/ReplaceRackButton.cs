@@ -17,7 +17,7 @@ public class ReplaceRackButton : MonoBehaviour {
     }
 
     public void Initialize() {
-        print("ReplaceRackButton.Initialize " + text.text + " " + GetComponent<Image>() + "\n");
+        print("ReplaceRackButton.Initialize " + text.text + "\n");
         GetComponent<Image>().color = Color.yellow;
         text.text = "Rack";
     }

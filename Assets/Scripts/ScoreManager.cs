@@ -77,7 +77,7 @@ public class ScoreManager : MonoBehaviour {
         }
 
         // If entire rack is used
-        if (newWord.Length - originalWord.Length >= MyPrefs.NUM_RACK_LETTERS) {
+        if (newWord.Length - originalWord.Length >= gameParameters.numRackLetters) {
             wordScore += 100;
             print("ScoreManager.CalculateWordScore 100 bonus ");
         }
@@ -101,7 +101,7 @@ public class ScoreManager : MonoBehaviour {
         }
 
         // If entire rack is used
-        if (newWord.Length - originalWord.Length >= MyPrefs.NUM_RACK_LETTERS) {
+        if (newWord.Length - originalWord.Length >= gameParameters.numRackLetters) {
             print("ScoreManager.SendToastMessage 100 bonus ");
             msg += "100 Point Bonus for using all letters!!! Great Job!";
             _ = transformShaker.ABeginRandomSpin(logoImage.transform, .3f, 4);

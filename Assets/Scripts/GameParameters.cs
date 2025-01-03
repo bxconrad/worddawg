@@ -8,6 +8,7 @@ public class GameParameters : MonoBehaviour {
     public bool isTimed { get; set; }
     public bool isGameOfTheDay { get; set; }
     public bool isEndGame { get; set; }
+    public int numRackLetters { get; set; }
 
 
     public void Initialize() {
@@ -17,6 +18,7 @@ public class GameParameters : MonoBehaviour {
         isTimed = false;
         isGameOfTheDay = false;
         isEndGame = false;
+        numRackLetters = MyPrefs.DEFAULT_NUM_RACK_LETTERS;
         //gameMode = ""; don't init gameMode, need it for same game replay
     }
 
