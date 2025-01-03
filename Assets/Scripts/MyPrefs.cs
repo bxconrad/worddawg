@@ -5,17 +5,18 @@ using Toggle = UnityEngine.UI.Toggle;
 
 public class MyPrefs : MonoBehaviour {
     public static int DEFAULT_DURATION = 4;
-    public static int DEFAULT_LETTERS = 50;
-    public static string DEFAULT_IS_TIMER = "TRUE";
-    public static string DEFAULT_IS_SHOW_BUTTON = "TRUE";
-    public static string DEFAULT_IS_GOTD = "TRUE";
+    public static readonly int DEFAULT_NUM_LETTERS = 50;
+    private static readonly string DEFAULT_IS_TIMER = "TRUE";
+    private static readonly string DEFAULT_IS_SHOW_BUTTON = "TRUE";
+    private static readonly string DEFAULT_IS_GOTD = "TRUE";
     public static string PREFS_RT_DURATION = "RT_DURATION";
     public static string PREFS_RT_LANGUAGE = "RT_LANGUAGE";
     public static string PREFS_RT_LETTERS = "RT_LETTERS";
+    public static string PREFS_RT_RACK_LETTERS = "RT_RACK_LETTERS";
     public static string PREFS_RT_IS_TIMER = "RT_IS_TIMER";
     public static string PREFS_RT_IS_GOTD = "RT_IS_GOTD";
-    public static string PREFS_RT_IS_SHOW_BUTTON = "RT_IS_SHOW_BUTTON";
-    public static int NUM_RACK_LETTERS = 7;
+    private static readonly string PREFS_RT_IS_SHOW_BUTTON = "RT_IS_SHOW_BUTTON";
+    public static readonly int DEFAULT_NUM_RACK_LETTERS = 7;
     public static string PREFS_LANG_SP = "SP";
     public static string PREFS_LANG_EN = "EN";
     public static string DEFAULT_LANG = PREFS_LANG_SP;
@@ -27,6 +28,7 @@ public class MyPrefs : MonoBehaviour {
     [SerializeField] private TMP_Dropdown durationDropdown;
     [SerializeField] private TMP_Dropdown letterDropdown;
     [SerializeField] private TMP_Dropdown languageDropdown;
+    [SerializeField] private TMP_Dropdown rackLettersDropdown;
     [SerializeField] private Toggle showButtonsToggle;
     [SerializeField] private Toggle timerToggle;
     [SerializeField] private Toggle gameOfTheDayToggle;
@@ -44,8 +46,11 @@ public class MyPrefs : MonoBehaviour {
             .Equals("TRUE");
 
         durationDropdown.value = PlayerPrefs.GetInt(PREFS_RT_DURATION, DEFAULT_DURATION) - 1;
-        letterDropdown.value = PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_LETTERS) / 50 - 1;
-        languageDropdown.value = 2; //PlayerPrefs.GetString(PREFS_RT_LANGUAGE, DEFAULT_LANG);
+        letterDropdown.value = PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_NUM_LETTERS) / 50 - 1;
+        rackLettersDropdown.value = PlayerPrefs.GetInt(PREFS_RT_RACK_LETTERS, DEFAULT_NUM_RACK_LETTERS);
+
+        var lang = PlayerPrefs.GetString(PREFS_RT_LANGUAGE, DEFAULT_LANG);
+        languageDropdown.value = lang == PREFS_LANG_SP ? 1 : 0;
 
         ShowTimerOnOff();
         Toast.Dismiss();
@@ -65,6 +70,12 @@ public class MyPrefs : MonoBehaviour {
         var numLetters = (index + 1) * 50;
         print("MyPrefs.LetterDropdown " + index + "  nl " + numLetters + " \n");
         PlayerPrefs.SetInt(PREFS_RT_LETTERS, numLetters);
+    }
+
+    public void RackLettersDropdown(int index) {
+        var numLetters = index + 7;
+        print("MyPrefs.RackLettersDropdown " + index + "  nl " + numLetters + " \n");
+        PlayerPrefs.SetInt(PREFS_RT_RACK_LETTERS, numLetters);
     }
 
     public void LanguageDropdown(int option) {
@@ -111,8 +122,8 @@ public class MyPrefs : MonoBehaviour {
 
 
     public static int GetNumLetters() {
-        var numLetters = DEFAULT_LETTERS;
-        if (!IsTimer()) numLetters = PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_LETTERS);
+        var numLetters = DEFAULT_NUM_LETTERS;
+        if (!IsTimer()) numLetters = PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_NUM_LETTERS);
 
         return numLetters;
     }

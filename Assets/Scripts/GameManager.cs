@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EasyUI.Toast;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     [Header("UI")] [SerializeField] private GameObject endGameContainer;
@@ -8,12 +11,14 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private ScoreManager scoreManager;
+    [SerializeField] private BetterRack betterRack;
     [SerializeField] private Stats stats;
     [SerializeField] private HelpDisplay helpDisplay;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] private ValidatorManager validatorManager;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private LogoImage logoImage;
+    private readonly List<Image> panelImages = new();
 
     private string gameMode;
 
@@ -30,6 +35,37 @@ public class GameManager : MonoBehaviour {
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    private void UpdateColors() {
+        var canvas = GetComponentInParent<Canvas>();
+        panelImages.Add(GameObject.FindGameObjectWithTag("header").GetComponent<Image>());
+        panelImages.Add(GameObject.FindGameObjectWithTag("endGamePanel").GetComponent<Image>());
+        panelImages.Add(canvas.GetComponentInChildren<GameManager>().GetComponent<Image>());
+        var ub = canvas.GetComponentInChildren<UpdateBoard>();
+        ub.enabled = true;
+        var ubi = ub.GetComponent<Image>();
+        panelImages.Add(ubi);
+
+        var wg = canvas.GetComponentInChildren<WordGrid>();
+        var wgi = wg.gameObject.transform.parent.GetComponent<Image>();
+        panelImages.Add(wgi);
+        foreach (var image in panelImages) {
+            image.color = Color.red;
+        }
+
+        var buttons = canvas.GetComponentInChildren<GameManager>().GetComponentsInChildren<Button>();
+        var buttons2 = ub.GetComponentsInChildren<Button>();
+        buttons.Concat(buttons2);
+        foreach (var button in buttons) {
+            var image = button.GetComponent<Image>();
+            image.color = Color.blue;
+        }
+
+        foreach (var button in buttons2) {
+            var image = button.GetComponent<Image>();
+            image.color = Color.blue;
+        }
     }
 
 
@@ -53,7 +89,7 @@ public class GameManager : MonoBehaviour {
 
         gameParameters.gameMode = Stats.PREFS_ST_MODE_GOTD;
         gameParameters.isGameOfTheDay = true;
-        gameParameters.numLetters = MyPrefs.DEFAULT_LETTERS;
+        gameParameters.numLetters = MyPrefs.DEFAULT_NUM_LETTERS;
         NewGame();
     }
 
@@ -62,7 +98,7 @@ public class GameManager : MonoBehaviour {
         gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
 
         gameParameters.isTimed = false;
-        gameParameters.numLetters = MyPrefs.DEFAULT_LETTERS;
+        gameParameters.numLetters = MyPrefs.DEFAULT_NUM_LETTERS;
         gameParameters.gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
         NewGame();
     }
@@ -95,6 +131,9 @@ public class GameManager : MonoBehaviour {
         gameParameters.numSeconds = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_DURATION) * 60;
         gameParameters.numLetters = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_LETTERS);
         gameParameters.language = PlayerPrefs.GetString(MyPrefs.PREFS_RT_LANGUAGE);
+        gameParameters.numRackLetters = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_RACK_LETTERS) == 0
+            ? MyPrefs.DEFAULT_NUM_RACK_LETTERS
+            : PlayerPrefs.GetInt(MyPrefs.PREFS_RT_RACK_LETTERS);
     }
 
     public void NewCustomGamePlay() {
@@ -126,6 +165,7 @@ public class GameManager : MonoBehaviour {
 
         scoreManager.Initialize();
         validatorManager.Initialize();
+        betterRack.Initialize();
         countdownTimer.enabled = false;
         if (gameParameters.isTimed) {
             countdownTimer.Initialize();
@@ -163,6 +203,7 @@ public class GameManager : MonoBehaviour {
 
     public void ExitApplication() {
         Debug.Log("GameManager.ExitApplication");
+        // UpdateColors();
         Application.Quit();
     }
 
