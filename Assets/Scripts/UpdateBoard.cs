@@ -13,31 +13,33 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private InputWord inputWord;
+    [SerializeField] private SelectedWord selectedWord;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private Dealer dealer;
     [SerializeField] private LogoImage logoImage;
 
-    private BetterRack betterRack;
-    private ReplaceRackButton replaceRackButton;
-    private SelectedWord selectedWord;
-    private WordGrid wordGrid;
+    [SerializeField] private BetterRack betterRack;
+    [SerializeField] private ReplaceRackButton replaceRackButton;
+    [SerializeField] private WordGrid wordGrid;
 
     public void Start() {
         print("UpdateBoard.Start\n");
-        AwakeIt();
+        // AwakeIt();
     }
 
-    // Problems with Awake event on Android
-    public void AwakeIt() {
-        selectedWord = GetComponentInChildren<SelectedWord>();
-        betterRack = GetComponentInChildren<BetterRack>();
-        wordGrid = GetComponentInChildren<WordGrid>();
-        replaceRackButton = GetComponentInChildren<ReplaceRackButton>();
-        print("UpdateBoard.AwakeIt\n");
-    }
+    // // Problems with Awake event on Android
+    // public void AwakeIt() {
+    //     if (!isAwake) {
+    //         isAwake = true;
+    //         betterRack = GetComponentInChildren<BetterRack>();
+    //         wordGrid = GetComponentInChildren<WordGrid>();
+    //         replaceRackButton = GetComponentInChildren<ReplaceRackButton>();
+    //         print("UpdateBoard.AwakeIt\n");
+    //     }
+    // }
 
     public void NewGame() {
-        print("UpdateBoard.NewGame \n");
+        print("UpdateBoard.NewGame selectedWord {" + selectedWord + "} \n");
         wordGrid.Initialize();
         RemoveSelectedWord();
         inputWord.Initialize();
@@ -45,20 +47,22 @@ public class UpdateBoard : MonoBehaviour {
         replaceRackButton.Initialize();
         updateButtons.SetActive(MyPrefs.IsShowButtons());
         Toast.Show(
-            "To start the game, create a word from the letters in the rack. After that, you can create or modify new words.",
+            "To start the game, create a word by clicking on the letters in the rack. After that, you can create or modify new words.",
             15f, Color.magenta, toastPosition);
     }
 
     // Called onButtonClick from wordGrid
     public void LoadSelectedWord(string word) {
         print("UpdateBoard.LoadSelectedWord {" + word + "}\n");
-        ClearInputWordButton();
+        selectedWord.gameObject.SetActive(true);
+        ClearInputWord();
         inputWord.Initialize();
         selectedWord.InitializeTiles(gameParameters.ContractDoubleLetter(word)); // quLogic
     }
 
     private void RemoveSelectedWord() {
         selectedWord.InitializeTiles(string.Empty);
+        selectedWord.gameObject.SetActive(false);
     }
 
     // ---------- buttons --------------------------
@@ -69,7 +73,7 @@ public class UpdateBoard : MonoBehaviour {
         dealer.DealNewRack();
         HandleNearEndGame();
 
-        ClearInputWordButton();
+        ClearInputWord();
         scoreManager.UpdateScoreForReplaceRack();
     }
 
@@ -77,12 +81,10 @@ public class UpdateBoard : MonoBehaviour {
 
 
     public void SubmitInputWordButton() {
-        //  transformShaker.BeginWaitSpin(logoImage.transform);
-        // transformShaker.ASpin(logoImage.transform);
-        // return;
         Toast.Dismiss();
         var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, inputWord.GetWord());
         if ("TRUE".Equals(validationResult)) {
+            selectedWord.gameObject.SetActive(false);
             scoreManager.UpdateScore(selectedWord.GetWord(), inputWord.GetWord());
             betterRack.RemoveSelectedLetters();
             dealer.Deal();
@@ -91,7 +93,8 @@ public class UpdateBoard : MonoBehaviour {
             wordGrid.UpdateDisplayButton(gameParameters.ExpandDoubleLetter(selectedWord.GetWord()),
                 gameParameters.ExpandDoubleLetter(inputWord.GetWord()));
             scrollRect.verticalNormalizedPosition = 1.0f;
-            CancelUpdateButton();
+            ClearInputWord();
+            RemoveSelectedWord();
         }
         else {
             Toast.Show(validationResult, 2f, Color.red, toastPosition);
@@ -100,7 +103,7 @@ public class UpdateBoard : MonoBehaviour {
     }
 
 
-    public void ClearInputWordButton() {
+    public void ClearInputWord() {
         //print("UpdateBoard.ClearInputWordButton\n");
         inputWord.Initialize();
         selectedWord.ResetStateUnselected();
@@ -109,7 +112,9 @@ public class UpdateBoard : MonoBehaviour {
 
     public void CancelUpdateButton() {
         // print("UpdateBoard.CancelInputWordButton\n");
-        ClearInputWordButton();
+        ClearInputWord();
+        print("UpdateBoard.CancelInputWordButton calling deselect \n");
+        wordGrid.DeselectButton();
         RemoveSelectedWord();
     }
 

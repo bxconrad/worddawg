@@ -10,13 +10,6 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
     private bool isFirstDrag = true;
     private BTile[] tiles { get; set; }
 
-    // private void Awake() {
-    //     //print("BetterRack.Awake \n");
-    //     Initialize();
-    //     print("BetterRack.Awake tiles" + tiles + "\n");
-    // }
-
-
     public void OnDrag(PointerEventData eventData) {
         //print("BetterRack.OnDrag " + eventData.position.x + "\n");
         if (isFirstDrag) {

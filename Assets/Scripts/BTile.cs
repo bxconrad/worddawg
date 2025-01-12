@@ -3,17 +3,10 @@ using UnityEngine;
 public class BTile : BaseTile {
     private InputWord inputWord;
 
-    private new void Awake() {
-        base.Awake();
-        // inputWord = GameObject.FindGameObjectWithTag("newInputWord").GetComponent<InputWord>();
-        //    print("BTile.Awake newInputWord {" + newInputWord + "} inputText " + inputText + "}\n");
-    }
-
-
     public override void OnButtonClick(string buttonString) {
         inputWord = GameObject.FindGameObjectWithTag("newInputWord").GetComponent<InputWord>();
         print("BTile.OnButtonClick  buttonString {" + buttonString + "} IsUnselected " + state.name +
-              " inputword {" + inputWord.GetWord() + "\n");
+              " inputword {" + inputWord.GetWord() + "}\n");
         if (IsSelected()) {
             inputWord.RemoveLetter(this);
             SetState(Tile.State.unselectedState);

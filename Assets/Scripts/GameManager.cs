@@ -174,7 +174,6 @@ public class GameManager : MonoBehaviour {
         }
 
         updateBoard.gameObject.SetActive(true);
-        updateBoard.AwakeIt(); // bcdo fix but be careful
         updateBoard.NewGame();
         gameObject.SetActive(false);
     }

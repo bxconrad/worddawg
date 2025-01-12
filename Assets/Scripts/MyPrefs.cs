@@ -38,7 +38,6 @@ public class MyPrefs : MonoBehaviour {
         print("MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
         timerToggle.onValueChanged.AddListener(delegate { TimerToggleValueChanged(timerToggle); });
         timerToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
-        print("MyPrefs.Start2 " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " ttog " + timerToggle + " \n");
 
 
         gameOfTheDayToggle.onValueChanged.AddListener(delegate { GameOfTheDayToggleValueChanged(gameOfTheDayToggle); });
@@ -47,7 +46,9 @@ public class MyPrefs : MonoBehaviour {
 
         durationDropdown.value = PlayerPrefs.GetInt(PREFS_RT_DURATION, DEFAULT_DURATION) - 1;
         letterDropdown.value = PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_NUM_LETTERS) / 50 - 1;
-        rackLettersDropdown.value = PlayerPrefs.GetInt(PREFS_RT_RACK_LETTERS, DEFAULT_NUM_RACK_LETTERS);
+        print("MyPrefs.Start LetterDropdown" + letterDropdown.value + " \n");
+        rackLettersDropdown.value = PlayerPrefs.GetInt(PREFS_RT_RACK_LETTERS, DEFAULT_NUM_RACK_LETTERS) - 7;
+        // print("MyPrefs.Start rackLettersDropdown" + rackLettersDropdown.value + " \n");
 
         var lang = PlayerPrefs.GetString(PREFS_RT_LANGUAGE, DEFAULT_LANG);
         languageDropdown.value = lang == PREFS_LANG_SP ? 1 : 0;
@@ -58,6 +59,7 @@ public class MyPrefs : MonoBehaviour {
         showButtonsToggle.onValueChanged.AddListener(delegate { ShowButtonsToggleValueChanged(showButtonsToggle); });
         showButtonsToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_SHOW_BUTTON, DEFAULT_IS_SHOW_BUTTON).ToUpper()
             .Equals("TRUE");
+        print("MyPrefs.Start end\n");
     }
 
 

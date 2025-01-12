@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class WordGrid : MonoBehaviour {
     [SerializeField] private GameObject displayButtonPrefab;
     [SerializeField] private UpdateBoard updateBoard;
+    private DisplayButton selectedButton;
 
     public void Initialize() {
         print("WordGrid.Initialize beforeDestroy \n");
@@ -43,28 +44,60 @@ public class WordGrid : MonoBehaviour {
     // Change the text and the onClick to reflect the new word
     private void UpdateExistingWord(string originalWord, string newWord) {
         print("WordGrid.UpdateExistingWord oWord " + originalWord + " nWord " + newWord + "\n");
+        DeselectButton();
+        var displayButton = FindMatchingButton(originalWord);
+        if (displayButton != null) {
+            displayButton.SetWord(newWord);
+            displayButton.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+            displayButton.GetComponentInChildren<Button>().onClick
+                .AddListener(() => OnButtonClick(newWord));
+            // Display the modified word at the top of the list of words
+            displayButton.transform.SetAsFirstSibling();
+            print("WordGrid. UpdateExistingWord " + newWord + "\n");
+        }
+
+        print("WordGrid.UpdateExistingWord null\n");
+    }
+
+    private DisplayButton FindMatchingButton(string buttonName) {
+        print("WordGrid.FindMatchingButton " + buttonName + "\n");
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
 
         for (var i = 0; i < displayButtons.Length; i++) {
             var displayButton = displayButtons[i];
             // Find the displayButton that was originally clicked to create a new word
-            if (originalWord.Equals(displayButton.GetWord())) {
+            if (buttonName.Equals(displayButton.GetWord())) {
                 // Update to have the new word 
-                displayButton.SetWord(newWord);
-                displayButton.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
-                displayButton.GetComponentInChildren<Button>().onClick
-                    .AddListener(() => OnButtonClick(newWord));
-                // Display the modified word at the top of the list of words
-                displayButton.transform.SetAsFirstSibling();
-                print("WordGrid. UpdateExistingWord " + newWord + "\n");
-                return;
+                print("WordGrid.FindMatchingButton found " + displayButton + "\n");
+                return displayButton;
             }
-            print("WordGrid.UpdateExistingWord " + newWord + "\n");
+        }
+
+        print("WordGrid.FindMatchingButton ***NOT*** found " + buttonName + "\n");
+        return null;
+    }
+
+    public void DeselectButton() {
+        print("WordGrid.DeselectButton  selectedButton {" + selectedButton + "}\n");
+        if (selectedButton != null) {
+            selectedButton.DeSelectButton();
+            selectedButton = null;
+        }
+    }
+
+    private void SelectButton(string buttonName) {
+        print("WordGrid.OnButtonClick  name " + buttonName + "\n");
+        var displayButton = FindMatchingButton(buttonName);
+        if (displayButton != null) {
+            DeselectButton();
+            selectedButton = displayButton;
+            displayButton.SelectButton();
         }
     }
 
     public void OnButtonClick(string buttonName) {
         print("WordGrid.OnButtonClick  name " + buttonName + "\n");
+        SelectButton(buttonName);
         updateBoard.LoadSelectedWord(buttonName);
     }
 }

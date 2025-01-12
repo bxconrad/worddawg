@@ -7,7 +7,6 @@ public class ValidatorManager : MonoBehaviour {
     public void Initialize() {
         print("ValidatorManager.Initialize\n");
         var dictionaryName = "dictionary-" + gameParameters.language;
-        // dictionaryName = "dictionary-spanishProcessed";
         var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
 

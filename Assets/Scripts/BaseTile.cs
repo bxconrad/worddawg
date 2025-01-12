@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public abstract class BaseTile : MonoBehaviour {
     private Image image;
+    private Color originalColor;
     public Tile.State state;
     private TextMeshProUGUI text;
     public Button button { get; set; }
@@ -20,6 +21,7 @@ public abstract class BaseTile : MonoBehaviour {
     protected void AwakeMe() {
         text = GetComponentInChildren<TextMeshProUGUI>();
         image = GetComponent<Image>();
+        originalColor = image.color;
         button = GetComponentInChildren<Button>();
     }
 
@@ -35,7 +37,7 @@ public abstract class BaseTile : MonoBehaviour {
     public void SetState(Tile.State state) {
         // print("BaseTile.SetState  " + state.name + "\n");
         this.state = state;
-        image.color = state.fillColor;
+        image.color = Tile.State.UNSELECTED.Equals(state.name) ? originalColor : state.fillColor;
     }
 
     public void SetOriginTile(BTile tile) {

@@ -30,7 +30,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
         isFirstDrag = true;
         if (distance < -50) {
             if (GetWord().Length > 0)
-                updateBoard.ClearInputWordButton();
+                updateBoard.ClearInputWord();
             else
                 updateBoard.CancelUpdateButton();
         }
@@ -40,7 +40,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     public virtual void OnPointerClick(PointerEventData eventData) {
         if (eventData.clickCount == 2) {
-            Debug.Log("double click");
+            Debug.Log("InputWord.OnPointerClick double click");
             updateBoard.SubmitInputWordButton();
         }
     }

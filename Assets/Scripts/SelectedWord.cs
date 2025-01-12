@@ -14,7 +14,6 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     // bcdo for some reason doesn't span entire width, it has to be in an active tile ??
-
     public void OnDrag(PointerEventData eventData) {
         // print("SelectedWord.OnDrag " + eventData.position.x + "\n");
         if (isFirstDrag) {
@@ -33,7 +32,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         }
         else if (distance < -50) {
             if (HasSelectedLetter())
-                updateBoard.ClearInputWordButton();
+                updateBoard.ClearInputWord();
             else
                 updateBoard.CancelUpdateButton();
         }
@@ -56,7 +55,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     public void InitializeTiles(string word) {
-        print("SelectedWord.InitializeTiles tiles " + tiles.Length + " word " + word + "\n");
+        print("SelectedWord.InitializeTiles tiles " + tiles.Length + " word {" + word + "}\n");
         var wordChars = word.ToCharArray();
 
         for (var i = 0; i < tiles.Length; i++) {

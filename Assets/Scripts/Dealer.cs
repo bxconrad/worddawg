@@ -79,8 +79,8 @@ public class Dealer : MonoBehaviour {
             numLettersDealt++;
             rackLetters += letters[0];
             //print("Dealer.Deal addLetter rackLetters " + rackLetters + "\n");
-            rackLetters = FixLetterDistribution(rackLetters);
             letters.RemoveAt(0);
+            rackLetters = FixLetterDistribution(rackLetters);
         }
 
         if (rackLetters.Length == 0) {
@@ -96,12 +96,25 @@ public class Dealer : MonoBehaviour {
               " rack " + betterRack.GetWord() + " numLettersDealt " + numLettersDealt + "\n");
     }
 
-
     private string FixLetterDistribution(string dealString) {
         //bcdo small bug here. we should fix distribution when we first hit last rack
         // dont reset letters at end of untimed game
+        var savedDealString = dealString;
         dealString = FixConsonantOrVowels(dealString);
         dealString = FixDuplicates(dealString);
+        // If we fixed the dealString, put the orignal last letter back in the bag and remove the new last letter from the bag
+        if (!savedDealString.Equals(dealString)) {
+            print("Dealer.FixLetterDistribution *FIXa*  savedDealString " + savedDealString + "\n" +
+                  LetterBagToString() + "\n");
+            // put the orignal last letter back in the bag 
+            var savedLastLetter = savedDealString.Substring(savedDealString.Length - 1, 1);
+            letters.Insert(0, savedLastLetter);
+            //remove the new last letter from the bag
+            var newLastLetter = dealString.Substring(dealString.Length - 1, 1);
+            letters.Remove(newLastLetter);
+            print("Dealer.FixLetterDistribution *FIXb*  dealString " + dealString + "\n" + LetterBagToString() + "\n");
+        }
+
         return dealString;
     }
 
@@ -109,14 +122,11 @@ public class Dealer : MonoBehaviour {
     private string FixDuplicates(string dealString) {
         if (dealString.Length < lengthForDuplicates) return dealString;
         var updatedDealString = new StringBuilder(dealString);
-        var lettersIndex = 0;
+        var lettersIndex = -1;
         var distinctCount = dealString.Distinct().Count();
         while (distinctCount <= dealString.Length - 2) {
             print("Dealer.FixDuplicates *FIX*  dealString " + dealString + " distinctCount " + distinctCount + "\n");
-
-            // get the last letter
-            var lastLetterIndex = dealString.Length - 1;
-            var lastLetter = dealString.Substring(lastLetterIndex, 1);
+            var lastLetter = updatedDealString.ToString().Substring(dealString.Length - 1, 1);
 
             var isVowel = IsAllVowels(lastLetter);
             print("Dealer.FixDuplicates *Found* updatedDealString " + updatedDealString +
@@ -129,33 +139,21 @@ public class Dealer : MonoBehaviour {
 
             if (!letters[lettersIndex].Equals(lastLetter)) {
                 // found a different letter of same type (vowel or consonant)
-                print("Dealer.FixDuplicates SWITCH newLetter {" + letters[lettersIndex] +
-                      "} original {" + lastLetter + " lettersIndex " + lettersIndex + " lastLetterIndex " +
-                      lastLetterIndex + "}\n");
-                // switch letters. put the old one back in the bag
-                SwitchLetters(lettersIndex, updatedDealString, lastLetterIndex);
-                print("Dealer.FixDuplicates switched updatedDealString " + updatedDealString + "}\n");
-            }
-            else {
-                print("Dealer.FixDuplicates No Switch same letter " + lastLetter + "} \n");
+                // replace the old letter with the new letter 
+                ReplaceLetter(updatedDealString, lettersIndex);
+                print("Dealer.FixDuplicates updated updatedDealString " + updatedDealString + "}\n");
             }
 
             distinctCount = updatedDealString.ToString().Distinct().Count();
-            print("Dealer.FixDuplicates return " + updatedDealString + " dealString " + dealString +
+            print("Dealer.FixDuplicates *Fix* updatedDealString " + updatedDealString + " dealString " + dealString +
                   " distinctCount " + distinctCount + "\n");
         }
 
+        // print("Dealer.FixDuplicates return " + updatedDealString + " dealString " + dealString +
+        //       " distinctCount " + distinctCount + "\n");
         return updatedDealString.ToString();
     }
 
-    private string LetterBagToString() {
-        var word = "";
-        foreach (var letter in letters) {
-            word += letter;
-        }
-
-        return word;
-    }
 
     // Ensure a good letter distribution. At least 3-5 consonants, 2-4 vowels 
     private string FixConsonantOrVowels(string dealString) {
@@ -174,7 +172,8 @@ public class Dealer : MonoBehaviour {
         var lastLetterIndex = dealString.Length - 1;
         // switch the last letter if we have too many cons or vowels
         if (numCons > consMax || numVowels > vowelMax) {
-            //print("Dealer.FixConsonantOrVowels  ~~~ dealString  " + dealString + " sb " + updatedDealString + "\n");
+            print("Dealer.FixConsonantOrVowels  ~~~ dealString  " + dealString + " sb " + updatedDealString + "\n" +
+                  LetterBagToString() + "\n");
             var dealLetter = updatedDealString[lastLetterIndex].ToString(); // get the letter from the dealString
             // update if we now have a good distribution
             var isConsMax = numCons > consMax;
@@ -185,7 +184,7 @@ public class Dealer : MonoBehaviour {
                 // find a consonant or vowel in our bag of letters starting at the index we left off on our last Buy
                 var lettersIndex = BuyMeAVowelOrConsonant(isConsMax, 0);
                 if (lettersIndex >= 0) {
-                    SwitchLetters(lettersIndex, updatedDealString, lastLetterIndex);
+                    ReplaceLetter(updatedDealString, lettersIndex);
                 }
                 else {
                     print("Dealer.FixConsonantOrVowels Could not fix  dealString " + dealString +
@@ -202,6 +201,13 @@ public class Dealer : MonoBehaviour {
         return updatedDealString.ToString();
     }
 
+    private void ReplaceLetter(StringBuilder updatedDealString, int lettersIndex) {
+        print("Dealer.ReplaceLetter *B4Replace*  updatedDealString " + updatedDealString + "\n");
+        updatedDealString.Replace(updatedDealString[updatedDealString.Length - 1].ToString(), letters[lettersIndex],
+            updatedDealString.Length - 1, 1);
+        print("Dealer.ReplaceLetter  *AFReplace updatedDealString " + updatedDealString + "\n");
+    }
+
     private bool IsCheckingVowelDistribution(string dealString) {
         return dealString.Length >= consMax;
     }
@@ -209,30 +215,20 @@ public class Dealer : MonoBehaviour {
     // iterate over our array of letters and find a consonant or vowel as requested.
     // We pass in the start index so we continue where we left off
     private int BuyMeAVowelOrConsonant(bool isVowel, int startIndex) {
-        // print("Dealer.BuyMeAVowelOrConsonant  isVowel " + isVowel + " startIndex " + startIndex + "\n");
+        print("Dealer.BuyMeAVowelOrConsonant  isVowel " + isVowel + " startIndex " + startIndex + "\n");
         for (var lettersIndex = startIndex; lettersIndex < letters.Count && startIndex >= 0; lettersIndex++) {
             var letter = letters[lettersIndex];
             //print("Dealer.BuyMeAVowelOrConsonant  letter " + letter + " index " + lettersIndex + "\n");
-            if ((isVowel && IsAllVowels(letter)) || (!isVowel && !IsAllVowels(letter))) return lettersIndex;
+            if ((isVowel && IsAllVowels(letter)) || (!isVowel && !IsAllVowels(letter))) {
+                print("Dealer.BuyMeAVowelOrConsonant returning  letter " + letter + " index " + lettersIndex + "\n");
+                return lettersIndex;
+            }
         }
 
         var which = isVowel ? "vowel" : "consonant";
         print("Dealer.BuyMeAVowelOrConsonant  *** Unable to find " + which + " in letters[]. numLetters " +
               letters.Count + "\n");
         return -1;
-    }
-
-
-    private void SwitchLetters(int lettersIndex, StringBuilder sb, int sbIndex) {
-        print("Dealer.SwitchLettersToEnd a  sb " + sb + " lettersIndex " + lettersIndex + " letterCount " +
-              letters.Count() + "\n bag " + LetterBagToString() + "\n");
-
-        var dealLetterChar = sb[sbIndex]; // save the letter we are replacing
-        sb[sbIndex] = letters[lettersIndex].ToCharArray()[0]; // replace the letter in the SB
-        letters.RemoveAt(0); // move all the letters in the array up one position starting at the lettersIndex
-        letters.Add(dealLetterChar.ToString()); // put the letter we saved at the end
-        print("Dealer.SwitchLettersToEnd end  sb " + sb + " lettersIndex " + lettersIndex + " letterCount " +
-              letters.Count() + "\n bag " + LetterBagToString() + "\n");
     }
 
     private bool IsAllConsonant(string compareString) {
@@ -248,15 +244,19 @@ public class Dealer : MonoBehaviour {
 
     private bool IsDealable() {
         // for timed game, if we run out of letters add more and will return true
-        if (gameParameters.isTimed && letters.Count() < gameParameters.numRackLetters) FillLetterBag();
+        if (letters.Count() < gameParameters.numRackLetters) {
+            if (gameParameters.isTimed || gameParameters.numLetters > numLettersDealt) {
+                FillLetterBag();
+            }
+        }
+
         return letters.Count > 0 && GetNumLetters() - numLettersDealt > 0;
     }
 
     // this includes letters in rack
     public int GetTotalNumLettersLeft() {
         var numLeft = GetNumLetters() - numLettersDealt + betterRack.GetWord().Trim().Length;
-        // print(
-        //     "Dealer.GetTotalNumLettersLeft  " + numLeft + " numLtrs " + GetNumLetters() + " numLettersDealt " +
+        // print("Dealer.GetTotalNumLettersLeft  " + numLeft + " numLtrs " + GetNumLetters() + " numLettersDealt " +
         //     numLettersDealt + " numRack " + betterRack.GetWord() + " ltrCount " + letters.Count() + "\n");
         return numLeft;
     }
@@ -265,9 +265,9 @@ public class Dealer : MonoBehaviour {
         return !gameParameters.isTimed && GetTotalNumLettersLeft() <= gameParameters.numRackLetters;
     }
 
-    // it's timed game numLetters will be 999.
+    // it's timed game numLetters will be 99999.
     private int GetNumLetters() {
-        return gameParameters.isTimed ? 999 : gameParameters.numLetters;
+        return gameParameters.isTimed ? 99999 : gameParameters.numLetters;
     }
 
     private int GetRandomSeed() {
@@ -276,5 +276,14 @@ public class Dealer : MonoBehaviour {
 
     private void SetRandomSeed(int value) {
         randomSeed = value;
+    }
+
+    private string LetterBagToString() {
+        var word = "";
+        foreach (var letter in letters) {
+            word += letter;
+        }
+
+        return word;
     }
 }
