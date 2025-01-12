@@ -46,7 +46,7 @@ public class Dealer : MonoBehaviour {
         }
 
         Shuffle(letters);
-        print("Dealer.FillLetterBag #letters  " + letters.Count + "\n");
+        print("Dealer.FillLetterBag #letters " + letters.Count + "\n");
     }
 
     private void Shuffle<T>(IList<T> list) {
