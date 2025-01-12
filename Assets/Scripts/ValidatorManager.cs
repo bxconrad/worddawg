@@ -20,7 +20,7 @@ public class ValidatorManager : MonoBehaviour {
         var selectedWordString = gameParameters.ExpandDoubleLetter(selectedWord.GetWord());
         var rackWordString = gameParameters.ExpandDoubleLetter(betterRack.GetWord());
         inputWordString = gameParameters.ExpandDoubleLetter(inputWordString);
-        // check all letters from currentWord are used
+        // check all letters from selectedWord are used
         if (!selectedWord.isAllLettersUsed()) {
             print("ValidatorManager.ValidateInputWord IsAllLettersUsed  false \n");
             return "You must use all the letters in the selected word";
