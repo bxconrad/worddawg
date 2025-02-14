@@ -4,25 +4,30 @@ using UnityEngine;
 using Toggle = UnityEngine.UI.Toggle;
 
 public class MyPrefs : MonoBehaviour {
+    public static string PREFS_LANG_SP = "SP";
+    public static string PREFS_LANG_EN = "EN";
+
     public static int DEFAULT_DURATION = 4;
-    public static readonly int DEFAULT_NUM_LETTERS = 50;
-    private static readonly string DEFAULT_IS_TIMER = "TRUE";
+    public static readonly string DEFAULT_IS_TIMER = "TRUE";
     private static readonly string DEFAULT_IS_SHOW_BUTTON = "TRUE";
     private static readonly string DEFAULT_IS_GOTD = "TRUE";
+    private static readonly string DEFAULT_IS_SOUND = "TRUE";
+    public static string DEFAULT_LANG = PREFS_LANG_SP;
+    public static readonly int DEFAULT_NUM_LETTERS = 50;
+    public static readonly int DEFAULT_NUM_RACK_LETTERS = 7;
+
     public static string PREFS_RT_DURATION = "RT_DURATION";
+    private static readonly string PREFS_RT_IS_SHOW_BUTTON = "RT_IS_SHOW_BUTTON";
+    private static readonly string PREFS_RT_IS_SOUND = "RT_IS_SOUND";
+    public static string PREFS_RT_IS_GOTD = "RT_IS_GOTD";
+    public static string PREFS_RT_IS_TIMER = "RT_IS_TIMER";
     public static string PREFS_RT_LANGUAGE = "RT_LANGUAGE";
     public static string PREFS_RT_LETTERS = "RT_LETTERS";
     public static string PREFS_RT_RACK_LETTERS = "RT_RACK_LETTERS";
-    public static string PREFS_RT_IS_TIMER = "RT_IS_TIMER";
-    public static string PREFS_RT_IS_GOTD = "RT_IS_GOTD";
-    private static readonly string PREFS_RT_IS_SHOW_BUTTON = "RT_IS_SHOW_BUTTON";
-    public static readonly int DEFAULT_NUM_RACK_LETTERS = 7;
-    public static string PREFS_LANG_SP = "SP";
-    public static string PREFS_LANG_EN = "EN";
-    public static string DEFAULT_LANG = PREFS_LANG_SP;
 
     public static readonly string[] PREFS_KEYS = {
-        PREFS_RT_LETTERS, PREFS_RT_IS_TIMER, PREFS_RT_DURATION, PREFS_RT_IS_SHOW_BUTTON, PREFS_RT_IS_GOTD
+        PREFS_RT_DURATION, PREFS_RT_IS_SHOW_BUTTON, PREFS_RT_IS_GOTD, PREFS_RT_IS_TIMER, PREFS_RT_LANGUAGE,
+        PREFS_RT_LETTERS, PREFS_RT_RACK_LETTERS
     };
 
     [SerializeField] private TMP_Dropdown durationDropdown;
@@ -32,33 +37,32 @@ public class MyPrefs : MonoBehaviour {
     [SerializeField] private Toggle showButtonsToggle;
     [SerializeField] private Toggle timerToggle;
     [SerializeField] private Toggle gameOfTheDayToggle;
+    [SerializeField] private Toggle soundToggle;
     [SerializeField] private GameParameters gameParameters;
 
     private void Start() {
         print("MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
+        Toast.Dismiss();
         timerToggle.onValueChanged.AddListener(delegate { TimerToggleValueChanged(timerToggle); });
-        timerToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
-
+        timerToggle.isOn = GetIsTimer();
 
         gameOfTheDayToggle.onValueChanged.AddListener(delegate { GameOfTheDayToggleValueChanged(gameOfTheDayToggle); });
-        gameOfTheDayToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_GOTD, DEFAULT_IS_GOTD).ToUpper()
-            .Equals("TRUE");
+        gameOfTheDayToggle.isOn = GetIsGOTD();
 
-        durationDropdown.value = PlayerPrefs.GetInt(PREFS_RT_DURATION, DEFAULT_DURATION) - 1;
-        letterDropdown.value = PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_NUM_LETTERS) / 50 - 1;
+        durationDropdown.value = GetDuration() - 1;
+        letterDropdown.value = GetNumLetters() / 50 - 1;
         print("MyPrefs.Start LetterDropdown" + letterDropdown.value + " \n");
-        rackLettersDropdown.value = PlayerPrefs.GetInt(PREFS_RT_RACK_LETTERS, DEFAULT_NUM_RACK_LETTERS) - 7;
+        rackLettersDropdown.value = GetNumRackLetters() - 7;
         // print("MyPrefs.Start rackLettersDropdown" + rackLettersDropdown.value + " \n");
 
-        var lang = PlayerPrefs.GetString(PREFS_RT_LANGUAGE, DEFAULT_LANG);
-        languageDropdown.value = lang == PREFS_LANG_SP ? 1 : 0;
-
+        languageDropdown.value = GetLanguage() == PREFS_LANG_SP ? 1 : 0;
         ShowTimerOnOff();
-        Toast.Dismiss();
 
         showButtonsToggle.onValueChanged.AddListener(delegate { ShowButtonsToggleValueChanged(showButtonsToggle); });
-        showButtonsToggle.isOn = PlayerPrefs.GetString(PREFS_RT_IS_SHOW_BUTTON, DEFAULT_IS_SHOW_BUTTON).ToUpper()
-            .Equals("TRUE");
+        showButtonsToggle.isOn = GetIsShowButtons();
+
+        soundToggle.onValueChanged.AddListener(delegate { SoundToggleValueChanged(soundToggle); });
+        soundToggle.isOn = GetIsSound();
         print("MyPrefs.Start end\n");
     }
 
@@ -101,6 +105,12 @@ public class MyPrefs : MonoBehaviour {
         print("MyPrefs.ShowButtonsToggleValueChanged " + val + " \n");
     }
 
+    private void SoundToggleValueChanged(Toggle toggle) {
+        var val = toggle.isOn;
+        PlayerPrefs.SetString(PREFS_RT_IS_SOUND, val.ToString());
+        print("MyPrefs.SoundToggleValueChanged " + val + " \n");
+    }
+
     private void GameOfTheDayToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(PREFS_RT_IS_GOTD, val.ToString());
@@ -109,6 +119,8 @@ public class MyPrefs : MonoBehaviour {
 
     private void ShowTimerOnOff() {
         var isTimerActive = PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
+        print("MyPrefs.ShowTimerOnOff isTimerActive " + isTimerActive + " \n");
+
         durationDropdown.gameObject.SetActive(isTimerActive);
         letterDropdown.gameObject.SetActive(!isTimerActive);
     }
@@ -123,18 +135,41 @@ public class MyPrefs : MonoBehaviour {
     }
 
 
+    public static string GetLanguage() {
+        return PlayerPrefs.GetString(PREFS_RT_LANGUAGE, DEFAULT_LANG);
+    }
+
+    public static int GetNumRackLetters() {
+        return PlayerPrefs.GetInt(PREFS_RT_RACK_LETTERS, DEFAULT_NUM_RACK_LETTERS);
+    }
+
     public static int GetNumLetters() {
-        var numLetters = DEFAULT_NUM_LETTERS;
-        if (!IsTimer()) numLetters = PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_NUM_LETTERS);
-
-        return numLetters;
+        return PlayerPrefs.GetInt(PREFS_RT_LETTERS, DEFAULT_NUM_LETTERS);
     }
 
-    public static bool IsShowButtons() {
-        return PlayerPrefs.GetString(PREFS_RT_IS_SHOW_BUTTON, DEFAULT_IS_SHOW_BUTTON).ToUpper().Equals("TRUE");
+    public static int GetDuration() {
+        return PlayerPrefs.GetInt(PREFS_RT_DURATION, DEFAULT_DURATION) * 60;
     }
 
-    public static bool IsTimer() {
+    public static bool GetIsGOTD() {
+        return PlayerPrefs.GetString(PREFS_RT_IS_GOTD, DEFAULT_IS_GOTD).ToUpper()
+            .Equals("TRUE");
+    }
+
+    public static bool GetIsSound() {
+        var retVal = PlayerPrefs.GetString(PREFS_RT_IS_SOUND, DEFAULT_IS_SOUND).ToUpper()
+            .Equals("TRUE");
+        print("MyPrefs.GetIsSound " + retVal + " \n");
+        return retVal;
+    }
+
+
+    public static bool GetIsTimer() {
         return PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
+    }
+
+    public static bool GetIsShowButtons() {
+        return PlayerPrefs.GetString(PREFS_RT_IS_SHOW_BUTTON, DEFAULT_IS_SHOW_BUTTON).ToUpper()
+            .Equals("TRUE");
     }
 }

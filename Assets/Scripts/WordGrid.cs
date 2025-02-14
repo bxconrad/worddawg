@@ -95,7 +95,7 @@ public class WordGrid : MonoBehaviour {
         }
     }
 
-    public void OnButtonClick(string buttonName) {
+    private void OnButtonClick(string buttonName) {
         print("WordGrid.OnButtonClick  name " + buttonName + "\n");
         SelectButton(buttonName);
         updateBoard.LoadSelectedWord(buttonName);

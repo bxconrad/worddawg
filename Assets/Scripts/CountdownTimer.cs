@@ -4,8 +4,19 @@ using UnityEngine;
 public class CountdownTimer : MonoBehaviour {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private TMP_Text countdownText;
+
     [SerializeField] private GameParameters gameParameters;
+    [SerializeField] private AudioSource audioSource;
+    private AudioClip clockTick;
     private float countdown;
+    private AudioClip howl;
+    private bool isSound;
+
+    public void Awake() {
+        howl = Resources.Load("dogHowlingAtMoon") as AudioClip;
+        clockTick = Resources.Load("clockTick") as AudioClip;
+        Initialize();
+    }
 
     public void Start() {
         gameManager.gameObject.SetActive(true);
@@ -18,8 +29,17 @@ public class CountdownTimer : MonoBehaviour {
         //print("CountdownTimer.Update " + isActiveAndEnabled + "\n");
         if (countdown <= 1 && isActiveAndEnabled) {
             enabled = false;
+            audioSource.Stop();
+            // bcHack. audio would not play in EndGame so we do it here.
+            audioSource.PlayOneShot(howl);
             EndGame();
             return;
+        }
+
+        if (countdown < 16 && !isSound && isActiveAndEnabled) {
+            print("CountdownTimer.Update play sound  mute? " + audioSource.mute + " \n");
+            isSound = true;
+            audioSource.PlayOneShot(clockTick);
         }
 
         countdown -= Time.deltaTime;
@@ -41,6 +61,8 @@ public class CountdownTimer : MonoBehaviour {
         print("CountdownTimer.Initialize \n");
         SetText("");
         countdown = gameParameters.numSeconds;
+        // countdown = 5;
+        isSound = false;
     }
 
     public void EndTimer() {
