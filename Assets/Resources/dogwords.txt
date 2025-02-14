@@ -4,6 +4,7 @@ basset
 beagle
 bite
 bloodhound
+bone
 breed
 brittany
 bulldog

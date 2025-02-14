@@ -11,7 +11,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
         tiles = GetComponentsInChildren<InputWordTile>();
         updateBoard = GetComponentInParent<UpdateBoard>();
 
-        print("InputWord.Awake updateBoard (" + updateBoard + "} tiles (" + tiles + "}\n");
+        print("InputWord.Awake updateBoard * (" + updateBoard + "} tiles (" + tiles + "}\n");
     }
 
 

@@ -14,6 +14,7 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private InputWord inputWord;
     [SerializeField] private SelectedWord selectedWord;
+    [SerializeField] private GameObject dummyPanel;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private Dealer dealer;
     [SerializeField] private LogoImage logoImage;
@@ -27,17 +28,6 @@ public class UpdateBoard : MonoBehaviour {
         // AwakeIt();
     }
 
-    // // Problems with Awake event on Android
-    // public void AwakeIt() {
-    //     if (!isAwake) {
-    //         isAwake = true;
-    //         betterRack = GetComponentInChildren<BetterRack>();
-    //         wordGrid = GetComponentInChildren<WordGrid>();
-    //         replaceRackButton = GetComponentInChildren<ReplaceRackButton>();
-    //         print("UpdateBoard.AwakeIt\n");
-    //     }
-    // }
-
     public void NewGame() {
         print("UpdateBoard.NewGame selectedWord {" + selectedWord + "} \n");
         wordGrid.Initialize();
@@ -45,7 +35,7 @@ public class UpdateBoard : MonoBehaviour {
         inputWord.Initialize();
         dealer.Initialize();
         replaceRackButton.Initialize();
-        updateButtons.SetActive(MyPrefs.IsShowButtons());
+        updateButtons.SetActive(MyPrefs.GetIsShowButtons());
         Toast.Show(
             "To start the game, create a word by clicking on the letters in the rack. After that, you can create or modify new words.",
             15f, Color.magenta, toastPosition);
@@ -55,6 +45,7 @@ public class UpdateBoard : MonoBehaviour {
     public void LoadSelectedWord(string word) {
         print("UpdateBoard.LoadSelectedWord {" + word + "}\n");
         selectedWord.gameObject.SetActive(true);
+        dummyPanel.SetActive(false);
         ClearInputWord();
         inputWord.Initialize();
         selectedWord.InitializeTiles(gameParameters.ContractDoubleLetter(word)); // quLogic
@@ -63,6 +54,7 @@ public class UpdateBoard : MonoBehaviour {
     private void RemoveSelectedWord() {
         selectedWord.InitializeTiles(string.Empty);
         selectedWord.gameObject.SetActive(false);
+        dummyPanel.SetActive(true);
     }
 
     // ---------- buttons --------------------------
@@ -85,7 +77,9 @@ public class UpdateBoard : MonoBehaviour {
         var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, inputWord.GetWord());
         if ("TRUE".Equals(validationResult)) {
             selectedWord.gameObject.SetActive(false);
-            scoreManager.UpdateScore(selectedWord.GetWord(), inputWord.GetWord());
+            dummyPanel.SetActive(true);
+            scoreManager.UpdateScore(gameParameters.ExpandDoubleLetter(selectedWord.GetWord()),
+                gameParameters.ExpandDoubleLetter(inputWord.GetWord()));
             betterRack.RemoveSelectedLetters();
             dealer.Deal();
             HandleNearEndGame();
@@ -112,6 +106,7 @@ public class UpdateBoard : MonoBehaviour {
 
     public void CancelUpdateButton() {
         // print("UpdateBoard.CancelInputWordButton\n");
+        //scoreManager.CalculateWordScore("BLOOM", "BLOOMING");
         ClearInputWord();
         print("UpdateBoard.CancelInputWordButton calling deselect \n");
         wordGrid.DeselectButton();

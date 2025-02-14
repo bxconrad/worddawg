@@ -18,16 +18,19 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private ValidatorManager validatorManager;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private LogoImage logoImage;
+    [SerializeField] private AudioSource audioSource;
+
     private readonly List<Image> panelImages = new();
 
+//        -diag-temp-memory-leak-validation
     private string gameMode;
 
     public void Start() {
-        print("GameManager.Start " + endGameContainer + "\n");
+        print("GameManager.Start sound " + MyPrefs.GetIsSound() + "\n");
+        Toast.Dismiss();
 
         gameObject.SetActive(true);
         InactivateOtherCanvases();
-        Toast.Dismiss();
         // end components
         countdownTimer.EndTimer();
         scoreManager.End();
@@ -35,37 +38,6 @@ public class GameManager : MonoBehaviour {
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-    }
-
-    private void UpdateColors() {
-        var canvas = GetComponentInParent<Canvas>();
-        panelImages.Add(GameObject.FindGameObjectWithTag("header").GetComponent<Image>());
-        panelImages.Add(GameObject.FindGameObjectWithTag("endGamePanel").GetComponent<Image>());
-        panelImages.Add(canvas.GetComponentInChildren<GameManager>().GetComponent<Image>());
-        var ub = canvas.GetComponentInChildren<UpdateBoard>();
-        ub.enabled = true;
-        var ubi = ub.GetComponent<Image>();
-        panelImages.Add(ubi);
-
-        var wg = canvas.GetComponentInChildren<WordGrid>();
-        var wgi = wg.gameObject.transform.parent.GetComponent<Image>();
-        panelImages.Add(wgi);
-        foreach (var image in panelImages) {
-            image.color = Color.red;
-        }
-
-        var buttons = canvas.GetComponentInChildren<GameManager>().GetComponentsInChildren<Button>();
-        var buttons2 = ub.GetComponentsInChildren<Button>();
-        buttons.Concat(buttons2);
-        foreach (var button in buttons) {
-            var image = button.GetComponent<Image>();
-            image.color = Color.blue;
-        }
-
-        foreach (var button in buttons2) {
-            var image = button.GetComponent<Image>();
-            image.color = Color.blue;
-        }
     }
 
 
@@ -123,17 +95,18 @@ public class GameManager : MonoBehaviour {
     }
 
     private void InitializeCustomGameParameters() {
-        print("GameManager.NewCustomGamePlay " + PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_TIMER) + " \n");
+        print("GameManager.InitializeCustomGameParameters  isSound {" + MyPrefs.GetIsSound() + "} \n");
 
         gameParameters.gameMode = Stats.PREFS_ST_MODE_CUSTOM;
-        gameParameters.isTimed = PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_TIMER).ToUpper().Equals("TRUE");
-        gameParameters.isGameOfTheDay = PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_GOTD).ToUpper().Equals("TRUE");
-        gameParameters.numSeconds = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_DURATION) * 60;
-        gameParameters.numLetters = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_LETTERS);
-        gameParameters.language = PlayerPrefs.GetString(MyPrefs.PREFS_RT_LANGUAGE);
-        gameParameters.numRackLetters = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_RACK_LETTERS) == 0
-            ? MyPrefs.DEFAULT_NUM_RACK_LETTERS
-            : PlayerPrefs.GetInt(MyPrefs.PREFS_RT_RACK_LETTERS);
+        gameParameters.isTimed = MyPrefs.GetIsTimer();
+        gameParameters.isGameOfTheDay = MyPrefs.GetIsGOTD();
+        gameParameters.numSeconds = MyPrefs.GetDuration();
+        gameParameters.numLetters = MyPrefs.GetNumLetters();
+        gameParameters.language = MyPrefs.GetLanguage();
+        gameParameters.numRackLetters = MyPrefs.GetNumRackLetters();
+        audioSource.mute = !MyPrefs.GetIsSound();
+
+        print("GameManager.InitializeCustomGameParameters gameParameters " + gameParameters + " \n");
     }
 
     public void NewCustomGamePlay() {
@@ -173,6 +146,7 @@ public class GameManager : MonoBehaviour {
             countdownTimer.enabled = true;
         }
 
+        audioSource.mute = !MyPrefs.GetIsSound();
         updateBoard.gameObject.SetActive(true);
         updateBoard.NewGame();
         gameObject.SetActive(false);
@@ -186,14 +160,15 @@ public class GameManager : MonoBehaviour {
         await Task.WhenAll(tasks);
     }
 
+
     public async Task EndGame() {
         print("GameManager.EndGame\n");
+        Toast.Dismiss();
         await Spinit();
         gameParameters.isEndGame = true;
         InactivateOtherCanvases();
         countdownTimer.EndTimer();
         scoreManager.End();
-        Toast.Dismiss();
 
         endGameContainer.SetActive(true);
         stats.UpdateStats(gameMode);
@@ -208,5 +183,36 @@ public class GameManager : MonoBehaviour {
 
     public void OpenHowToPlayVideo() {
         Application.OpenURL("https://sites.google.com/view/worddawg/howtoplayvideo");
+    }
+
+    private void UpdateColors() {
+        var canvas = GetComponentInParent<Canvas>();
+        panelImages.Add(GameObject.FindGameObjectWithTag("header").GetComponent<Image>());
+        panelImages.Add(GameObject.FindGameObjectWithTag("endGamePanel").GetComponent<Image>());
+        panelImages.Add(canvas.GetComponentInChildren<GameManager>().GetComponent<Image>());
+        var ub = canvas.GetComponentInChildren<UpdateBoard>();
+        ub.enabled = true;
+        var ubi = ub.GetComponent<Image>();
+        panelImages.Add(ubi);
+
+        var wg = canvas.GetComponentInChildren<WordGrid>();
+        var wgi = wg.gameObject.transform.parent.GetComponent<Image>();
+        panelImages.Add(wgi);
+        foreach (var image in panelImages) {
+            image.color = Color.red;
+        }
+
+        var buttons = canvas.GetComponentInChildren<GameManager>().GetComponentsInChildren<Button>();
+        var buttons2 = ub.GetComponentsInChildren<Button>();
+        buttons.Concat(buttons2);
+        foreach (var button in buttons) {
+            var image = button.GetComponent<Image>();
+            image.color = Color.blue;
+        }
+
+        foreach (var button in buttons2) {
+            var image = button.GetComponent<Image>();
+            image.color = Color.blue;
+        }
     }
 }

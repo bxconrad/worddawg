@@ -19,7 +19,14 @@ public class GameParameters : MonoBehaviour {
         isGameOfTheDay = false;
         isEndGame = false;
         numRackLetters = MyPrefs.DEFAULT_NUM_RACK_LETTERS;
+
         //gameMode = ""; don't init gameMode, need it for same game replay
+    }
+
+    public override string ToString() {
+        return $"{base.ToString()}, numLetters: {numLetters}, numSeconds: {numSeconds}," +
+               $" language: {language}, gameMode: {gameMode}, isTimed: {isTimed}, isGameOfTheDay: {isGameOfTheDay}, " +
+               $"isEndGame: {isEndGame},  numRackLetters: {numRackLetters}";
     }
 
     public string ContractDoubleLetter(string word) {

@@ -11,13 +11,20 @@ public class Dealer : MonoBehaviour {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private BetterRack betterRack;
     [SerializeField] private GameParameters gameParameters;
+    [SerializeField] private AudioSource audioSource;
     private readonly List<string> letters = new();
     private Random aRandom;
     private int consMax;
+    private AudioClip howl;
     private int lengthForDuplicates;
     private int numLettersDealt;
     private int randomSeed;
     private int vowelMax;
+
+    public void Awake() {
+        howl = Resources.Load("dogHowlingAtMoon") as AudioClip;
+        Initialize();
+    }
 
     public void Initialize() {
         numLettersDealt = 0;
@@ -66,7 +73,7 @@ public class Dealer : MonoBehaviour {
     }
 
     public void Deal() {
-        print("Dealer.Deal word {" + betterRack.GetWord().Trim() + "} timed? " + gameParameters.isTimed +
+        print("Dealer.Deal word *{" + betterRack.GetWord().Trim() + "} timed? " + gameParameters.isTimed +
               " letters.count " + letters.Count() + " lt? " + (letters.Count() <= gameParameters.numRackLetters) +
               "\n");
 
@@ -84,7 +91,9 @@ public class Dealer : MonoBehaviour {
         }
 
         if (rackLetters.Length == 0) {
-            print("Dealer.Deal calling endGame " + rackLetters + "\n");
+            print("Dealer.Deal calling endGame  rackLetters " + rackLetters + " muteSound? " + audioSource.mute + "\n");
+            // bcHack. audio would not play in EndGame so we do it here.
+            audioSource.PlayOneShot(howl);
             _ = gameManager.EndGame();
             return;
         }
@@ -104,15 +113,14 @@ public class Dealer : MonoBehaviour {
         dealString = FixDuplicates(dealString);
         // If we fixed the dealString, put the orignal last letter back in the bag and remove the new last letter from the bag
         if (!savedDealString.Equals(dealString)) {
-            print("Dealer.FixLetterDistribution *FIXa*  savedDealString " + savedDealString + "\n" +
-                  LetterBagToString() + "\n");
+            print("Dealer.FixLetterDistribution *FIXa*  savedDealString " + savedDealString + "\n");
             // put the orignal last letter back in the bag 
             var savedLastLetter = savedDealString.Substring(savedDealString.Length - 1, 1);
             letters.Insert(0, savedLastLetter);
             //remove the new last letter from the bag
             var newLastLetter = dealString.Substring(dealString.Length - 1, 1);
             letters.Remove(newLastLetter);
-            print("Dealer.FixLetterDistribution *FIXb*  dealString " + dealString + "\n" + LetterBagToString() + "\n");
+            print("Dealer.FixLetterDistribution *FIXb*  dealString " + dealString + "\n");
         }
 
         return dealString;
@@ -172,8 +180,7 @@ public class Dealer : MonoBehaviour {
         var lastLetterIndex = dealString.Length - 1;
         // switch the last letter if we have too many cons or vowels
         if (numCons > consMax || numVowels > vowelMax) {
-            print("Dealer.FixConsonantOrVowels  ~~~ dealString  " + dealString + " sb " + updatedDealString + "\n" +
-                  LetterBagToString() + "\n");
+            print("Dealer.FixConsonantOrVowels  ~~~ dealString  " + dealString + " sb " + updatedDealString + "\n");
             var dealLetter = updatedDealString[lastLetterIndex].ToString(); // get the letter from the dealString
             // update if we now have a good distribution
             var isConsMax = numCons > consMax;

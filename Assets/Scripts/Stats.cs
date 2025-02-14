@@ -30,6 +30,7 @@ public class Stats : MonoBehaviour {
     private int rowNum;
 
     public void UpdateStats(string gameMode) {
+        currentGameMode = gameMode;
         // Add the gameModeSuffix to the key to set different stats for each gameMode (timed, untimed, etc)
         var currentGameModeSuffix = "_" + gameMode;
         titleText.text = gameMode + '\n' + DateTime.Today.ToString("MMM dd, yyyy");
@@ -73,6 +74,9 @@ public class Stats : MonoBehaviour {
                 allTimeBestWord = PlayerPrefs.GetString(bestWordKey);
             }
 
+            print("Stats.UpdateBestWordStats bestWordKey " + bestWordKey +
+                  " allTimeBestWord " + allTimeBestWord + " \n");
+
             UpdateRow("Best Word", currentBestWord, allTimeBestWord, bestMarker);
         }
     }
@@ -110,10 +114,19 @@ public class Stats : MonoBehaviour {
             foreach (var gameMode in STAT_GAME_MODES) {
                 var key = statKey + "_" + gameMode;
                 PlayerPrefs.DeleteKey(key);
+                print("Stats.OnResetStatsButtonClicked " + key + " \n");
             }
         }
 
+        ResetPrefs();
         scoreManager.Initialize();
         UpdateStats(currentGameMode);
+    }
+
+    public void ResetPrefs() {
+        print("Stats.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
+        foreach (var key in MyPrefs.PREFS_KEYS) {
+            PlayerPrefs.DeleteKey(key);
+        }
     }
 }
