@@ -1,4 +1,8 @@
-﻿# Default ignored files
+﻿/[Aa]ssets/[Ff]onts/*
+/[Aa]ssets/TextMesh Pro/*
+/.utmp/
+# Default ignored files
+
 /shelf/
 /workspace.xml
 # Rider ignored files
