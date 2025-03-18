@@ -35,7 +35,7 @@ public class Stats : MonoBehaviour {
         var currentGameModeSuffix = "_" + gameMode;
         titleText.text = gameMode + '\n' + DateTime.Today.ToString("MMM dd, yyyy");
 
-        rowNum = 0;
+        rowNum = 1; // skip header
         UpdateStat(PREFS_ST_SCORE + currentGameModeSuffix, "Score", scoreManager.currentScore);
         UpdateStat(PREFS_ST_WORDS + currentGameModeSuffix, "Words", scoreManager.numWords);
         UpdateStat(PREFS_ST_CHANGED_WORDS + currentGameModeSuffix, "Changed", scoreManager.numChangedWords);

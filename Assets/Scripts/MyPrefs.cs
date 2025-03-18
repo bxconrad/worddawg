@@ -34,7 +34,6 @@ public class MyPrefs : MonoBehaviour {
     [SerializeField] private TMP_Dropdown letterDropdown;
     [SerializeField] private TMP_Dropdown languageDropdown;
     [SerializeField] private TMP_Dropdown rackLettersDropdown;
-    [SerializeField] private Toggle showButtonsToggle;
     [SerializeField] private Toggle timerToggle;
     [SerializeField] private Toggle gameOfTheDayToggle;
     [SerializeField] private Toggle soundToggle;
@@ -57,9 +56,6 @@ public class MyPrefs : MonoBehaviour {
 
         languageDropdown.value = GetLanguage() == PREFS_LANG_SP ? 1 : 0;
         ShowTimerOnOff();
-
-        showButtonsToggle.onValueChanged.AddListener(delegate { ShowButtonsToggleValueChanged(showButtonsToggle); });
-        showButtonsToggle.isOn = GetIsShowButtons();
 
         soundToggle.onValueChanged.AddListener(delegate { SoundToggleValueChanged(soundToggle); });
         soundToggle.isOn = GetIsSound();
@@ -97,12 +93,6 @@ public class MyPrefs : MonoBehaviour {
         gameParameters.isTimed = val;
         ShowTimerOnOff();
         print("MyPrefs.TimerToggleValueChanged " + val + " \n");
-    }
-
-    private void ShowButtonsToggleValueChanged(Toggle toggle) {
-        var val = toggle.isOn;
-        PlayerPrefs.SetString(PREFS_RT_IS_SHOW_BUTTON, val.ToString());
-        print("MyPrefs.ShowButtonsToggleValueChanged " + val + " \n");
     }
 
     private void SoundToggleValueChanged(Toggle toggle) {

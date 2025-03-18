@@ -49,6 +49,7 @@ public class UpdateBoard : MonoBehaviour {
         ClearInputWord();
         inputWord.Initialize();
         selectedWord.InitializeTiles(gameParameters.ContractDoubleLetter(word)); // quLogic
+        Toast.Dismiss();
     }
 
     private void RemoveSelectedWord() {
