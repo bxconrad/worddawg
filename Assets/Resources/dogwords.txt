@@ -10,6 +10,7 @@ brittany
 bulldog
 canine
 chihuahua
+collar
 collie
 coonhound
 corgi
@@ -23,6 +24,7 @@ doberman
 dog
 doghouse
 doodle
+fido
 foxhound
 furry
 golden 
