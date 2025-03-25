@@ -5,10 +5,13 @@ public class GameManagerPanelLayout : MonoBehaviour {
     [SerializeField] private GameObject leftPanel;
     [SerializeField] private GameObject rightPanel;
     [SerializeField] private GameObject helpLayout;
+    private bool isFirst = true;
     private bool isPortrait = true;
 
     private void Update() {
-        if (Screen.height >= Screen.width && !isPortrait) {
+        // isFirst is needed to force correct display if starting in landscape. (?)
+        if (isFirst || (Screen.height >= Screen.width && !isPortrait)) {
+            isFirst = false;
             DisplayPortrait();
         }
         else if (Screen.height < Screen.width && isPortrait) {
