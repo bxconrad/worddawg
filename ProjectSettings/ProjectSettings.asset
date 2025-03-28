@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: worddawg
-  productName: word dawg
+  productName: Word Dawg
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.46274513, g: 0.2901961, b: 0.7137255, a: 1}
@@ -169,7 +169,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.worddawg.worddawg
+    Android: com.worddawg.WordDawg
     Standalone: com.DefaultCompany.2DProject
     iPhone: com.worddawg.worddawg
   buildNumber:
