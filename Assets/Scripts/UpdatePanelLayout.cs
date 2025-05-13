@@ -6,26 +6,53 @@ public class UpdatePanelLayout : MonoBehaviour {
     [SerializeField] private GameObject leftPanel;
     [SerializeField] private GameObject rightPanel;
     [SerializeField] private ScrollRect scrollRect;
+    private bool isFirst = true;
     private bool isPortrait = true;
+    private bool isUpdateWordGrid = true;
 
     private void Update() {
-        if (Screen.height >= Screen.width && !isPortrait) {
-            DisplayPortrait();
+        //UpdateWWordGrid must be done on subsequent update DisplayPortrait/Landscape to get correct updated widths
+        if (isUpdateWordGrid) {
+            UpdateWordGrid();
         }
-        else if (Screen.height < Screen.width && isPortrait) {
+
+        isUpdateWordGrid = true;
+        if (isFirst || (Screen.height >= Screen.width && !isPortrait)) {
+            DisplayPortrait();
+            isFirst = false;
+        }
+        else if (isFirst || (Screen.height < Screen.width && isPortrait)) {
             DisplayLandscape();
+            isFirst = false;
+        }
+        else {
+            isUpdateWordGrid = false;
         }
     }
 
     private void DisplayPortrait() {
-        print("UpdatePanelLayout.DisplayPortrait \n");
+        print("UpdatePanelLayout.DisplayPortrait \n"); // + leftPanel.GetComponent<RectTransform>().rect.width + "\n");
         isPortrait = true;
         // reparent wordList to left panel
-        scrollRect.transform.SetParent(leftPanel.transform, false);
         rightPanel.SetActive(false);
+        scrollRect.transform.SetParent(leftPanel.transform, false);
         UpdateBoard.toastPosition = ToastPosition.BottomCenter;
     }
 
+    private void UpdateWordGrid() {
+        var parent = isPortrait ? leftPanel : rightPanel;
+        //  scrollRect.transform.SetParent(parent.transform, false);
+
+        var width = parent.GetComponent<RectTransform>().rect.width;
+        var newWidth = width * .9 / 2;
+
+        var gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>();
+        var newSize = new Vector2((float)newWidth, gridLayoutGroup.cellSize.y);
+        print("UpdatePanelLayout.UpdateWordGrid screenWidthw=" + Screen.width +
+              " leftPanel " + leftPanel.GetComponent<RectTransform>().rect.width +
+              " rightPanel " + rightPanel.GetComponent<RectTransform>().rect.width + "\n");
+        gridLayoutGroup.cellSize = newSize;
+    }
 
     private void DisplayLandscape() {
         print("UpdatePanelLayout.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
@@ -33,6 +60,7 @@ public class UpdatePanelLayout : MonoBehaviour {
         rightPanel.SetActive(true);
         // reparent wordList to right panel
         scrollRect.transform.SetParent(rightPanel.transform, false);
+
         UpdateBoard.toastPosition = ToastPosition.BottomRight;
     }
 }

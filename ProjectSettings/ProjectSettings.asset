@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: worddawg
-  productName: Word Dawg
+  productName: worddawg
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.46274513, g: 0.2901961, b: 0.7137255, a: 1}
@@ -146,7 +146,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 6
+  bundleVersion: 7
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -171,7 +171,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.worddawg.WordDawg
     Standalone: com.DefaultCompany.2DProject
-    iPhone: com.worddawg.worddawg
+    iPhone: com.worddawg.Word-Dawg
   buildNumber:
     Standalone: 0
     VisionOS: 0

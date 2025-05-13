@@ -9,6 +9,8 @@ public class GameParameters : MonoBehaviour {
     public bool isGameOfTheDay { get; set; }
     public bool isEndGame { get; set; }
     public int numRackLetters { get; set; }
+   
+    public int minimumLetters { get; set; }
 
 
     public void Initialize() {

@@ -80,6 +80,7 @@ tail
 tillie
 trainer
 tucker
+wag
 walk
 walker
 watchdog
@@ -88,6 +89,7 @@ whippet
 wiener
 withers
 wolfhound
+woof
 yap
 yoko
 yorkie
