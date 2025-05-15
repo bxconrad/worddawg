@@ -23,10 +23,10 @@ public class Dealer : MonoBehaviour {
 
     public void Awake() {
         howl = Resources.Load("dogHowlingAtMoon") as AudioClip;
-        Initialize();
     }
 
     public void Initialize() {
+        print("Dealer.Initialize \n");
         numLettersDealt = 0;
         numLettersDealt = 0;
         letters.Clear();

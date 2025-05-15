@@ -39,16 +39,20 @@ public class UpdatePanelLayout : MonoBehaviour {
         UpdateBoard.toastPosition = ToastPosition.BottomCenter;
     }
 
+    // viewPortImage was not resetting width. 
+    // set controloChildSize.width=true on RightUpdatePanel
     private void UpdateWordGrid() {
         var parent = isPortrait ? leftPanel : rightPanel;
-        //  scrollRect.transform.SetParent(parent.transform, false);
 
         var width = parent.GetComponent<RectTransform>().rect.width;
         var newWidth = width * .9 / 2;
 
         var gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>();
         var newSize = new Vector2((float)newWidth, gridLayoutGroup.cellSize.y);
-        print("UpdatePanelLayout.UpdateWordGrid screenWidthw=" + Screen.width +
+        print("UpdatePanelLayout.UpdateWordGrid " +
+              " isPportrait=" + isPortrait +
+              " newWidth=" + newWidth +
+              " screenWidthw=" + Screen.width +
               " leftPanel " + leftPanel.GetComponent<RectTransform>().rect.width +
               " rightPanel " + rightPanel.GetComponent<RectTransform>().rect.width + "\n");
         gridLayoutGroup.cellSize = newSize;
