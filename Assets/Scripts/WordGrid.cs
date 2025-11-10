@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class WordGrid : MonoBehaviour {
@@ -75,6 +76,18 @@ public class WordGrid : MonoBehaviour {
 
         print("WordGrid.FindMatchingButton ***NOT*** found " + buttonName + "\n");
         return null;
+    }
+
+    public List<string> FindWordList() {
+        print("WordGrid.FindWordListt\n");
+        var words = new List<string>();
+        var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
+
+        foreach (var displayButton in displayButtons) {
+            words.Add(displayButton.GetWord());
+        }
+
+        return words;
     }
 
     public void DeselectButton() {

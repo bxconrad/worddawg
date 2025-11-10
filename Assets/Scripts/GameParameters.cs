@@ -9,7 +9,7 @@ public class GameParameters : MonoBehaviour {
     public bool isGameOfTheDay { get; set; }
     public bool isEndGame { get; set; }
     public int numRackLetters { get; set; }
-   
+
     public int minimumLetters { get; set; }
 
 
@@ -31,27 +31,5 @@ public class GameParameters : MonoBehaviour {
                $"isEndGame: {isEndGame},  numRackLetters: {numRackLetters}";
     }
 
-    public string ContractDoubleLetter(string word) {
-        return HandleDoubleLetter(false, word);
-    }
-
-    public string ExpandDoubleLetter(string word) {
-        return HandleDoubleLetter(true, word);
-    }
-
     //qulogic
-    private string HandleDoubleLetter(bool isAdding, string word) {
-        if (isAdding) {
-            word = word.Replace("Q", "QU");
-            if (MyPrefs.PREFS_LANG_SP.Equals(language))
-                word = word.Replace("*", "LL");
-        }
-        else {
-            word = word.Replace("QU", "Q");
-            if (MyPrefs.PREFS_LANG_SP.Equals(language))
-                word = word.Replace("LL", "*");
-        }
-
-        return word;
-    }
 }

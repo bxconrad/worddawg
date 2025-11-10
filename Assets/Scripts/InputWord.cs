@@ -59,14 +59,14 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     public void AddLetter(BTile tile) {
         var loc = GetWord().Length;
-        print("InputWord.AddLetter loc " + loc + " word {" + GetWord() + "} \n");
+        //print("InputWord.AddLetter loc " + loc + " word {" + GetWord() + "} \n");
         tiles[loc].gameObject.SetActive(true);
         tiles[loc].SetLetter(tile.letter);
         tiles[loc].SetOriginTile(tile);
     }
 
     public void RemoveLetter(BTile originTile) {
-        print("InputWord.RemoveLetter \n");
+        //print("InputWord.RemoveLetter \n");
         originTile.SetState(Tile.State.unselectedState);
         for (var i = 0; i < tiles.Length; i++) {
             var tile = tiles[i];

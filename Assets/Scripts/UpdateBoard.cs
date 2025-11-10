@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using EasyUI.Toast;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,8 +12,6 @@ public class UpdateBoard : MonoBehaviour {
     [Header("UI")] [SerializeField] private GameObject updateButtons;
     [SerializeField] private GameParameters gameParameters;
 
-    [SerializeField] private ValidatorManager validatorManager;
-
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private InputWord inputWord;
@@ -17,15 +19,22 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private GameObject dummyPanel;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private Dealer dealer;
-    [SerializeField] private LogoImage logoImage;
-
     [SerializeField] private BetterRack betterRack;
     [SerializeField] private ReplaceRackButton replaceRackButton;
     [SerializeField] private WordGrid wordGrid;
+    private PB3 bot;
+
+    private List<string> stringList;
+    private ValidatorManager validatorManager;
 
     public void Start() {
         print("UpdateBoard.Start\n");
-        // AwakeIt();
+        validatorManager = new ValidatorManager();
+        var dictionaryFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "Downloads", "dictionary-EN.txt");
+        // bot = new PB3(dictionaryFilePath);
+
+        validatorManager.Initialize(gameParameters.language);
     }
 
     public void NewGame() {
@@ -48,7 +57,7 @@ public class UpdateBoard : MonoBehaviour {
         dummyPanel.SetActive(false);
         ClearInputWord();
         inputWord.Initialize();
-        selectedWord.InitializeTiles(gameParameters.ContractDoubleLetter(word)); // quLogic
+        selectedWord.InitializeTiles(GameHelper.ContractDoubleLetter(word, gameParameters.language)); // quLogic
         Toast.Dismiss();
     }
 
@@ -70,7 +79,24 @@ public class UpdateBoard : MonoBehaviour {
         scoreManager.UpdateScoreForReplaceRack();
     }
 
-    //qulogic
+    private void CallPlayerBot() {
+        var words = wordGrid.FindWordList();
+        var letters = betterRack.GetWord().ToCharArray().ToList();
+        // var letters = betterRack.GetWord().ToList();
+        // var rackList = betterRack.GetWord().Split(',').ToList();
+        // var listOfNames = new List<string>(betterRack.GetWord().Split(','));
+        stringList = new List<string>();
+        var word = betterRack.GetWord();
+        for (var i = 0; i < word.Length; i++) {
+            stringList.Add(word.Substring(i, 1));
+        } //   words = new List<string> { "cat", "dog", "frog" };
+
+        //  letters = new List<char> { 'r', 's', 'e', 'w', 'a', 'b' };
+        var letters2 = new List<string> { "r", "s", "e", "w", "a", "b" };
+        var bot = new PB3();
+        var newWordCombinations = bot.FindHighestScoringWord(words, stringList);
+        print("  New words formed: " + newWordCombinations);
+    }
 
 
     public void SubmitInputWordButton() {
@@ -79,17 +105,19 @@ public class UpdateBoard : MonoBehaviour {
         if ("TRUE".Equals(validationResult)) {
             selectedWord.gameObject.SetActive(false);
             dummyPanel.SetActive(true);
-            scoreManager.UpdateScore(gameParameters.ExpandDoubleLetter(selectedWord.GetWord()),
-                gameParameters.ExpandDoubleLetter(inputWord.GetWord()));
+            scoreManager.UpdateScore(GameHelper.ExpandDoubleLetter(selectedWord.GetWord(), gameParameters.language),
+                GameHelper.ExpandDoubleLetter(inputWord.GetWord(), gameParameters.language));
             betterRack.RemoveSelectedLetters();
             dealer.Deal();
             HandleNearEndGame();
 
-            wordGrid.UpdateDisplayButton(gameParameters.ExpandDoubleLetter(selectedWord.GetWord()),
-                gameParameters.ExpandDoubleLetter(inputWord.GetWord()));
+            wordGrid.UpdateDisplayButton(
+                GameHelper.ExpandDoubleLetter(selectedWord.GetWord(), gameParameters.language),
+                GameHelper.ExpandDoubleLetter(inputWord.GetWord(), gameParameters.language));
             scrollRect.verticalNormalizedPosition = 1.0f;
             ClearInputWord();
             RemoveSelectedWord();
+            CallPlayerBot();
         }
         else {
             Toast.Show(validationResult, 2f, Color.red, toastPosition);

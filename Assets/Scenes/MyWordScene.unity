@@ -5846,7 +5846,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateButtons: {fileID: 880988820}
   gameParameters: {fileID: 242061349}
-  validatorManager: {fileID: 618069927}
   scoreManager: {fileID: 57664982}
   scrollRect: {fileID: 1792496960}
   inputWord: {fileID: 583348232}
@@ -5854,7 +5853,6 @@ MonoBehaviour:
   dummyPanel: {fileID: 936784883}
   transformShaker: {fileID: 271896978}
   dealer: {fileID: 1867392557}
-  logoImage: {fileID: 1605416206}
   betterRack: {fileID: 1285693172}
   replaceRackButton: {fileID: 1462356516}
   wordGrid: {fileID: 841442075}
@@ -6434,55 +6432,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 601729849}
   m_CullTransparentMesh: 1
---- !u!1 &618069926
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 618069928}
-  - component: {fileID: 618069927}
-  m_Layer: 5
-  m_Name: ValidatorScript
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &618069927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618069926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02f164ff5b064696b0063d0bd45fc141, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameParameters: {fileID: 242061349}
---- !u!224 &618069928
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618069926}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1884578461}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 955.2948, y: -1179.998}
-  m_SizeDelta: {x: 1910.5896, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &649303224 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8969046879470839753, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -27184,7 +27133,6 @@ RectTransform:
   - {fileID: 2110859979}
   - {fileID: 1792496959}
   - {fileID: 1867392556}
-  - {fileID: 618069928}
   - {fileID: 1309730087}
   m_Father: {fileID: 1714180150}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -32245,7 +32193,6 @@ MonoBehaviour:
   stats: {fileID: 884772259}
   helpDisplay: {fileID: 1248222835}
   gameParameters: {fileID: 242061349}
-  validatorManager: {fileID: 618069927}
   transformShaker: {fileID: 271896978}
   logoImage: {fileID: 1605416206}
   audioSource: {fileID: 1933399652}

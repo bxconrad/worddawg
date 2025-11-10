@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private Stats stats;
     [SerializeField] private HelpDisplay helpDisplay;
     [SerializeField] private GameParameters gameParameters;
-    [SerializeField] private ValidatorManager validatorManager;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private LogoImage logoImage;
     [SerializeField] private AudioSource audioSource;
@@ -137,7 +136,7 @@ public class GameManager : MonoBehaviour {
         InactivateOtherCanvases();
 
         scoreManager.Initialize();
-        validatorManager.Initialize();
+        //validatorManager.Initialize();
         betterRack.Initialize();
         countdownTimer.enabled = false;
         if (gameParameters.isTimed) {
