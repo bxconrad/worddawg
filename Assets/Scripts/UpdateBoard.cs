@@ -23,6 +23,7 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private ReplaceRackButton replaceRackButton;
     [SerializeField] private WordGrid wordGrid;
     private PB3 bot;
+    private BrucesBot brucesBot;
 
     private List<string> stringList;
     private ValidatorManager validatorManager;
@@ -93,8 +94,8 @@ public class UpdateBoard : MonoBehaviour {
 
         //  letters = new List<char> { 'r', 's', 'e', 'w', 'a', 'b' };
         var letters2 = new List<string> { "r", "s", "e", "w", "a", "b" };
-        var bot = new PB3();
-        var newWordCombinations = bot.FindHighestScoringWord(words, stringList);
+        var bot = new BrucesBot();
+        var newWordCombinations = bot.FindAllWords(words, stringList);
         print("  New words formed: " + newWordCombinations);
     }
 

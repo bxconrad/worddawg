@@ -1,24 +1,75 @@
-using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 
 public class TestBot
 {
-    // A Test behaves as an ordinary method
+    private readonly PB3 bot3 = new();
+
+    private readonly PB4 bot4 = new();
+    private readonly BrucesBot brucesBot = new();
+    private readonly EnhancedWordCombinator enhancedWordCombinator = new();
+
     [Test]
-    public void TestBotSimplePasses()
+    public void TestDictionary()
     {
-        // Use the Assert class to test conditions
+        BrucesDicionaryTrie brucesDictionaryTrie = new();
+        brucesDictionaryTrie.LoadDictionary("C:/Users/bacon/Downloads/dictionary-EN.txt");
+        // Remaining: 'e'. Rack: 'e', 'a', 'r'. Passes.
+        var wordList = new List<string> { "POT" };
+        var rack = new List<string> { "TCLIWNU" };
+
+        var x = ""; // brucesBot.FindAllWords(wordList, rack);
+        Assert.IsTrue(x != null,
+            "Simple test failed. Expected true: lop -> lope (remaining 'e') in ear.");
     }
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator TestBotWithEnumeratorPasses()
+    [Test]
+    public void TestBrucesBot()
     {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
+        // Remaining: 'e'. Rack: 'e', 'a', 'r'. Passes.
+        var wordList = new List<string> { "POT" };
+        var rack = new List<string> { "TCLIWNU" };
+
+        var x = brucesBot.FindAllWords(wordList, rack);
+        Assert.IsTrue(x != null,
+            "Simple test failed. Expected true: lop -> lope (remaining 'e') in ear.");
+    }
+
+    [Test]
+    public void TestPb3()
+    {
+        // Remaining: 'e'. Rack: 'e', 'a', 'r'. Passes.
+        var wordList = new List<string> { "POT" };
+        var rack = new List<string> { "TCLIWNU" };
+
+        var x = bot3.FindHighestScoringWord(wordList, rack);
+        Assert.IsTrue(x != null,
+            "Simple test failed. Expected true: lop -> lope (remaining 'e') in ear.");
+    }
+
+
+    [Test]
+    public void TestPb4()
+    {
+        // Remaining: 'e'. Rack: 'e', 'a', 'r'. Passes.
+        var wordList = new List<string> { "POT" };
+        var rack = new List<string> { "TCLIWNU" };
+
+        var x = bot4.GenerateCombinations("CAT", "OR");
+        Assert.IsTrue(x != null,
+            "Simple test failed. Expected true: lop -> lope (remaining 'e') in ear.");
+    }
+
+/* */
+    [Test]
+    public void TestCombinator()
+    {
+        // Remaining: 'e'. Rack: 'e', 'a', 'r'. Passes.
+        var wordList = new List<string> { "POT" };
+        var rack = new List<string> { "TCLIWNU" };
+
+        var x = enhancedWordCombinator.GenerateCombinations("CAT", "OR");
+        Assert.IsTrue(x != null,
+            "Simple test failed. Expected true: lop -> lope (remaining 'e') in ear.");
     }
 }

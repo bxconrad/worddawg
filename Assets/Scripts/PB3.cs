@@ -87,6 +87,21 @@ public class PB3 {
         return true;
     }
 
+    private bool IsEndOfTrie(string prefix) {
+        var current = _dictionaryTrie;
+        foreach (var c in prefix) {
+            if (!current.Children.ContainsKey(c)) {
+                return true;
+            }
+
+            current = current.Children[c];
+        }
+
+        return false;
+    }
+
+    // called by FindHighestScoringWordHelper.
+    // return true if word is found in dictionaryTrie
     private bool IsValidWord(string word) {
         var current = _dictionaryTrie;
         foreach (var c in word) {
@@ -110,19 +125,29 @@ public class PB3 {
         return score * multiplier;
     }
 
+    // called by highest scoringWord with empty currentWord, then recursively here
     private void FindHighestScoringWordHelper(char[] availableLetters, string currentWord,
         HashSet<(string Word, int Score)> validWordsWithScores) {
+        Debug.Log("FindHighestScoringWordHelper currentWord " + currentWord);
+
         if (IsValidWord(currentWord)) {
+            Debug.Log("FindHighestScoringWordHelper validWord  =======  " + currentWord);
             validWordsWithScores.Add((currentWord, CalculateScore(currentWord)));
         }
 
-        if (!IsPrefix(currentWord)) {
+//        if (!IsPrefix(currentWord)) {
+        if (IsEndOfTrie(currentWord)) {
+            Debug.Log("FindHighestScoringWordHelper  IsEndOfTrie return  " + currentWord);
             return;
         }
 
+        // create every possible word from the letters. 
+        // could check for dup first letter here. could set min word length
         for (var i = 0; i < availableLetters.Length; i++) {
             var nextLetter = availableLetters[i];
             var remainingLetters = availableLetters.Where((c, index) => index != i).ToArray();
+            // Debug.Log("FindHighestScoringWordHelper recurse " + currentWord + nextLetter);
+
             FindHighestScoringWordHelper(remainingLetters, currentWord + nextLetter, validWordsWithScores);
         }
     }
@@ -138,6 +163,7 @@ public class PB3 {
         var overallHighestScore = -1;
         var allValidWords = new HashSet<(string Word, int Score)>();
 
+        // finds every possible combination
         foreach (var originalWord in wordList) {
             var originalWordUpper = originalWord.ToUpper();
             var originalWordChars = originalWordUpper.ToCharArray();
@@ -154,28 +180,14 @@ public class PB3 {
             Debug.Log($"--- Valid words formed using '{originalWord}' and rack letters ---\n");
 
             foreach (var (word, score) in validWordsForOriginal) {
+                Debug.Log("FindHighestScoringWord --- " + word + "\n");
+                // checks for original word AFTER making list. possibly better to check that first and short circuit the checking... maybe not
                 if (word.Length >= originalWordUpper.Length + 1) {
-                    var usesAllOriginal = originalWordUpper.All(c =>
-                        word.Count(wc => wc == c) >= originalWordUpper.Count(oc => oc == c));
+                    var usesAllOriginal = UsesAllOriginal(originalWordUpper, word);
 
                     if (usesAllOriginal) {
                         // Check if at least one letter in 'word' came from 'rack' (considering counts)
-                        var usedRackLetter = false;
-                        var originalCounts = originalWordUpper.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
-                        var rackCounts = rackChars.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
-                        var wordCounts = word.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
-
-                        foreach (var kvp in wordCounts) {
-                            var letter = kvp.Key;
-                            var wordCount = kvp.Value;
-                            var originalCount = originalCounts.GetValueOrDefault(letter, 0);
-                            var rackAvailable = rackCounts.GetValueOrDefault(letter, 0);
-
-                            if (wordCount > originalCount && rackAvailable > 0) {
-                                usedRackLetter = true;
-                                break;
-                            }
-                        }
+                        var usedRackLetter = UsedRackLetter(originalWordUpper, rackChars, word, out var wordCounts);
 
                         if (usedRackLetter) {
                             var combinedLetterCounts =
@@ -217,20 +229,8 @@ public class PB3 {
 
         // Secondary Goal remains the same, but will only be executed if no word met the primary goal across the entire word list
         if (overallHighestScoringWord == null) {
-            Debug.Log("\n--- Valid words formed using only rack letters ---");
-            var distinctRackChars = rack.SelectMany(s => s.ToUpper().ToCharArray()).Distinct().ToArray();
-            var validRackWordsWithScores = new HashSet<(string Word, int Score)>();
-            FindHighestScoringWordHelper(distinctRackChars, "", validRackWordsWithScores);
-
-            foreach (var (word, score) in validRackWordsWithScores.Where(w => w.Word.Length >= 3)
-                         .OrderByDescending(ws => ws.Score)) {
-                Debug.Log($"Word: {word.ToUpper()}, Score: {score}");
-                allValidWords.Add((word.ToUpper(), score));
-                if (score > overallHighestScore) {
-                    overallHighestScore = score;
-                    overallHighestScoringWord = word.ToUpper();
-                }
-            }
+            overallHighestScoringWord =
+                OverallHighestScoringWordNull(rack, allValidWords, overallHighestScore, overallHighestScoringWord);
         }
 
         var end1 = DateTime.Now.Millisecond;
@@ -239,6 +239,55 @@ public class PB3 {
         Debug.Log("time ---" + elapsed + "\n");
 
         return overallHighestScoringWord;
+    }
+
+    private string OverallHighestScoringWordNull(List<string> rack, HashSet<(string Word, int Score)> allValidWords,
+        int overallHighestScore,
+        string overallHighestScoringWord) {
+        Debug.Log("\n--- Valid words formed using only rack letters ---");
+        var distinctRackChars = rack.SelectMany(s => s.ToUpper().ToCharArray()).Distinct().ToArray();
+        var validRackWordsWithScores = new HashSet<(string Word, int Score)>();
+        FindHighestScoringWordHelper(distinctRackChars, "", validRackWordsWithScores);
+
+        foreach (var (word, score) in validRackWordsWithScores.Where(w => w.Word.Length >= 3)
+                     .OrderByDescending(ws => ws.Score)) {
+            Debug.Log($"Word: {word.ToUpper()}, Score: {score}");
+            allValidWords.Add((word.ToUpper(), score));
+            if (score > overallHighestScore) {
+                overallHighestScore = score;
+                overallHighestScoringWord = word.ToUpper();
+            }
+        }
+
+        return overallHighestScoringWord;
+    }
+
+    private static bool UsedRackLetter(string originalWordUpper, char[] rackChars, string word,
+        out Dictionary<char, int> wordCounts) {
+        var usedRackLetter = false;
+        var originalCounts = originalWordUpper.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
+        var rackCounts = rackChars.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
+        wordCounts = word.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
+
+        foreach (var kvp in wordCounts) {
+            var letter = kvp.Key;
+            var wordCount = kvp.Value;
+            var originalCount = originalCounts.GetValueOrDefault(letter, 0);
+            var rackAvailable = rackCounts.GetValueOrDefault(letter, 0);
+
+            if (wordCount > originalCount && rackAvailable > 0) {
+                usedRackLetter = true;
+                break;
+            }
+        }
+
+        return usedRackLetter;
+    }
+
+    private static bool UsesAllOriginal(string originalWordUpper, string word) {
+        var usesAllOriginal = originalWordUpper.All(c =>
+            word.Count(wc => wc == c) >= originalWordUpper.Count(oc => oc == c));
+        return usesAllOriginal;
     }
 
     private class TrieNode {
