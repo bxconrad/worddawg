@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EasyUI.Toast;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     [Header("UI")] [SerializeField] private GameObject endGameContainer;
     [SerializeField] private GameObject prefsContainer;
+    [SerializeField] private GameObject timeScorePanel;
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private ScoreManager scoreManager;
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private LogoImage logoImage;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private TextMeshProUGUI countdownText;
 
     private readonly List<Image> panelImages = new();
 
@@ -46,6 +49,7 @@ public class GameManager : MonoBehaviour {
         updateBoard.gameObject.SetActive(false);
         endGameContainer.SetActive(false);
         prefsContainer.SetActive(false);
+        timeScorePanel.SetActive(false);
         helpDisplay.Initialize();
     }
 
@@ -139,10 +143,15 @@ public class GameManager : MonoBehaviour {
         //validatorManager.Initialize();
         betterRack.Initialize();
         countdownTimer.enabled = false;
+        timeScorePanel.SetActive(true);
         if (gameParameters.isTimed) {
             countdownTimer.Initialize();
             countdownTimer.gameObject.SetActive(true);
             countdownTimer.enabled = true;
+            countdownText.text = "Countdown";
+        }
+        else {
+            countdownText.text = "# Letters";
         }
 
         audioSource.mute = !MyPrefs.GetIsSound();

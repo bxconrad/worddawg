@@ -49,13 +49,13 @@ public class TestBot
 
 
     [Test]
-    public void TestPb4()
+    public void TestPb4NoRack()
     {
         // Remaining: 'e'. Rack: 'e', 'a', 'r'. Passes.
         var wordList = new List<string> { "POT" };
-        var rack = new List<string> { "TCLIWNU" };
+        var rack = new List<string> { "" };
 
-        var x = bot4.GenerateCombinations("CAT", "OR");
+        var x = bot4.GenerateCombinations("CAT", "R");
         Assert.IsTrue(x != null,
             "Simple test failed. Expected true: lop -> lope (remaining 'e') in ear.");
     }

@@ -5,9 +5,9 @@ public class ValidatorManager {
     private string language { get; set; }
 
     public void Initialize(string lang) {
-        MonoBehaviour.print("ValidatorManager.Initialize\n");
         language = lang;
-        var dictionaryName = "dictionary-" + lang;
+        var dictionaryName = "dictionary-EN"; // + lang;
+        MonoBehaviour.print("ValidatorManager.Initialize " + dictionaryName + "\n");
         var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
 

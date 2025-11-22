@@ -44,7 +44,8 @@ public class ScoreManager : MonoBehaviour {
 
     public void Initialize() {
         currentScore = 0;
-        scoreText.text = "0";
+        wordScore = 0;
+        UpdateScoreText();
         longestWord = "";
         highestWordScoreWord = "";
         highestWordScore = 0;

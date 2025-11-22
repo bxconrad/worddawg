@@ -118,7 +118,7 @@ public class UpdateBoard : MonoBehaviour {
             scrollRect.verticalNormalizedPosition = 1.0f;
             ClearInputWord();
             RemoveSelectedWord();
-            CallPlayerBot();
+            //CallPlayerBot();
         }
         else {
             Toast.Show(validationResult, 2f, Color.red, toastPosition);
