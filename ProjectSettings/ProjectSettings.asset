@@ -13,10 +13,10 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: worddawg
-  productName: worddawg
-  defaultCursor: {fileID: 2800000, guid: d3f19c2542dc4534da60da901df857fb, type: 3}
+  productName: Word Dawg
+  defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.46274513, g: 0.2901961, b: 0.7137255, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 0.5
@@ -42,7 +42,7 @@ PlayerSettings:
   m_SplashScreenLogos:
   - logo: {fileID: 10404, guid: 0000000000000000f000000000000000, type: 0}
     duration: 2
-  - logo: {fileID: 21300000, guid: 090aca741cea6f844bc31aa1b1d148bb, type: 3}
+  - logo: {fileID: 5866503095645217153, guid: 1b6735dd8f5840a4abfebd9c3877a3f4, type: 3}
     duration: 5
   - logo: {fileID: 21300000, guid: eab55e25aec8a1b4d9e517e53cc97ac9, type: 3}
     duration: 2
@@ -146,7 +146,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 8
+  bundleVersion: 9
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -298,7 +298,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: d3f19c2542dc4534da60da901df857fb, type: 3}
+      m_Icon: {fileID: 2800000, guid: e4375e39b3992b5449ee9628d69ddfb8, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
