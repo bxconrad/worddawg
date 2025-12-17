@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 010ee67f408e29e4fb5f305efe6e807d
+guid: d3d2dba51b5ebff41b9c5f9859cb1aa6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9130958928974446293
-    second: letterTileWhite_0
+      213: -708595107810995506
+    second: 0wordDawgLetters_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: letterTileWhite_0
+      name: 0wordDawgLetters_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 1
-        width: 49
-        height: 48
+        x: 36
+        y: 713
+        width: 3128
+        height: 1774
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b210cc36b31584180800000000000000
-      internalID: -9130958928974446293
+      spriteID: ec29855f0809a26f0800000000000000
+      internalID: -708595107810995506
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      letterTileWhite_0: -9130958928974446293
+      0wordDawgLetters_0: -708595107810995506
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 010ee67f408e29e4fb5f305efe6e807d
+guid: f0ef0d9138e137540ba7687dfb6e054e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9130958928974446293
-    second: letterTileWhite_0
+      213: -1298977728339242953
+    second: icon-ios-1024x1024_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: letterTileWhite_0
+      name: icon-ios-1024x1024_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 1
-        width: 49
-        height: 48
+        x: 4
+        y: 4
+        width: 1016
+        height: 1016
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b210cc36b31584180800000000000000
-      internalID: -9130958928974446293
+      spriteID: 730123b63aa19fde0800000000000000
+      internalID: -1298977728339242953
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      letterTileWhite_0: -9130958928974446293
+      icon-ios-1024x1024_0: -1298977728339242953
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

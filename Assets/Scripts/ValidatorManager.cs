@@ -6,14 +6,13 @@ public class ValidatorManager {
 
     public void Initialize(string lang) {
         language = lang;
-        var dictionaryName = "dictionary-EN"; // + lang;
+        var dictionaryName = "dictionary-" + lang;
         MonoBehaviour.print("ValidatorManager.Initialize " + dictionaryName + "\n");
         var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
 
         MonoBehaviour.print("ValidatorManager.Initialize allWords " + allWords.Length + " dictionary " +
-                            dictionaryName +
-                            "\n");
+                            dictionaryName + "\n");
     }
 
     public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWordString) {

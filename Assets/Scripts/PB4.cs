@@ -5,7 +5,7 @@ using UnityEngine;
 
 // --- 2. MAIN WORD COMBINATOR LOGIC ---
 public class PB4 {
-    private readonly BrucesDicionaryTrie _dictionary = new();
+    private readonly DicionaryTrie _dictionary = new();
 
     /// <summary>
     ///     Generates all valid combinations, pruned by the Trie dictionary.

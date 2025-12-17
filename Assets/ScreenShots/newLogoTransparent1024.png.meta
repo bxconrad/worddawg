@@ -373,7 +373,16 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      newLogoTransparent1024_0: -8778184401763692481
+      newLogoTransparent1024_1: 6746292784893793219
+      newLogoTransparent1024_2: -7559596250662912734
+      newLogoTransparent1024_3: 8882402129423229572
+      newLogoTransparent1024_4: 3084710575289779676
+      newLogoTransparent1024_5: 1974635812593804206
+      newLogoTransparent1024_6: -1757289870315804073
+      newLogoTransparent1024_7: 5051387278710156112
+      newLogoTransparent1024_8: -8293485675846305408
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

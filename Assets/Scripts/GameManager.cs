@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour {
     private string gameMode;
 
     public void Start() {
-        print("GameManager.Start sound " + MyPrefs.GetIsSound() + "\n");
         Toast.Dismiss();
 
         gameObject.SetActive(true);
@@ -40,6 +39,7 @@ public class GameManager : MonoBehaviour {
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        print("GameManager.Start sound " + MyPrefs.GetIsSound() + " " + gameParameters + "\n");
     }
 
 
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void NewGame() {
-        print("GameManager.NewGame \n");
+        print("GameManager.NewGame " + gameParameters + "\n");
         InactivateOtherCanvases();
 
         scoreManager.Initialize();

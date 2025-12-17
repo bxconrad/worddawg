@@ -17,11 +17,9 @@ public class ReplaceRackButton : MonoBehaviour {
     }
 
     public void Initialize() {
-        //102,45,145
-        Color myPurple;
-        var my = new Color32(102, 45, 145, 255);
+        var myPurple = new Color32(102, 45, 145, 255);
         print("ReplaceRackButton.Initialize " + text.text + "\n");
-        GetComponent<Image>().color = my;
+        GetComponent<Image>().color = myPurple;
         text.text = "RACK";
     }
 }

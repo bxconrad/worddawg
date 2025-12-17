@@ -26,7 +26,7 @@ public class GameParameters : MonoBehaviour {
     }
 
     public override string ToString() {
-        return $"{base.ToString()}, numLetters: {numLetters}, numSeconds: {numSeconds}," +
+        return "GameParameters " + $"{base.ToString()}, numLetters: {numLetters}, numSeconds: {numSeconds}," +
                $" language: {language}, gameMode: {gameMode}, isTimed: {isTimed}, isGameOfTheDay: {isGameOfTheDay}, " +
                $"isEndGame: {isEndGame},  numRackLetters: {numRackLetters}";
     }

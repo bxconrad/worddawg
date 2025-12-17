@@ -21,9 +21,10 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private Dealer dealer;
     [SerializeField] private BetterRack betterRack;
     [SerializeField] private ReplaceRackButton replaceRackButton;
+
     [SerializeField] private WordGrid wordGrid;
-    private PB3 bot;
-    private BrucesBot brucesBot;
+    //  private PB3 bot;
+    //private BrucesBot brucesBot;
 
     private List<string> stringList;
     private ValidatorManager validatorManager;
@@ -34,12 +35,12 @@ public class UpdateBoard : MonoBehaviour {
         var dictionaryFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             "Downloads", "dictionary-EN.txt");
         // bot = new PB3(dictionaryFilePath);
-
-        validatorManager.Initialize(gameParameters.language);
     }
 
     public void NewGame() {
         print("UpdateBoard.NewGame selectedWord {" + selectedWord + "} \n");
+        //bcdo only need to reload dictionary at startup and custom goame. vm should use trie
+        validatorManager.Initialize(gameParameters.language);
         wordGrid.Initialize();
         RemoveSelectedWord();
         inputWord.Initialize();

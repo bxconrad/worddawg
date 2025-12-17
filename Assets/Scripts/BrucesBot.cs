@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public class BrucesBot {
-    private readonly BrucesDicionaryTrie brucesDictionaryTrie = new();
+    private readonly DicionaryTrie dictionaryTrie = new();
     private readonly WordChecker wordChecker = new();
 
 
@@ -14,14 +14,14 @@ public class BrucesBot {
         //  Debug.Log("FIndAllWordsForEachWord currentWord " + currentWord + "avl " + string.Join("", availableLetters));
 
         // checks for original word AFTER making list. possibly better to check that first and short circuit the checking... maybe not
-        if (brucesDictionaryTrie.IsValidWord(currentWord)) {
+        if (dictionaryTrie.IsValidWord(currentWord)) {
             if (wordChecker.CanFormNewWord(originalWord, currentWord, rackWord)) {
                 //  if (currentWord.Length >= originalWordUpper.Length + 1) {
                 validWords.Add(currentWord);
             }
         }
 
-        if (brucesDictionaryTrie.IsEndOfTrie(currentWord)) {
+        if (dictionaryTrie.IsEndOfTrie(currentWord)) {
             //  Debug.Log("FindHighestScoringWordHelper  IsEndOfTrie return  " + currentWord);
             return;
         }
@@ -42,7 +42,7 @@ public class BrucesBot {
 
     public string FindAllWords(List<string> wordList, List<string> rack) {
         var start = DateTime.Now.Millisecond;
-        brucesDictionaryTrie.LoadDictionary("C:/Users/bacon/Downloads/dictionary-EN.txt");
+        dictionaryTrie.LoadDictionary("C:/Users/bacon/Downloads/dictionary-EN.txt");
         Debug.Log("Word List: " + string.Join(", ", wordList));
         Debug.Log("Rack: " + string.Join(", ", rack));
         Debug.Log("Time: " + DateTime.Now + "\n");
