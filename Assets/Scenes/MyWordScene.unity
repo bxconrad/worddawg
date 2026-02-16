@@ -397,7 +397,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -531,7 +531,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 505.3399, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &55158474
@@ -940,7 +940,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -1474,8 +1474,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -364.8089}
+  m_SizeDelta: {x: 1910.6798, y: 729.6178}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &153447116
 MonoBehaviour:
@@ -1570,7 +1570,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -1703,8 +1703,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: -24.34}
+  m_SizeDelta: {x: 285.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &161386576
 MonoBehaviour:
@@ -2289,7 +2289,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 855.3399, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &208641852
@@ -2910,8 +2910,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &307835010
 MonoBehaviour:
@@ -3433,7 +3433,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -4044,7 +4044,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 837812051}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
@@ -4238,7 +4238,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -4374,8 +4374,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: 0}
+  m_SizeDelta: {x: 285.16995, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &501019063
 MonoBehaviour:
@@ -4876,8 +4876,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: 0}
+  m_SizeDelta: {x: 415.16995, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &545854180
 MonoBehaviour:
@@ -5179,8 +5179,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &552516750
 MonoBehaviour:
@@ -5424,8 +5424,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &564557039
 MonoBehaviour:
@@ -5567,7 +5567,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -5809,7 +5809,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -5942,8 +5942,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: -24.34}
+  m_SizeDelta: {x: 285.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &571418766
 MonoBehaviour:
@@ -6188,7 +6188,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -6457,8 +6457,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: -24.34}
+  m_SizeDelta: {x: 415.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &601729851
 MonoBehaviour:
@@ -6711,7 +6711,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -6953,7 +6953,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -7242,7 +7242,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -7610,7 +7610,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -8107,8 +8107,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -464.14926}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &755545426
 MonoBehaviour:
@@ -8246,7 +8246,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2952034395196891467, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
@@ -8478,8 +8478,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -261.46497}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &787088331
 MonoBehaviour:
@@ -8954,8 +8954,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -396.58783}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &811160042
 MonoBehaviour:
@@ -9611,7 +9611,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1533880029115552079, guid: 26fc80f44079f6a4a932f0130f2e8ec7, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 1653244441981744486, guid: 26fc80f44079f6a4a932f0130f2e8ec7, type: 3}
@@ -10906,32 +10906,31 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Word Dawg is an exciting new game where you can create words and then
-    modify them to make new words.\r\n\r\nTo begin, you will be dealt a rack of seven
-    letters. Tap letters in the rack to create your first new word. Words must be
-    at least three letters. To submit, click the Submit button or swipe right on
-    your word. Each new word will display in a list below and new letters will be
-    added to the rack.\r\n\r\nAfter that, you may continue to make new words. Better
-    yet,the fun begins and you earn even more points when you start to modify the
-    words you\u2019ve already created. You may add prefixes, suffixes or rearrange
-    the letters to make new words. For example, if your first word is CAT, you might
-    turn it into CATS or CART or ACTOR depending on the letters in the rack.\r\n\r\nTo
-    do that, tap the word you want to modify and it will be displayed beneath the
-    rack of letters. Tap the letters from the selected word plus letters in the rack
-    to make a new word. You can use the letters in any order but you MUST use ALLof
-    them. Plus you must use at least ONE letter from the rack. After you modify the
-    word and hit Submit,the original word will be replaced and displayed at the top
-    of your list of words.\r\n\r\nIf you make a mistake, you can deselect individual
-    letters by tapping them or clicking the Reset button.If you get stuck, you can
-    replace the rack with new letters by swiping left on the rack or clicking the
-    Rack button.\r\n\r\nThe game is over when you run out of letters or time, depending
-    on which variation of the game you selected to play. You will see the results
-    of your current and highest scores and best words.\r\n\r\nSee the Games help
-    section to explore variations of the game. These include timed, untimed, and
-    customized possibilities as well as a Game of The Day. See the Gestures section
-    for various swiping and clicking shortcuts to make playing more fun and faster.
-    See the Scoring help for more details on how points are calculated so you can
-    maximize your score.\r\n\r\n\n\n\n\n\n\n\n\n\n-\n"
+  m_text: "Word Dawg is an exciting new game where you can create words and then modify
+    them to make new words.\r\n\r\nTo begin, you will be dealt a rack of seven letters.
+    Tap letters in the rack to create your first new word. Words must be at least
+    three letters. To submit, click the Submit button or swipe right on your word.
+    Each new word will display in a list below and new letters will be added to the
+    rack.\r\n\r\nAfter that, you may continue to make new words. Better yet,the fun
+    begins and you earn even more points when you start to modify the words you\u2019ve
+    already created. You may add prefixes, suffixes or rearrange the letters to make
+    new words. For example, if your first word is CAT, you might turn it into CATS
+    or CART or ACTOR depending on the letters in the rack.\r\n\r\nTo do that, tap
+    the word you want to modify and it will be displayed beneath the rack of letters.
+    Tap the letters from the selected word plus letters in the rack to make a new
+    word. You can use the letters in any order but you MUST use ALLof them. Plus you
+    must use at least ONE letter from the rack. After you modify the word and hit
+    Submit,the original word will be replaced and displayed at the top of your list
+    of words.\r\n\r\nIf you make a mistake, you can deselect individual letters by
+    tapping them or clicking the Reset button.If you get stuck, you can replace the
+    rack with new letters by swiping left on the rack or clicking the Rack button.\r\n\r\nThe
+    game is over when you run out of letters or time, depending on which variation
+    of the game you selected to play. You will see the results of your current and
+    highest scores and best words.\r\n\r\nSee the Games help section to explore variations
+    of the game. These include timed, untimed, and customized possibilities as well
+    as a Game of The Day. See the Gestures section for various swiping and clicking
+    shortcuts to make playing more fun and faster. See the Scoring help for more details
+    on how points are calculated so you can maximize your score.\r\n\r\n\n\n\n\n\n\n\n\n\n-\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11210,7 +11209,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -11656,8 +11655,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -296.8721}
+  m_SizeDelta: {x: 1910.6798, y: 565.4914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &884772258
 MonoBehaviour:
@@ -12119,7 +12118,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2952034395196891467, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
@@ -12656,8 +12655,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &930297668
 MonoBehaviour:
@@ -12962,8 +12961,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: -24.34}
+  m_SizeDelta: {x: 415.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &936102365
 MonoBehaviour:
@@ -13926,8 +13925,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &973247803
 MonoBehaviour:
@@ -14343,7 +14342,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -14631,7 +14630,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2952034395196891467, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
@@ -14749,7 +14748,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -15147,8 +15146,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1046023406
 MonoBehaviour:
@@ -15455,8 +15454,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -531.7107}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1058338302
 MonoBehaviour:
@@ -15540,8 +15539,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: -24.34}
+  m_SizeDelta: {x: 285.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1067166978
 MonoBehaviour:
@@ -16138,8 +16137,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: -24.34}
+  m_SizeDelta: {x: 285.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1094417895
 MonoBehaviour:
@@ -17147,8 +17146,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -7.0632052}
+  m_SizeDelta: {x: 1910.6798, y: 14.1264105}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1150781582
 MonoBehaviour:
@@ -17558,7 +17557,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 837812051}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
@@ -18079,25 +18078,22 @@ MonoBehaviour:
 
 
 
-    Game Of the Day
-    - All players use the same special curated bag of 50 letters each day. Compare
-    your scores with your friends or try to beat your previous score.
+    Game Of the Day - All players use the same special curated bag of 50 letters each
+    day. Compare your scores with your friends or try to beat your previous score.
 
 
 
-    Untimed
-    Game - Use 50 random letters. Take as long as you want to play the game.
+    Untimed Game - Use 50 random letters. Take as long as you want to play the game.
 
 
 
-    Timed
-    Game - See how many words you can make in 4 minutes with an unlimited amount
+    Timed Game - See how many words you can make in 4 minutes with an unlimited amount
     of letters.
 
 
 
-    Custom Game - Make your own game by setting the time or the
-    number of letters from Settings.
+    Custom Game - Make your own game by setting the time or the number of letters
+    from Settings.
 
 
 
@@ -18540,8 +18536,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1221260309
 MonoBehaviour:
@@ -19100,8 +19096,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1258515305
 MonoBehaviour:
@@ -20480,8 +20476,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: -24.34}
+  m_SizeDelta: {x: 415.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1357468645
 MonoBehaviour:
@@ -20623,7 +20619,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -20813,7 +20809,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 837812051}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
@@ -21081,8 +21077,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1384078823
 MonoBehaviour:
@@ -21251,8 +21247,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: -24.34}
+  m_SizeDelta: {x: 415.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1388840222
 MonoBehaviour:
@@ -22178,7 +22174,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -22319,8 +22315,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1000, y: -784.7391}
-  m_SizeDelta: {x: 300, y: 1569.4781}
+  m_AnchoredPosition: {x: 831.766, y: -785.52155}
+  m_SizeDelta: {x: 475.29486, y: 1571.0431}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1506694313
 MonoBehaviour:
@@ -22415,7 +22411,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -22709,8 +22705,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1508997120
 MonoBehaviour:
@@ -22852,7 +22848,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 837812051}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: da81ce84d43d80e46831e7bfa1623b69, type: 3}
@@ -23069,13 +23065,13 @@ MonoBehaviour:
     value is not multiplied by 1.5. \n\nFor example, if you have a four letter word
     whose letter values add up to 10, the word score will be 10. But, if you have
     a five letter word whose letter values add up to 10, the word score will be 60.
-    A six lerrer word whose letter scores add up to 10 will have a word score of
-    75.\n\nThis is the formula:  \n   letterScore *  (length-1)*1.5 )\n\n   \nLetter
-    Scores\n    A = 1 \r\n    B = 4 \r\n    C = 4 \r\n    D = 2 \r\n    E = 1 \r\n   
-    F = 4 \r\n    G = 4\r\n    H = 5\r\n    I = 1 \r\n    J = 8\r\n    K = 6\r\n   
-    L = 3\r\n    M = 4\r \n    N = 2\r\n    O = 1\r\n    P = 4\r\n    Q = n/a\r\n   
-    R = 3\r\n    S = 1\r\n    T = 2 \r\n    U = 4\r\n    V = 6\r\n    W = 4\r\n   
-    X = 10\r\n    Y = 4 \r\n    Z = 1\r\n\r\n\n\n\n\n\n\n\n\n\n-\n"
+    A six lerrer word whose letter scores add up to 10 will have a word score of 75.\n\nThis
+    is the formula:  \n   letterScore *  (length-1)*1.5 )\n\n   \nLetter Scores\n
+    \   A = 1 \r\n    B = 4 \r\n    C = 4 \r\n    D = 2 \r\n    E = 1 \r\n F = 4 \r\n
+    \   G = 4\r\n    H = 5\r\n    I = 1 \r\n    J = 8\r\n    K = 6\r\n L = 3\r\n    M
+    = 4\r \n    N = 2\r\n    O = 1\r\n    P = 4\r\n    Q = n/a\r\n R = 3\r\n    S
+    = 1\r\n    T = 2 \r\n    U = 4\r\n    V = 6\r\n    W = 4\r\n X = 10\r\n    Y =
+    4 \r\n    Z = 1\r\n\r\n\n\n\n\n\n\n\n\n\n-\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -23192,8 +23188,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -58.780712}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1520573985
 MonoBehaviour:
@@ -23472,7 +23468,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -23613,8 +23609,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: -24.34}
+  m_SizeDelta: {x: 285.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1534748069
 MonoBehaviour:
@@ -23923,8 +23919,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1561571488
 MonoBehaviour:
@@ -24628,7 +24624,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -24854,8 +24850,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -654.6178}
+  m_SizeDelta: {x: 1910.6798, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1641632216
 MonoBehaviour:
@@ -25266,8 +25262,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: -24.34}
+  m_SizeDelta: {x: 285.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1703313845
 MonoBehaviour:
@@ -25930,8 +25926,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1758412304
 MonoBehaviour:
@@ -26073,7 +26069,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -26410,7 +26406,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -26762,7 +26758,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -26968,17 +26964,17 @@ MonoBehaviour:
     It will be displayed under the rack. We call this the Selected word.\n\nIf you
     make a mistake and want to deselect a letter, tap the letter either in the New
     word. You can aslo tap the letter in  the selected word or the rack, whchever
-    one it originated. You can also swipe left to clear out all the letters. You
-    can also hit the Cancel button to unselect everything.\n\nSwipe left on the rack
-    to get new rack letters, same as hitting the Replace Rack button.\r\n\r\nSwipe
-    left on your new/modified word to clear all the letters, same as the Clear button.\n\nSwipe
+    one it originated. You can also swipe left to clear out all the letters. You can
+    also hit the Cancel button to unselect everything.\n\nSwipe left on the rack to
+    get new rack letters, same as hitting the Replace Rack button.\r\n\r\nSwipe left
+    on your new/modified word to clear all the letters, same as the Clear button.\n\nSwipe
     left again on your empty new/modified word to reset and clear the selected word,
-    same as the Reset button. Or you can click on a word from your list of words
-    to select a different word to modify.\n\nSwipe right on the selected word to
-    select all the unselected letters. This can be helpful if you are just adding
-    letters to the end of a word. It can also be helpful to select all the remaining
-    letters after some are selected.\n\r\n\rSwipe left on the selected word to clear
-    and unselect any selected letters.\n\n\n\n\n\n\n\n\n\n\n-\n"
+    same as the Reset button. Or you can click on a word from your list of words to
+    select a different word to modify.\n\nSwipe right on the selected word to select
+    all the unselected letters. This can be helpful if you are just adding letters
+    to the end of a word. It can also be helpful to select all the remaining letters
+    after some are selected.\n\r\n\rSwipe left on the selected word to clear and unselect
+    any selected letters.\n\n\n\n\n\n\n\n\n\n\n-\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -27093,8 +27089,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: -24.34}
+  m_SizeDelta: {x: 415.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1825803595
 MonoBehaviour:
@@ -27585,8 +27581,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1880352182
 MonoBehaviour:
@@ -28298,7 +28294,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -28441,8 +28437,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -329.0264}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1921465834
 MonoBehaviour:
@@ -29024,8 +29020,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1942531728
 MonoBehaviour:
@@ -29552,8 +29548,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: -24.34}
+  m_SizeDelta: {x: 415.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1979322036
 MonoBehaviour:
@@ -29724,8 +29720,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -193.90356}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1981612389
 MonoBehaviour:
@@ -30430,7 +30426,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -30805,7 +30801,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 583348228}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 7334868467900631059, guid: aebdd68013802104c82c3da55aa0b6e1, type: 3}
@@ -31646,7 +31642,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1024415400}
     m_Modifications:
     - target: {fileID: 2952034395196891467, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 8969046879470839753, guid: d1ee7424353ceab42a455f1303ec0936, type: 3}
@@ -31952,7 +31948,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1205.3398, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2125707397
@@ -32239,8 +32235,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1668.0947, y: -24.34}
+  m_SizeDelta: {x: 285.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &501079618748209397
 RectTransform:
@@ -32417,8 +32413,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 955.3399, y: -126.34213}
+  m_SizeDelta: {x: 1810.6798, y: 67.561424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2781440338180101128
 MonoBehaviour:
@@ -32724,8 +32720,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1245.4248, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5726662375067951481
 MonoBehaviour:
@@ -32783,8 +32779,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 695.2549, y: -24.34}
+  m_SizeDelta: {x: 540.1699, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7574649395014543250
 GameObject:
@@ -33024,8 +33020,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 207.58498, y: -24.34}
+  m_SizeDelta: {x: 415.16995, y: 48.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9115370395586202495
 MonoBehaviour:
