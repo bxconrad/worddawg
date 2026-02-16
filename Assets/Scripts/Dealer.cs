@@ -53,6 +53,7 @@ public class Dealer : MonoBehaviour {
         }
 
         Shuffle(letters);
+        letters.Insert(1, "Q");
         print("Dealer.FillLetterBag #letters " + letters.Count + "\n");
     }
 
@@ -264,7 +265,7 @@ public class Dealer : MonoBehaviour {
     public int GetTotalNumLettersLeft() {
         var numLeft = GetNumLetters() - numLettersDealt + betterRack.GetWord().Trim().Length;
         // print("Dealer.GetTotalNumLettersLeft  " + numLeft + " numLtrs " + GetNumLetters() + " numLettersDealt " +
-        //     numLettersDealt + " numRack " + betterRack.GetWord() + " ltrCount " + letters.Count() + "\n");
+        //     numLettersDealt + " numRack " + betterRack.GetWordText() + " ltrCount " + letters.Count() + "\n");
         return numLeft;
     }
 

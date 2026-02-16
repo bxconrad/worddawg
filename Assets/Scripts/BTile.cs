@@ -6,7 +6,7 @@ public class BTile : BaseTile {
     public override void OnButtonClick(string buttonString) {
         inputWord = GameObject.FindGameObjectWithTag("newInputWord").GetComponent<InputWord>();
         // print("BTile.OnButtonClick  buttonString {" + buttonString + "} IsUnselected " + state.name +
-        //       " inputword {" + inputWord.GetWord() + "}\n");
+        //       " inputword {" + inputWord.GetWordText() + "}\n");
         if (IsSelected()) {
             inputWord.RemoveLetter(this);
             SetState(Tile.State.unselectedState);

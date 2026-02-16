@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class ValidatorManager {
     private string[] allWords;
-    private string language { get; set; }
 
-    public void Initialize(string lang) {
-        language = lang;
-        var dictionaryName = "dictionary-" + lang;
+    public void Initialize() {
+        var dictionaryName = "dictionary-" + GameHelper.LANGUAGE;
         MonoBehaviour.print("ValidatorManager.Initialize " + dictionaryName + "\n");
         var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
@@ -19,9 +17,9 @@ public class ValidatorManager {
         MonoBehaviour.print("ValidatorManager.ValidateInputWord {" + inputWordString + "}\n");
         //  return "TRUE";
         // qulogic
-        var selectedWordString = GameHelper.ExpandDoubleLetter(selectedWord.GetWord(), language);
-        var rackWordString = GameHelper.ExpandDoubleLetter(betterRack.GetWord(), language);
-        inputWordString = GameHelper.ExpandDoubleLetter(inputWordString, language);
+        var selectedWordString = GameHelper.ExpandDoubleLetter(selectedWord.GetWord());
+        var rackWordString = GameHelper.ExpandDoubleLetter(betterRack.GetWord());
+        //inputWordString = GameHelper.ExpandDoubleLetter(inputWordString);
         // check all letters from selectedWord are used
         if (!selectedWord.isAllLettersUsed()) {
             MonoBehaviour.print("ValidatorManager.ValidateInputWord IsAllLettersUsed  false \n");

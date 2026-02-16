@@ -17,66 +17,69 @@ public class WordGrid : MonoBehaviour {
 
     // If we created a new word, instantiate
     // if we updated an existing word, find it and change it to have the new word
-    public void UpdateDisplayButton(string originalWord, string newWord) {
-        print("WordGrid.UpdateDisplayButton oWord " + originalWord + " nWord " + newWord + "\n");
+    //bcdo remove newWord from method call
+    public void UpdateDisplayButton(Word wordObject) {
+        print("WordGrid.UpdateDisplayButton oWord {" + wordObject + "}\n");
 
         // If there was no originalWord that means we are creating a new word
-        if (originalWord.Length == 0) {
-            InstantiateDisplayButton(newWord);
+        if (wordObject.IsNewWord()) {
+            InstantiateDisplayButton(wordObject);
         }
         // If there was an originalWord that means we are updating an existing word
         else {
-            UpdateExistingWord(originalWord, newWord);
+            UpdateExistingWord(wordObject);
         }
     }
 
-    private void InstantiateDisplayButton(string newWord) {
+    private void InstantiateDisplayButton(Word word) {
         var newDisplayButton = Instantiate(displayButtonPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         newDisplayButton.transform.SetParent(transform, false);
         var displayButton = newDisplayButton.GetComponent<DisplayButton>();
-        displayButton.SetWord(newWord);
+        displayButton.SetWord(word);
         newDisplayButton.transform.SetAsFirstSibling();
-        newDisplayButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnButtonClick(newWord));
-        print("WordGrid.InstantiateDisplayButton " + newWord + "\n");
+        newDisplayButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnButtonClick(word));
+        print("WordGrid.InstantiateDisplayButton " + word + "\n");
     }
 
     // An existing word was updated.
     // Find it in our list of words. 
     // Change the text and the onClick to reflect the new word
-    private void UpdateExistingWord(string originalWord, string newWord) {
-        print("WordGrid.UpdateExistingWord oWord " + originalWord + " nWord " + newWord + "\n");
+    private void UpdateExistingWord(Word wordObject) {
+        print("WordGrid.UpdateExistingWord oWord " + wordObject + "\n");
         DeselectButton();
-        var displayButton = FindMatchingButton(originalWord);
+        var displayButton = FindMatchingButton(wordObject);
         if (displayButton != null) {
-            displayButton.SetWord(newWord);
+            displayButton.SetWord(wordObject);
+            //displayButton.SetWordText(newWord);
             displayButton.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
             displayButton.GetComponentInChildren<Button>().onClick
-                .AddListener(() => OnButtonClick(newWord));
+                .AddListener(() => OnButtonClick(wordObject));
             // Display the modified word at the top of the list of words
             displayButton.transform.SetAsFirstSibling();
-            print("WordGrid. UpdateExistingWord " + newWord + "\n");
+            print("WordGrid. UpdateExistingWord " + "\n");
         }
 
         print("WordGrid.UpdateExistingWord null\n");
     }
 
-    private DisplayButton FindMatchingButton(string buttonName) {
-        print("WordGrid.FindMatchingButton " + buttonName + "\n");
+    private DisplayButton FindMatchingButton(Word wordObject) {
+        print("WordGrid.FindMatchingButton " + wordObject + "\n");
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
 
         for (var i = 0; i < displayButtons.Length; i++) {
             var displayButton = displayButtons[i];
             // Find the displayButton that was originally clicked to create a new word
-            if (buttonName.Equals(displayButton.GetWord())) {
+            if (wordObject.Equals(displayButton.GetWord())) {
                 // Update to have the new word 
-                print("WordGrid.FindMatchingButton found " + displayButton + "\n");
+                print("WordGrid.FindMatchingButton found " + displayButton + " i: " + i + "\n");
                 return displayButton;
             }
         }
 
-        print("WordGrid.FindMatchingButton ***NOT*** found " + buttonName + "\n");
+        print("WordGrid.FindMatchingButton ***NOT*** found " + wordObject + "\n");
         return null;
     }
+
 
     public List<string> FindWordList() {
         print("WordGrid.FindWordListt\n");
@@ -84,7 +87,7 @@ public class WordGrid : MonoBehaviour {
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
 
         foreach (var displayButton in displayButtons) {
-            words.Add(displayButton.GetWord());
+            words.Add(displayButton.GetWordText());
         }
 
         return words;
@@ -98,9 +101,9 @@ public class WordGrid : MonoBehaviour {
         }
     }
 
-    private void SelectButton(string buttonName) {
-        print("WordGrid.OnButtonClick  name " + buttonName + "\n");
-        var displayButton = FindMatchingButton(buttonName);
+    private void SelectButton(Word wordObject) {
+        print("WordGrid.OnButtonClick  name " + wordObject + "\n");
+        var displayButton = FindMatchingButton(wordObject);
         if (displayButton != null) {
             DeselectButton();
             selectedButton = displayButton;
@@ -108,9 +111,9 @@ public class WordGrid : MonoBehaviour {
         }
     }
 
-    private void OnButtonClick(string buttonName) {
-        print("WordGrid.OnButtonClick  name " + buttonName + "\n");
-        SelectButton(buttonName);
-        updateBoard.LoadSelectedWord(buttonName);
+    private void OnButtonClick(Word wordObject) {
+        print("WordGrid.OnButtonClick  name " + wordObject + "\n");
+        SelectButton(wordObject);
+        updateBoard.LoadSelectedWord(wordObject);
     }
 }

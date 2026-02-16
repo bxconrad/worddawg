@@ -34,13 +34,13 @@ public class UpdateBoard : MonoBehaviour {
         validatorManager = new ValidatorManager();
         var dictionaryFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             "Downloads", "dictionary-EN.txt");
+        validatorManager.Initialize();
         // bot = new PB3(dictionaryFilePath);
     }
 
     public void NewGame() {
         print("UpdateBoard.NewGame selectedWord {" + selectedWord + "} \n");
         //bcdo only need to reload dictionary at startup and custom goame. vm should use trie
-        validatorManager.Initialize(gameParameters.language);
         wordGrid.Initialize();
         RemoveSelectedWord();
         inputWord.Initialize();
@@ -53,13 +53,13 @@ public class UpdateBoard : MonoBehaviour {
     }
 
     // Called onButtonClick from wordGrid
-    public void LoadSelectedWord(string word) {
-        print("UpdateBoard.LoadSelectedWord {" + word + "}\n");
+    public void LoadSelectedWord(Word wordObject) {
+        print("UpdateBoard.LoadSelectedWord {" + wordObject.GetCurrentContents() + "}\n");
         selectedWord.gameObject.SetActive(true);
         dummyPanel.SetActive(false);
         ClearInputWord();
         inputWord.Initialize();
-        selectedWord.InitializeTiles(GameHelper.ContractDoubleLetter(word, gameParameters.language)); // quLogic
+        selectedWord.Initialize(wordObject); // quLogic
         Toast.Dismiss();
     }
 
@@ -84,9 +84,9 @@ public class UpdateBoard : MonoBehaviour {
     private void CallPlayerBot() {
         var words = wordGrid.FindWordList();
         var letters = betterRack.GetWord().ToCharArray().ToList();
-        // var letters = betterRack.GetWord().ToList();
-        // var rackList = betterRack.GetWord().Split(',').ToList();
-        // var listOfNames = new List<string>(betterRack.GetWord().Split(','));
+        // var letters = betterRack.GetWordText().ToList();
+        // var rackList = betterRack.GetWordText().Split(',').ToList();
+        // var listOfNames = new List<string>(betterRack.GetWordText().Split(','));
         stringList = new List<string>();
         var word = betterRack.GetWord();
         for (var i = 0; i < word.Length; i++) {
@@ -103,19 +103,31 @@ public class UpdateBoard : MonoBehaviour {
 
     public void SubmitInputWordButton() {
         Toast.Dismiss();
-        var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, inputWord.GetWord());
+        var expandedInputString = GameHelper.ExpandDoubleLetter(inputWord.GetWord());
+        var validationResult =
+            validatorManager.ValidateInputWord(selectedWord, betterRack, expandedInputString);
         if ("TRUE".Equals(validationResult)) {
+            Word selectedWordObject = null;
+
+            if (selectedWord.gameObject.activeInHierarchy) {
+                selectedWordObject = selectedWord.GetWordObject();
+                selectedWordObject.CreateWord(expandedInputString);
+            }
+            else {
+                selectedWordObject = new Word(expandedInputString);
+            }
+
+            print("UpdateBoard ***Word ***" + selectedWordObject + " COntents {" +
+                  selectedWordObject.GetCurrentContents() + "}\n");
             selectedWord.gameObject.SetActive(false);
             dummyPanel.SetActive(true);
-            scoreManager.UpdateScore(GameHelper.ExpandDoubleLetter(selectedWord.GetWord(), gameParameters.language),
-                GameHelper.ExpandDoubleLetter(inputWord.GetWord(), gameParameters.language));
+            scoreManager.UpdateScore(GameHelper.ExpandDoubleLetter(selectedWord.GetWord()),
+                GameHelper.ExpandDoubleLetter(inputWord.GetWord()));
             betterRack.RemoveSelectedLetters();
             dealer.Deal();
             HandleNearEndGame();
 
-            wordGrid.UpdateDisplayButton(
-                GameHelper.ExpandDoubleLetter(selectedWord.GetWord(), gameParameters.language),
-                GameHelper.ExpandDoubleLetter(inputWord.GetWord(), gameParameters.language));
+            wordGrid.UpdateDisplayButton(selectedWordObject);
             scrollRect.verticalNormalizedPosition = 1.0f;
             ClearInputWord();
             RemoveSelectedWord();

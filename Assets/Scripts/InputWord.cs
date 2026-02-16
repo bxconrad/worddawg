@@ -59,7 +59,7 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     public void AddLetter(BTile tile) {
         var loc = GetWord().Length;
-        //print("InputWord.AddLetter loc " + loc + " word {" + GetWord() + "} \n");
+        //print("InputWord.AddLetter loc " + loc + " word {" + GetWordText() + "} \n");
         tiles[loc].gameObject.SetActive(true);
         tiles[loc].SetLetter(tile.letter);
         tiles[loc].SetOriginTile(tile);

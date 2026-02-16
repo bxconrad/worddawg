@@ -5,6 +5,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     private float firstPos;
     private bool isFirstDrag = true;
     private UpdateBoard updateBoard;
+    private Word wordObject { get; set; }
     private BTile[] tiles { get; set; }
 
     public void Awake() {
@@ -38,6 +39,14 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         }
     }
 
+    public Word GetWordObject() {
+        return wordObject;
+    }
+
+    public void SetWordObject(Word word) {
+        wordObject = word;
+    }
+
     private bool HasSelectedLetter() {
         print("SelectedWord.SelectAllLetters after drag\n");
         foreach (var tile in tiles) {
@@ -52,6 +61,13 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         foreach (var tile in tiles) {
             tile.SelectLetter();
         }
+    }
+
+    public void Initialize(Word inwordObject) {
+        wordObject = inwordObject;
+        // Word is contracted for display as tile will display a Q as a QU 
+        var contents = GameHelper.ContractDoubleLetter(wordObject.GetCurrentContents());
+        InitializeTiles(contents);
     }
 
     public void InitializeTiles(string word) {

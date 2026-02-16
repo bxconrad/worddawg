@@ -7,6 +7,7 @@ public class DisplayButton : MonoBehaviour {
     private Image image;
     private Color originalColor;
     private TextMeshProUGUI text;
+    private Word word { get; set; }
 
     private void Awake() {
         text = GetComponentInChildren<TextMeshProUGUI>();
@@ -15,14 +16,23 @@ public class DisplayButton : MonoBehaviour {
         //print("DisplayButton.Awake \n");
     }
 
-    public string GetWord() {
-        print("DisplayButton.GetWord " + text.text + "\n");
-        return text.text;
+    public void SetWord(Word inWord) {
+        word = inWord;
+        text.text = word.GetCurrentContents();
     }
 
-    public void SetWord(string word) {
-        //print("DisplayButton.SetWord " + word + "\n");
-        text.text = word;
+    public override string ToString() {
+        return $"{base.ToString()}, {nameof(word)}: {word}";
+    }
+
+    public Word GetWord() {
+        print("DisplayButton.GetWordText " + word + "\n");
+        return word;
+    }
+
+    public string GetWordText() {
+        print("DisplayButton.GetWordText " + text.text + "\n");
+        return word.GetCurrentContents(); // text.text;
     }
 
     public void SelectButton() {
