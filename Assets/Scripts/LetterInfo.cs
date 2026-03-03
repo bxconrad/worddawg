@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class LetterInfo {
     public static LetterInfo A = new("A", 1, 9);
@@ -57,6 +58,7 @@ public class LetterInfo {
     public static LetterInfo Y_SP = new("Y", 4, 1);
     public static LetterInfo Z_SP = new("Z", 10, 1);
 
+
     // 39 vowels, 64 consonants 38% vowel
     // vowels 36% https://en.wikipedia.org/wiki/Letter_frequency
     public static List<LetterInfo> letterInfosEN = new()
@@ -87,7 +89,11 @@ public class LetterInfo {
             letterDictionary.Add(letterInfo.theLetter, letterInfo.value);
         }
 
+
         letterDictionaryDictionary.Add(MyPrefs.PREFS_LANG_SP, letterDictionary);
+
+        MonoBehaviour.print("LetterInfo.LetterInfo letterDictionaryDictionary " +
+                            letterDictionaryDictionary["SP"].Count + "\n");
     }
 
     private LetterInfo(string theLetter, int value, int distribution) {

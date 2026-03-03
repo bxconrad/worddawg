@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
     [Header("UI")] [SerializeField] private GameObject endGameContainer;
     [SerializeField] private GameObject prefsContainer;
+    [SerializeField] private GameObject settingsContainer;
+    [SerializeField] private GameObject settingsWidget;
     [SerializeField] private GameObject timeScorePanel;
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
@@ -25,21 +28,23 @@ public class GameManager : MonoBehaviour {
     private readonly List<Image> panelImages = new();
 
 //        -diag-temp-memory-leak-validation
-    private string gameMode;
+    //   private string gameMode;
+    private Player player;
+
+    private string savedGameMode;
 
     public void Start() {
         Toast.Dismiss();
-
         gameObject.SetActive(true);
         InactivateOtherCanvases();
+        settingsWidget.SetActive(true);
         // end components
         countdownTimer.EndTimer();
         scoreManager.End();
         gameParameters.Initialize();
-
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        print("GameManager.Start sound " + MyPrefs.GetIsSound() + " " + gameParameters + "\n");
+        print("GameManager.Start sound " + Settings.GetIsSound() + " " + gameParameters + "\n");
     }
 
 
@@ -50,6 +55,7 @@ public class GameManager : MonoBehaviour {
         endGameContainer.SetActive(false);
         prefsContainer.SetActive(false);
         timeScorePanel.SetActive(false);
+        settingsContainer.SetActive(false);
         helpDisplay.Initialize();
     }
 
@@ -60,32 +66,33 @@ public class GameManager : MonoBehaviour {
 
     public void NewGameOfTheDay() {
         print("GameManager.NewGameOfTheDay \n");
-        gameMode = Stats.PREFS_ST_MODE_GOTD;
-
+        gameParameters.Initialize();
+        savedGameMode = Stats.PREFS_ST_MODE_GOTD;
         gameParameters.gameMode = Stats.PREFS_ST_MODE_GOTD;
         gameParameters.isGameOfTheDay = true;
         gameParameters.numLetters = MyPrefs.DEFAULT_NUM_LETTERS;
+        gameParameters.dealerSeed = DateTime.Today.DayOfYear;
         NewGame();
     }
 
     public void NewUntimedGame() {
         print("GameManager.NewUntimedGame \n");
-        gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
-
+        gameParameters.Initialize();
+        savedGameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
+        gameParameters.gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
         gameParameters.isTimed = false;
         gameParameters.numLetters = MyPrefs.DEFAULT_NUM_LETTERS;
-        gameParameters.gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
         NewGame();
     }
 
     public void NewTimedGame() {
         print("GameManager.NewTimedGame \n");
-        gameMode = Stats.PREFS_ST_MODE_TIMED_4;
-
+        gameParameters.Initialize();
+        savedGameMode = Stats.PREFS_ST_MODE_TIMED_4;
+        gameParameters.gameMode = Stats.PREFS_ST_MODE_TIMED_4;
         gameParameters.isTimed = true;
         gameParameters.numSeconds = MyPrefs.DEFAULT_DURATION * 60;
         gameParameters.numLetters = 999;
-        gameParameters.gameMode = Stats.PREFS_ST_MODE_TIMED_4;
 
         NewGame();
     }
@@ -97,17 +104,26 @@ public class GameManager : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    private void InitializeCustomGameParameters() {
-        print("GameManager.InitializeCustomGameParameters  isSound {" + MyPrefs.GetIsSound() + "} \n");
 
+    private void InitializeCustomGameParameters() {
+        print("GameManager.InitializeCustomGameParameters  isSound {" + Settings.GetIsSound() + "} \n");
+        gameParameters.Initialize();
         gameParameters.gameMode = Stats.PREFS_ST_MODE_CUSTOM;
         gameParameters.isTimed = MyPrefs.GetIsTimer();
         gameParameters.isGameOfTheDay = MyPrefs.GetIsGOTD();
+        if (gameParameters.isGameOfTheDay) {
+            gameParameters.dealerSeed = DateTime.Today.DayOfYear;
+        }
+
         gameParameters.numSeconds = MyPrefs.GetDuration();
         gameParameters.numLetters = MyPrefs.GetNumLetters();
-        gameParameters.language = MyPrefs.GetLanguage();
         gameParameters.numRackLetters = MyPrefs.GetNumRackLetters();
-        audioSource.mute = !MyPrefs.GetIsSound();
+        gameParameters.language = MyPrefs.GetLanguage();
+        if (gameParameters.language == null) {
+            gameParameters.language = MyPrefs.PREFS_LANG_EN; //? it happens
+            print("GameManager.InitializeCustomGameParameters ?? lanuage null set to EN " + gameParameters.language +
+                  " \n");
+        }
 
         print("GameManager.InitializeCustomGameParameters gameParameters " + gameParameters + " \n");
     }
@@ -116,36 +132,43 @@ public class GameManager : MonoBehaviour {
         print("GameManager.NewCustomGamePlay \n");
         prefsContainer.SetActive(false);
         gameObject.SetActive(true);
-        gameMode = Stats.PREFS_ST_MODE_CUSTOM;
+        savedGameMode = Stats.PREFS_ST_MODE_CUSTOM;
         InitializeCustomGameParameters();
         NewGame();
     }
 
+    public void OpenSettings() {
+        print("GameManager.OpenSettings \n");
+        var isActive = settingsContainer.activeSelf;
+        InactivateOtherCanvases();
+        settingsContainer.SetActive(!isActive);
+        gameObject.SetActive(isActive);
+    }
+
     public void RepeatGame() {
         print("GameManager.RepeatGame \n");
-        if (Stats.PREFS_ST_MODE_CUSTOM.Equals(gameMode))
+        if (Stats.PREFS_ST_MODE_CUSTOM.Equals(gameParameters.gameMode))
             NewCustomGamePlay();
-        else if (Stats.PREFS_ST_MODE_GOTD.Equals(gameMode))
+        else if (Stats.PREFS_ST_MODE_GOTD.Equals(gameParameters.gameMode))
             NewGameOfTheDay();
-        else if (Stats.PREFS_ST_MODE_TIMED_4.Equals(gameMode))
+        else if (Stats.PREFS_ST_MODE_TIMED_4.Equals(gameParameters.gameMode))
             NewTimedGame();
-        else if (Stats.PREFS_ST_MODE_UNTIMED_50.Equals(gameMode))
+        else if (Stats.PREFS_ST_MODE_UNTIMED_50.Equals(gameParameters.gameMode))
             NewUntimedGame();
         else
-            print("GameManager.RepeatGame Unknown gameMode " + gameMode);
+            print("GameManager.RepeatGame Unknown gameMode " + gameParameters.gameMode);
     }
 
     private void NewGame() {
         print("GameManager.NewGame " + gameParameters + "\n");
         InactivateOtherCanvases();
-
-        scoreManager.Initialize();
-        //validatorManager.Initialize();
         betterRack.Initialize();
         countdownTimer.enabled = false;
-        timeScorePanel.SetActive(true);
+        timeScorePanel.SetActive(!gameParameters.isTwoPlayer);
         if (gameParameters.isTimed) {
+            print("GameManager.NewGame isTimed " + gameParameters.isTimed + "\n");
             countdownTimer.Initialize();
+            countdownTimer.Startx();
             countdownTimer.gameObject.SetActive(true);
             countdownTimer.enabled = true;
             countdownText.text = "Countdown";
@@ -154,11 +177,17 @@ public class GameManager : MonoBehaviour {
             countdownText.text = "# Letters";
         }
 
-        audioSource.mute = !MyPrefs.GetIsSound();
+        audioSource.mute = !Settings.GetIsSound();
         GameHelper.LANGUAGE = MyPrefs.GetLanguage();
         updateBoard.gameObject.SetActive(true);
-        updateBoard.NewGame();
+        print("GameManager.NewGame 1 " + gameObject.activeInHierarchy + "\n");
         gameObject.SetActive(false);
+        print("GameManager.NewGame 2 " + gameObject.activeInHierarchy + "\n");
+        player = new Player(gameParameters.userName);
+
+        updateBoard.NewGame(player);
+        settingsWidget.SetActive(false);
+        print("GameManager.NewGame done " + gameObject.activeInHierarchy + "\n");
     }
 
     private async Task Spinit() {
@@ -172,15 +201,15 @@ public class GameManager : MonoBehaviour {
 
     public async Task EndGame() {
         print("GameManager.EndGame\n");
-        Toast.Dismiss();
+        //Toast.Dismiss();
+        updateBoard.EndGame();
         await Spinit();
-        gameParameters.isEndGame = true;
         InactivateOtherCanvases();
         countdownTimer.EndTimer();
         scoreManager.End();
 
         endGameContainer.SetActive(true);
-        stats.UpdateStats(gameMode);
+        stats.UpdateStats(gameParameters.gameMode, player);
         print("GameManager.EndGame complete\n");
     }
 

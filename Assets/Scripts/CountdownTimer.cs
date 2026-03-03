@@ -18,12 +18,6 @@ public class CountdownTimer : MonoBehaviour {
         Initialize();
     }
 
-    public void Start() {
-        gameManager.gameObject.SetActive(true);
-        enabled = false;
-        SetText("");
-    }
-
 
     private void Update() {
         //print("CountdownTimer.Update " + isActiveAndEnabled + "\n");
@@ -44,6 +38,13 @@ public class CountdownTimer : MonoBehaviour {
 
         countdown -= Time.deltaTime;
         SetText(NiceTime(countdown));
+    }
+
+    public void Startx() {
+        gameManager.gameObject.SetActive(true);
+        print("CountdownTimer.Start gmActive " + gameManager.gameObject.activeInHierarchy + " \n");
+        enabled = false;
+        SetText("");
     }
 
     private string NiceTime(float seconds) {

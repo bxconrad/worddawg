@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-public class DicionaryTrie {
+public class TrieDictionary : ITrieDictionary {
     private readonly TrieNode dictionaryTrie = new();
     private string[] allWords;
 
@@ -12,6 +12,14 @@ public class DicionaryTrie {
 
     private bool isDictionaryRead;
 
+    public bool HasPrefix(string prefix) {
+        return !IsEndOfTrie(prefix);
+    }
+
+    public bool Contains(string contents) {
+        return IsValidWord(contents);
+    }
+
     //  private string language { get; set; }
 
     public void Initialize() {
@@ -20,11 +28,11 @@ public class DicionaryTrie {
 
     public void Initialize(string lang) {
         var dictionaryName = "dictionary-" + lang;
-        MonoBehaviour.print("DicionaryTrie.Initialize " + dictionaryName + "\n");
+        MonoBehaviour.print("TrieDictionary.Initialize " + dictionaryName + "\n");
         var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
         LoadDictionary(allWords);
-        MonoBehaviour.print("DicionaryTrie.Initialize allWords " + allWords.Length + " dictionary " +
+        MonoBehaviour.print("TrieDictionary.Initialize allWords " + allWords.Length + " dictionary " +
                             dictionaryName +
                             "\n");
     }
@@ -34,8 +42,8 @@ public class DicionaryTrie {
     }
 
     public void LoadDictionary(string[] allWords) {
+        Debug.Log("DictionaryTrie.LoadDictionary ");
         foreach (var word in allWords) {
-            Debug.Log("PXXXinsert " + word);
             InsertWord(word);
         }
     }
@@ -49,12 +57,12 @@ public class DicionaryTrie {
                 count++;
             }
 
-            Debug.Log($"Dictionary count {count}");
+            Debug.Log($"DictionaryTrie count {count}");
 
             isDictionaryRead = true;
         }
         catch (FileNotFoundException) {
-            Debug.LogError($"Error: Dictionary file not found at {filePath}");
+            Debug.LogError($"Error: DictionaryTrie file not found at {filePath}");
         }
     }
 
@@ -98,7 +106,7 @@ public class DicionaryTrie {
     }
 
     // called by FindHighestScoringWordHelper.
-    // return true if word is found in dictionaryTrie
+    // return true if word is found in trieDictionary
     public bool IsValidWord(string word) {
         var current = dictionaryTrie;
         foreach (var c in word) {
@@ -111,7 +119,6 @@ public class DicionaryTrie {
 
         return current.IsEndOfWord;
     }
-
 
     private class TrieNode {
         public Dictionary<char, TrieNode> Children { get; } = new();

@@ -5,14 +5,15 @@ using System.Linq;
 public class Word {
     private readonly DateTime created;
     private readonly List<WordHistory> histories = new();
+    public string contents;
 
 
-    public Word(string contents) {
-        CreateWord(contents);
+    public Word(string contents, Player player, int score) {
+        CreateWord(contents, player, score);
         created = DateTime.Now;
     }
 
-    public WordHistory currentWord { get; set; }
+    public WordHistory currentWordHistory { get; set; }
 
     public static IEqualityComparer<Word> CreatedComparer { get; } = new CreatedEqualityComparer();
 
@@ -21,13 +22,23 @@ public class Word {
     }
 
     public string GetCurrentContents() {
-        return currentWord.contents;
+        return currentWordHistory.contents;
     }
 
-    public void CreateWord(string contents) {
-        var history = new WordHistory(contents);
+    public string GetPreviousContents() {
+        if (histories.Count >= 2) {
+            return histories[^2].contents;
+        }
+
+        return "";
+    }
+
+    public void CreateWord(string contents, Player player, int score) {
+        this.contents = contents;
+        var history = new WordHistory(contents, player, score);
         histories.Add(history);
-        currentWord = history;
+        currentWordHistory = history;
+        player.currentScore += score;
         Console.WriteLine(history.ToString());
     }
 
@@ -36,7 +47,8 @@ public class Word {
     }
 
     public override string ToString() {
-        return $" {nameof(currentWord)}: {currentWord}, {nameof(created)}: {created}, NumHistories: {histories.Count},";
+        return
+            $" {nameof(currentWordHistory)}: {currentWordHistory}, {nameof(created)}: {created}, NumHistories: {histories.Count},";
     }
 
     private sealed class CreatedEqualityComparer : IEqualityComparer<Word> {
@@ -56,24 +68,24 @@ public class Word {
     public class WordHistory {
         public string contents;
         public DateTime created;
+        public bool isDogBonusWord;
         public Player player;
         public int score;
 
         /*
          * A word history includes the content/string, time created, score, player.
          */
-        public WordHistory(string contents) : this(contents, -1) {
-        }
-
-        private WordHistory(string contents, int score) {
+        public WordHistory(string contents, Player player, int score) {
             this.contents = contents;
             created = DateTime.Now;
-            player = Player.GET_DUMMY_PLAYER();
+            this.player = player;
+            this.score = score;
+            isDogBonusWord = false;
         }
 
         public override string ToString() {
-            return $"Contents: {contents}, Created: {created}, Player: {player}, Score: {score}";
+            return
+                $"{nameof(contents)}: {contents}, {nameof(created)}: {created}, {nameof(player)}: {player}, {nameof(score)}: {score}";
         }
-        // public Player player
     }
 }

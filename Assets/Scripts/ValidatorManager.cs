@@ -1,17 +1,8 @@
 using UnityEngine;
 
 public class ValidatorManager {
-    private string[] allWords;
+    public TrieDictionary trieDictionary;
 
-    public void Initialize() {
-        var dictionaryName = "dictionary-" + GameHelper.LANGUAGE;
-        MonoBehaviour.print("ValidatorManager.Initialize " + dictionaryName + "\n");
-        var textFile = Resources.Load(dictionaryName) as TextAsset;
-        allWords = textFile.text.Split();
-
-        MonoBehaviour.print("ValidatorManager.Initialize allWords " + allWords.Length + " dictionary " +
-                            dictionaryName + "\n");
-    }
 
     public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWordString) {
         MonoBehaviour.print("ValidatorManager.ValidateInputWord {" + inputWordString + "}\n");
@@ -20,7 +11,14 @@ public class ValidatorManager {
         var selectedWordString = GameHelper.ExpandDoubleLetter(selectedWord.GetWord());
         var rackWordString = GameHelper.ExpandDoubleLetter(betterRack.GetWord());
         //inputWordString = GameHelper.ExpandDoubleLetter(inputWordString);
+
+        if (inputWordString.Length < 3) {
+            MonoBehaviour.print("ValidatorManager.ValidateInputWord is Length <3 " + inputWordString.Length + " \n");
+            return "Words must be at least 3 letters long";
+        }
+
         // check all letters from selectedWord are used
+        MonoBehaviour.print("ValidatorManager.ValidateInputWord IsLength true\n");
         if (!selectedWord.isAllLettersUsed()) {
             MonoBehaviour.print("ValidatorManager.ValidateInputWord IsAllLettersUsed  false \n");
             return "You must use all the letters in the selected word";
@@ -41,20 +39,13 @@ public class ValidatorManager {
 
         MonoBehaviour.print("ValidatorManager.ValidateInputWord IsRackLettersUsed true\n");
 
-        if (inputWordString.Length > 0 && inputWordString.Length < 3) {
-            MonoBehaviour.print("ValidatorManager.ValidateInputWord is Length 3 " + inputWordString.Length + " \n");
-            return "Words must be at least 3 letters long";
-        }
-
-        MonoBehaviour.print("ValidatorManager.ValidateInputWord IsLength true\n");
-
         if (!IsInDictionary(inputWordString)) {
             MonoBehaviour.print("ValidatorManager.ValidateInputWord " + inputWordString +
                                 " IsInDictionary  isValidNew false\n");
             return inputWordString + " is not in the dictionary";
         }
 
-        MonoBehaviour.print("ValidatorManager.IsInDictionary  isValidNew true \n");
+        MonoBehaviour.print("ValidatorManager.ValidateInputWord  isValidNew true \n");
 
         return "TRUE";
     }
@@ -86,16 +77,10 @@ public class ValidatorManager {
     }
 
     private bool IsInDictionary(string word) {
-        MonoBehaviour.print("ValidatorManager.IsInDictionary word " + word + "\n");
-        for (var i = 0; i < allWords.Length; i++) {
-            if (word.Equals(allWords[i].ToUpper())) {
-                //bcdo make allWords upper at initialization
-                MonoBehaviour.print("ValidatorManager.IsInDictionary " + i + " allWords[i] " + allWords[i] + "\n");
-                return true;
-            }
-        }
+        //MonoBehaviour.print("ValidatorManager.IsInDictionary word " + word + "}\n");
+        var retVal = trieDictionary.IsValidWord(word);
 
-        MonoBehaviour.print("ValidatorManager.IsInDictionary false  word " + word + "\n");
-        return false;
+        MonoBehaviour.print("ValidatorManager.IsInDictionary " + retVal + "   word " + word + "\n");
+        return retVal;
     }
 }

@@ -1,4 +1,4 @@
-﻿public class GameHelper {
+﻿public static class GameHelper {
     public static string LANGUAGE = MyPrefs.PREFS_LANG_EN;
 
     public static string ContractDoubleLetter(string word) {
@@ -11,10 +11,8 @@
 
     private static string HandleDoubleLetter(bool isAdding, string word) {
         if (isAdding) {
-            if (!word.Contains("QU")) {
-                word = word.Replace("Q", "QU");
-            }
-
+            word = word.Replace("Q", "QU");
+            // note that we modified the dictionary to change LL to * 
             if (MyPrefs.PREFS_LANG_SP.Equals(LANGUAGE))
                 word = word.Replace("*", "LL");
         }

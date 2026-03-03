@@ -5,7 +5,34 @@ using UnityEngine.UI;
 public class WordGrid : MonoBehaviour {
     [SerializeField] private GameObject displayButtonPrefab;
     [SerializeField] private UpdateBoard updateBoard;
-    private DisplayButton selectedButton;
+    [SerializeField] private Image viewPortImage;
+    public DisplayButton selectedButton;
+
+    public void Activate(bool isActive) {
+        if (isActive) {
+            viewPortImage.color = Color.magenta;
+        }
+        else {
+            viewPortImage.color = Color.black;
+        }
+    }
+
+    public bool DeselectMismatchButton(Word word) {
+        if (selectedButton != null && !selectedButton.GetWord().Equals(word)) {
+            selectedButton.DeSelectButton();
+            print("~~WordGrid.DeselectMismatchButton deselecting  {" + selectedButton.GetWord().contents + "\n");
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public void UpdateGridLayoutConstraint(int count) {
+        var gridLayout = gameObject.GetComponent<GridLayoutGroup>();
+        print("WordGrid.UpdateGridLayoutConstraint gridLayout {" + gridLayout + "\n");
+        gridLayout.constraintCount = count;
+    }
 
     public void Initialize() {
         print("WordGrid.Initialize beforeDestroy \n");
@@ -31,7 +58,7 @@ public class WordGrid : MonoBehaviour {
         }
     }
 
-    private void InstantiateDisplayButton(Word word) {
+    public void InstantiateDisplayButton(Word word) {
         var newDisplayButton = Instantiate(displayButtonPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         newDisplayButton.transform.SetParent(transform, false);
         var displayButton = newDisplayButton.GetComponent<DisplayButton>();
@@ -50,19 +77,19 @@ public class WordGrid : MonoBehaviour {
         var displayButton = FindMatchingButton(wordObject);
         if (displayButton != null) {
             displayButton.SetWord(wordObject);
-            //displayButton.SetWordText(newWord);
             displayButton.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
             displayButton.GetComponentInChildren<Button>().onClick
                 .AddListener(() => OnButtonClick(wordObject));
             // Display the modified word at the top of the list of words
             displayButton.transform.SetAsFirstSibling();
-            print("WordGrid. UpdateExistingWord " + "\n");
+            print("WordGrid. UpdateExistingWord \n");
         }
-
-        print("WordGrid.UpdateExistingWord null\n");
+        else {
+            print("WordGrid.UpdateExistingWord null\n");
+        }
     }
 
-    private DisplayButton FindMatchingButton(Word wordObject) {
+    public DisplayButton FindMatchingButton(Word wordObject) {
         print("WordGrid.FindMatchingButton " + wordObject + "\n");
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
 
@@ -91,6 +118,30 @@ public class WordGrid : MonoBehaviour {
         }
 
         return words;
+    }
+
+    public List<Word> FindWordObjects() {
+        print("WordGrid.FindWordObjects\n");
+        var words = new List<Word>();
+        var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
+
+        foreach (var displayButton in displayButtons) {
+            words.Add(displayButton.GetWord());
+        }
+
+        return words;
+    }
+
+    public DisplayButton FindDisplayButtonForWordObject(Word word) {
+        print("WordGrid.FindDisplayButtonForWordObject\n");
+        var displayButtons = GetComponentsInChildren<DisplayButton>();
+        foreach (var displayButton in displayButtons) {
+            if (displayButton.GetWord().Equals(word)) {
+                return displayButton;
+            }
+        }
+
+        return null;
     }
 
     public void DeselectButton() {

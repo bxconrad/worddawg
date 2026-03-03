@@ -107,6 +107,17 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         return myWord;
     }
 
+    public bool SelectLetter(string letter) {
+        foreach (var tile in tiles) {
+            if (!tile.IsSelected() && tile.letter.Equals(letter)) {
+                tile.SelectLetter();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public bool isAllLettersUsed() {
         for (var i = 0; i < tiles.Length; i++) {
             if (tiles[i].IsUnselected()) {

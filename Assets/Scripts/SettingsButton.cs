@@ -1,15 +1,9 @@
-﻿using EasyUI.Toast;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SettingsButton : MonoBehaviour {
-    [SerializeField] private GameObject prefsContainer;
-    [SerializeField] private GameObject updateContainer;
+    [SerializeField] private GameObject gameManagerContainer;
 
-    //bcdo move SettingsButton to FooterCanvas and disable updateCanvas
-    public void OnButtonClickSettings() {
-        Toast.Dismiss();
-        var isActive = prefsContainer.activeSelf;
-        prefsContainer.SetActive(!isActive);
-        updateContainer.SetActive(isActive);
+    public void Start() {
+        gameManagerContainer.SetActive(true);
     }
 }

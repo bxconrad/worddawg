@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,7 +17,6 @@ public class Dealer : MonoBehaviour {
     private AudioClip howl;
     private int lengthForDuplicates;
     private int numLettersDealt;
-    private int randomSeed;
     private int vowelMax;
 
     public void Awake() {
@@ -33,7 +31,6 @@ public class Dealer : MonoBehaviour {
         consMax = (int)(gameParameters.numRackLetters * .73);
         vowelMax = (int)(gameParameters.numRackLetters * .6);
         lengthForDuplicates = (int)(gameParameters.numRackLetters * .45);
-        if (gameParameters.isGameOfTheDay) SetRandomSeed(DateTime.Today.DayOfYear);
         FillLetterBag();
         betterRack.ClearRack();
         Deal();
@@ -53,14 +50,14 @@ public class Dealer : MonoBehaviour {
         }
 
         Shuffle(letters);
-        letters.Insert(1, "Q");
+        //    letters.Insert(1, "I");
         print("Dealer.FillLetterBag #letters " + letters.Count + "\n");
     }
 
     private void Shuffle<T>(IList<T> list) {
         var n = list.Count;
-        aRandom = !gameParameters.isGameOfTheDay ? new Random() : new Random(GetRandomSeed());
-        print("Dealer.Shuffle randomSeed  [" + GetRandomSeed() + "] aRandom " + aRandom + "\n");
+        aRandom = GetRandom();
+        print("Dealer.Shuffle randomSeed  [" + gameParameters.dealerSeed + "] aRandom " + aRandom + "\n");
         while (n > 1) {
             n--;
             var k = aRandom.Next(n + 1);
@@ -92,7 +89,8 @@ public class Dealer : MonoBehaviour {
         }
 
         if (rackLetters.Length == 0) {
-            print("Dealer.Deal calling endGame  rackLetters " + rackLetters + " muteSound? " + audioSource.mute + "\n");
+            print("Dealer.Deal calling endGame  rackLetters " + rackLetters + " muteSound? " + audioSource.mute +
+                  " numLettersNeeded " + numLettersNeeded + "\n");
             // bcHack. audio would not play in EndGame so we do it here.
             audioSource.PlayOneShot(howl);
             _ = gameManager.EndGame();
@@ -102,8 +100,8 @@ public class Dealer : MonoBehaviour {
         betterRack.InitializeTiles(rackLetters);
         countDown.SetText(GetTotalNumLettersLeft().ToString());
 
-        print("Dealer.Deal rackLetters numLettersNeeded " + numLettersNeeded +
-              " rack " + betterRack.GetWord() + " numLettersDealt " + numLettersDealt + "\n");
+        print("~~Dealer.Deal rackLetters  rack " + betterRack.GetWord() + " numLettersNeeded " + numLettersNeeded +
+              " numLettersDealt " + numLettersDealt + "\n");
     }
 
     private string FixLetterDistribution(string dealString) {
@@ -278,13 +276,10 @@ public class Dealer : MonoBehaviour {
         return gameParameters.isTimed ? 99999 : gameParameters.numLetters;
     }
 
-    private int GetRandomSeed() {
-        return randomSeed;
+    private Random GetRandom() {
+        return gameParameters.dealerSeed == 0 ? new Random() : new Random(gameParameters.dealerSeed);
     }
 
-    private void SetRandomSeed(int value) {
-        randomSeed = value;
-    }
 
     private string LetterBagToString() {
         var word = "";

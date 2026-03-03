@@ -57,6 +57,18 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
         }
     }
 
+    public void AddLetters(string letters) {
+        for (var i = 0; i < tiles.Length; i++) {
+            tiles[i].gameObject.SetActive(true);
+            tiles[i].SetLetter(letters.Substring(i, 1));
+        }
+    }
+
+    public void AddLetter(string letter, int index) {
+        tiles[index].gameObject.SetActive(true);
+        tiles[index].SetLetter(letter);
+    }
+
     public void AddLetter(BTile tile) {
         var loc = GetWord().Length;
         //print("InputWord.AddLetter loc " + loc + " word {" + GetWordText() + "} \n");

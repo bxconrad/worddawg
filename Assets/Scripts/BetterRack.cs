@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
     [SerializeField] private UpdateBoard updateBoard;
@@ -8,6 +10,7 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
 
     private float firstPos;
     private bool isFirstDrag = true;
+
     private BTile[] tiles { get; set; }
 
     public void OnDrag(PointerEventData eventData) {
@@ -26,6 +29,7 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
         isFirstDrag = true;
         if (Mathf.Abs(distance) > 100) updateBoard.ReplaceRackButton();
     }
+
 
     public void Initialize() {
         print("BetterRack.Initialize " + gameParameters.numRackLetters + " \n");
@@ -98,6 +102,22 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
         return false;
     }
 
+    public void SelectLetter(string letter) {
+        foreach (var tile in tiles) {
+            if (!tile.IsSelected() && tile.letter.Equals(letter)) {
+                tile.SelectLetter();
+                return;
+            }
+        }
+    }
+
+    public void SetColor(Color color) {
+        foreach (var tile in tiles) {
+            tile.GetComponent<Image>().color = color;
+        }
+    }
+
+
     // called on Submit to determine how many new letters are needed
     // and shifting letters to the left
     public int RemoveSelectedLetters() {
@@ -116,6 +136,47 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
                 //bcdo compare to isSelected
                 tiles[i].SetLetter(tiles[j].letter); // move the letter from the next tile to this tile
                 tiles[j].SetLetter(""); // set to selected
+            }
+        }
+
+        return numRemoved;
+    }
+
+    public int CountRemoveSelectedLetters() {
+        var numRemoved = 0;
+        foreach (var tile in tiles) {
+            if (tile.IsSelected()) {
+                numRemoved++;
+            }
+        }
+
+        return numRemoved;
+    }
+
+    public IEnumerator AutomateRemoveLetter(BTile tile, string letter) {
+        tile.SetLetter(letter); //bcdo may be able to get rid of this 
+        yield return new WaitForSeconds(.50f);
+    }
+
+    public int TestRemoveSelectedLetters() {
+        var numRemoved = 0;
+        foreach (var tile in tiles) {
+            if (tile.IsSelected()) {
+                tile.SetLetter(""); //bcdo may be able to get rid of this 
+                AutomateRemoveLetter(tile, "");
+                numRemoved++;
+            }
+        }
+
+        for (var i = 0; i < tiles.Length; i++)
+        for (var j = i + 1; j < tiles.Length; j++) {
+            // j is the index of the next tile to the right
+            if ("".Equals(tiles[i].letter)) {
+                //bcdo compare to isSelected
+                // tiles[i].SetLetter(tiles[j].letter); // move the letter from the next tile to this tile
+                AutomateRemoveLetter(tiles[i], tiles[j].letter);
+                tiles[j].SetLetter(""); // set to selected
+                AutomateRemoveLetter(tiles[j], "");
             }
         }
 

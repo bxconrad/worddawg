@@ -15,56 +15,62 @@ public class Stats : MonoBehaviour {
     public static readonly string PREFS_ST_MODE_TIMED_4 = "Timed, 4 Minutes";
     public static readonly string PREFS_ST_MODE_CUSTOM = "Custom";
 
-    public static readonly string[] STAT_KEYS = {
+    private static readonly string[] STAT_KEYS = {
         PREFS_ST_BEST_WORD, PREFS_ST_BEST_WORD_SCORE, PREFS_ST_LETTERS,
         PREFS_ST_LONG_WORD, PREFS_ST_CHANGED_WORDS, PREFS_ST_SCORE, PREFS_ST_WORDS
     };
 
-    public static readonly string[] STAT_GAME_MODES = {
+    private static readonly string[] STAT_GAME_MODES = {
         PREFS_ST_MODE_GOTD, PREFS_ST_MODE_UNTIMED_50, PREFS_ST_MODE_TIMED_4, PREFS_ST_MODE_CUSTOM
     };
 
-    [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private TextMeshProUGUI titleText;
     private string currentGameMode;
     private int rowNum;
 
-    public void UpdateStats(string gameMode) {
+    public void UpdateStats(string gameMode, Player player) {
+        print("Stats.UpdateStats\n");
         currentGameMode = gameMode;
         // Add the gameModeSuffix to the key to set different stats for each gameMode (timed, untimed, etc)
         var currentGameModeSuffix = "_" + gameMode;
         titleText.text = gameMode + '\n' + DateTime.Today.ToString("MMM dd, yyyy");
 
         rowNum = 1; // skip header
-        UpdateStat(PREFS_ST_SCORE + currentGameModeSuffix, "Score", scoreManager.currentScore);
-        UpdateStat(PREFS_ST_WORDS + currentGameModeSuffix, "Words", scoreManager.numWords);
-        UpdateStat(PREFS_ST_CHANGED_WORDS + currentGameModeSuffix, "Changed", scoreManager.numChangedWords);
-        UpdateStat(PREFS_ST_LONG_WORD + currentGameModeSuffix, "Longest", scoreManager.longestWord);
-        UpdateStat(PREFS_ST_BEST_WORD_SCORE + currentGameModeSuffix, "Word Score", scoreManager.highestWordScore);
-        UpdateStat(PREFS_ST_LETTERS + currentGameModeSuffix, "Letters", scoreManager.numLettersUsed);
+        UpdateStat(PREFS_ST_SCORE + currentGameModeSuffix, "Score", player.currentScore);
+        UpdateStat(PREFS_ST_WORDS + currentGameModeSuffix, "Words", player.numWords);
+        UpdateStat(PREFS_ST_CHANGED_WORDS + currentGameModeSuffix, "Changed", player.numChangedWords);
+        UpdateStat(PREFS_ST_LONG_WORD + currentGameModeSuffix, "Longest", player.longestWord);
+        UpdateStat(PREFS_ST_BEST_WORD_SCORE + currentGameModeSuffix, "Word Score", player.highestWordScore,
+            player.highestWordScoreWord);
+        //       UpdateStat(PREFS_ST_LETTERS + currentGameModeSuffix, "Letters", player.numLettersUsed);
     }
 
     private void UpdateStat(string key, string label, int current) {
+        UpdateStat(key, label, current, "");
+    }
+
+    private void UpdateStat(string key, string label, int current, string highestWordScoreWord) {
         var high = PlayerPrefs.GetInt(key);
         var bestMarker = "";
-        //print("Stats.UpdateStats key " + key + " current " + current + " high  " + high + "\n");
+        print("Stats.UpdateStat key " + key + " current " + current + " high  " + high + "\n");
         if (current > high) {
             bestMarker = "*";
             high = current;
             PlayerPrefs.SetInt(key, high);
-            //print("Stats.UpdateStats HIGH key " + key + "  current " + current + " high  " + high + "\n");
+            print("Stats.UpdateStat HIGH key " + key + "  current " + current + " high  " + high + "\n");
         }
 
-        UpdateBestWordStats(key, bestMarker);
+        UpdateBestWordStats(key, bestMarker, highestWordScoreWord);
 
         UpdateRow(label, current.ToString(), high.ToString(), bestMarker);
     }
 
     // special case for PREFS_ST_BEST_WORD based on PREFS_ST_BEST_WORD_SCORE
-    private void UpdateBestWordStats(string key, string bestMarker) {
+    private void UpdateBestWordStats(string key, string bestMarker, string highestWordScoreWord) {
+        //bcdo player refactor fix highestWordScoreWord
         if (key.StartsWith(PREFS_ST_BEST_WORD_SCORE)) {
             var bestWordKey = PREFS_ST_BEST_WORD + "_" + currentGameMode;
-            var currentBestWord = scoreManager.highestWordScoreWord;
+            var currentBestWord = highestWordScoreWord;
             var allTimeBestWord = "";
             if ("*".Equals(bestMarker)) {
                 allTimeBestWord = currentBestWord;
@@ -119,11 +125,10 @@ public class Stats : MonoBehaviour {
         }
 
         ResetPrefs();
-        scoreManager.Initialize();
-        UpdateStats(currentGameMode);
+        //UpdateStats(currentGameMode);
     }
 
-    public void ResetPrefs() {
+    private void ResetPrefs() {
         print("Stats.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
         foreach (var key in MyPrefs.PREFS_KEYS) {
             PlayerPrefs.DeleteKey(key);

@@ -6,6 +6,7 @@ public class UpdatePanelLayout : MonoBehaviour {
     [SerializeField] private GameObject leftPanel;
     [SerializeField] private GameObject rightPanel;
     [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private GameObject wordGridVerticalLayout;
     private bool isFirst = true;
     private bool isPortrait = true;
     private bool isUpdateWordGrid = true;
@@ -13,7 +14,7 @@ public class UpdatePanelLayout : MonoBehaviour {
     private void Update() {
         //UpdateWWordGrid must be done on subsequent update DisplayPortrait/Landscape to get correct updated widths
         if (isUpdateWordGrid) {
-            UpdateWordGrid();
+            //    UpdateWordGrid();
         }
 
         isUpdateWordGrid = true;
@@ -35,7 +36,8 @@ public class UpdatePanelLayout : MonoBehaviour {
         isPortrait = true;
         // reparent wordList to left panel
         rightPanel.SetActive(false);
-        scrollRect.transform.SetParent(leftPanel.transform, false);
+        // scrollRect.transform.SetParent(leftPanel.transform, false);
+        wordGridVerticalLayout.transform.SetParent(leftPanel.transform, false);
         UpdateBoard.toastPosition = ToastPosition.BottomCenter;
     }
 
@@ -63,7 +65,8 @@ public class UpdatePanelLayout : MonoBehaviour {
         isPortrait = false;
         rightPanel.SetActive(true);
         // reparent wordList to right panel
-        scrollRect.transform.SetParent(rightPanel.transform, false);
+        // scrollRect.transform.SetParent(rightPanel.transform, false);
+        wordGridVerticalLayout.transform.SetParent(rightPanel.transform, false);
 
         UpdateBoard.toastPosition = ToastPosition.BottomRight;
     }
