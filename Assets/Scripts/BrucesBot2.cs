@@ -11,11 +11,7 @@ public class BrucesBot2 : BrucesBot1 {
         // return random word
         var index = new Random().Next(0, newWordCombinations.Count);
         var bestResultMatch = newWordCombinations[index];
-        MonoBehaviour.print("BrucesBot.FindBestWord  random " + bestResultMatch + " index " + index + "\n");
-
-
-        MonoBehaviour.print("BrucesBot.FindBestWord  highest " + bestResultMatch + "\n");
-
+        MonoBehaviour.print("BrucesBot2.FindBestWord  random " + bestResultMatch + " index " + index + "\n");
         return bestResultMatch;
     }
 }

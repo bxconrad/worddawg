@@ -107,12 +107,10 @@ public class Dealer : MonoBehaviour {
             return;
         }
 
-        countDown.SetText(GetTotalNumLettersLeft().ToString());
-
-        print("~~Dealer.Deal rackLetters  rack " + betterRack.GetWord() + " numLettersNeeded " + numLettersNeeded +
-              " numLettersDealt " + numLettersDealt + "\n");
-
         betterRack.InitializeTiles(rackLetters);
+        countDown.SetText(GetTotalNumLettersLeft().ToString());
+        print("~~Dealer.Deal rackLetters  rack {" + betterRack.GetWord() + "} numLettersNeeded " + numLettersNeeded +
+              " numLettersDealt " + numLettersDealt + "\n");
         //betterRack.InitializeTilesCoroutine(rackLetters);
     }
 
@@ -275,8 +273,8 @@ public class Dealer : MonoBehaviour {
     // this includes letters in rack
     public int GetTotalNumLettersLeft() {
         var numLeft = GetNumLetters() - numLettersDealt + betterRack.GetWord().Trim().Length;
-        // print("Dealer.GetTotalNumLettersLeft  " + numLeft + " numLtrs " + GetNumLetters() + " numLettersDealt " +
-        //     numLettersDealt + " numRack " + betterRack.GetWordText() + " ltrCount " + letters.Count() + "\n");
+        print("Dealer.GetTotalNumLettersLeft  " + numLeft + " numLtrs " + GetNumLetters() + " numLettersDealt " +
+              numLettersDealt + " ltrCount " + letters.Count() + "\n");
         return numLeft;
     }
 

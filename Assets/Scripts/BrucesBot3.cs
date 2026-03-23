@@ -22,8 +22,7 @@ public class BrucesBot3 : BrucesBotAbstract {
             }
         }
 
-        MonoBehaviour.print("BrucesBot.FindBestWord  highest " + bestResultMatch + " highScore " + highScore + "\n");
-
+        MonoBehaviour.print("BrucesBot3.FindBestWord  highest " + bestResultMatch + " highScore " + highScore + "\n");
         return bestResultMatch;
     }
 }

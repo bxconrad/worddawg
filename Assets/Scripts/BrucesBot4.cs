@@ -2,4 +2,5 @@
     public BrucesBot4() {
         maxLetters = 99;
     }
+    // extends Bot3 so finds best word. only difference is maxLetters
 }

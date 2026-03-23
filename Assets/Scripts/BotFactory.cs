@@ -7,7 +7,7 @@
            4 - Add 99 letters. Return high score word.
            */
     public static BrucesBotAbstract Create(int botLevel, TrieDictionary dictionary, ScoreCalculator scoreCalculator) {
-        BrucesBotAbstract bot = null;
+        BrucesBotAbstract bot;
         if (botLevel == 0) {
             bot = new BrucesBot0();
         }
@@ -20,7 +20,7 @@
         else if (botLevel == 3) {
             bot = new BrucesBot3();
         }
-        else if (botLevel == 4) {
+        else {
             bot = new BrucesBot4();
         }
 

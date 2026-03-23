@@ -314,9 +314,9 @@ public class UpdateBoard : MonoBehaviour {
         var newWordCombinations = brucesBot.GetCombinations(words, betterRack.GetWord());
         print("~~UpdateBoard.CallPlayerBot  New words formed: " + newWordCombinations.Count + " rack " +
               betterRack.GetWord() + "\n");
-        var bestResultMatch = brucesBot.FindBestWord(newWordCombinations);
 
-        if (bestResultMatch.GeneratedWord != null) {
+        if (newWordCombinations.Count > 0) {
+            var bestResultMatch = brucesBot.FindBestWord(newWordCombinations);
             AutomateWordEntry(bestResultMatch.SourceObject, bestResultMatch.GeneratedWord);
         }
         else {

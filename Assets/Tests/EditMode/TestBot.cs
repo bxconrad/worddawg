@@ -3,11 +3,11 @@ using NUnit.Framework;
 
 public class TestBot
 {
-    private readonly BrucesBot bot3 = new(null);
-
-    private readonly BrucesBot bot4 = new(null);
-
-    private readonly BrucesBot brucesBot = new(null);
+    // private readonly BrucesBot bot3 = new(null);
+    //
+    // private readonly BrucesBot bot4 = new(null);
+    //
+    // private readonly BrucesBot brucesBot = new(null);
     // private readonly EnhancedWordCombinator enhancedWordCombinator = new();
 
     [Test]
