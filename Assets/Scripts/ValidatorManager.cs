@@ -6,7 +6,7 @@ public class ValidatorManager {
 
     public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWordString) {
         MonoBehaviour.print("ValidatorManager.ValidateInputWord {" + inputWordString + "}\n");
-        //  return "TRUE";
+        //return "TRUE";
         // qulogic
         var selectedWordString = GameHelper.ExpandDoubleLetter(selectedWord.GetWord());
         var rackWordString = GameHelper.ExpandDoubleLetter(betterRack.GetWord());

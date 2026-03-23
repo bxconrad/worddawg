@@ -1,4 +1,3 @@
-using EasyUI.Toast;
 using UnityEngine;
 
 public class GameManagerPanelLayout : MonoBehaviour {
@@ -25,7 +24,6 @@ public class GameManagerPanelLayout : MonoBehaviour {
         // reparent helpLayout to left panel
         helpLayout.transform.SetParent(leftPanel.transform, false);
         rightPanel.SetActive(false);
-        UpdateBoard.toastPosition = ToastPosition.BottomCenter;
     }
 
 
@@ -35,6 +33,5 @@ public class GameManagerPanelLayout : MonoBehaviour {
         rightPanel.SetActive(true);
         // reparent helpLayout to right panel
         helpLayout.transform.SetParent(rightPanel.transform, false);
-        UpdateBoard.toastPosition = ToastPosition.BottomRight;
     }
 }

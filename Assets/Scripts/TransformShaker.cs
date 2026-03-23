@@ -25,7 +25,18 @@ public class TransformShaker : MonoBehaviour {
         await ASpin(theTransform, duration, rotations, axis, isForward);
     }
 
+    public async Task ABeginSpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
+        print("ABeginSpin");
+        await ASpin(theTransform, duration, rotations, axis, isForward);
+    }
+
     public async Task ABeginRandomSpin(Transform theTransform, float duration, int rotations) {
+        var axis = rnd.Next(1, 4);
+        var directionForward = rnd.Next(0, 2) == 0;
+        await ABeginSpin(theTransform, duration, rotations, axis, directionForward);
+    }
+
+    public async Task ABeginRandomSpins(Transform[] theTransform, float duration, int rotations) {
         var axis = rnd.Next(1, 4);
         var directionForward = rnd.Next(0, 2) == 0;
         await ABeginSpin(theTransform, duration, rotations, axis, directionForward);
@@ -75,6 +86,40 @@ public class TransformShaker : MonoBehaviour {
                     theTransform.eulerAngles = new Vector3(theRotation, eulery, eulerz);
                 else if (axis == 3)
                     theTransform.eulerAngles = new Vector3(eulerx, eulery, theRotation);
+                await Task.Yield();
+            }
+        }
+    }
+
+    public async Task ASpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
+        print("ShakeTransform.ASpin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
+        var startRotation = theTransform[0].eulerAngles.x;
+        var direction = isForward ? -360.0f : 360.0f; // minus goes fwd, + bwd
+        var endRotation = startRotation + direction;
+        var eulerx = theTransform[0].eulerAngles.x;
+        var eulery = theTransform[0].eulerAngles.y;
+        var eulerz = theTransform[0].eulerAngles.z;
+        for (var i = 0; i < rotations; i++) {
+            var t = 0.0f;
+            while (t < duration) {
+                t += Time.deltaTime;
+                var theRotation = Mathf.Lerp(startRotation, endRotation, t / duration) % 360.0f;
+                if (axis == 1) {
+                    foreach (var transform in theTransform) {
+                        transform.eulerAngles = new Vector3(eulerx, theRotation, eulerz);
+                    }
+                }
+                else if (axis == 2) {
+                    foreach (var transform in theTransform) {
+                        transform.eulerAngles = new Vector3(theRotation, eulery, eulerz);
+                    }
+                }
+                else if (axis == 3) {
+                    foreach (var transform in theTransform) {
+                        transform.eulerAngles = new Vector3(eulerx, eulery, theRotation);
+                    }
+                }
+
                 await Task.Yield();
             }
         }

@@ -18,9 +18,7 @@ public class Player {
     }
 
     public Player(string name, WordGrid wordGrid, ScoreGrid scoreGrid) {
-        this.name = name;
-        this.wordGrid = wordGrid;
-        this.scoreGrid = scoreGrid;
+        Initialize(name, wordGrid, scoreGrid);
     }
 
     public Word currentWord { get; private set; }
@@ -31,6 +29,12 @@ public class Player {
     public int numWords { get; private set; }
     public int numChangedWords { get; private set; }
     public int numLettersUsed { get; set; }
+
+    public void Initialize(string name, WordGrid wordGrid, ScoreGrid scoreGrid) {
+        this.name = name;
+        this.wordGrid = wordGrid;
+        this.scoreGrid = scoreGrid;
+    }
 
     public void Initialize() {
         var currentWordScore = currentWord != null ? currentWord.currentWordHistory.score : 0;
@@ -82,7 +86,18 @@ public class Player {
     }
 
     public void UpdateScoreForReplaceRack(int points) {
-        currentScore = Math.Max(0, currentScore -= points);
+        var subtractPoints = Math.Min(currentScore, points) * -1;
+        currentScore += subtractPoints;
+        scoreGrid.totalScore.text = currentScore.ToString().PadRight(5) + subtractPoints;
         MonoBehaviour.print("Player.UpdateScoreForReplaceRack " + points + "\n");
     }
+
+    public override string ToString() {
+        return $"CurrentScore: {currentScore}, IsBot: {isBot}, Name: {name}, wordScore: {wordScore}";
+    }
+    // public override string ToString() {
+    //     return
+    //         $"{nameof(name)}: {name}";
+    //    // $"{nameof(name)}: {name}, {nameof(words)}: {words}, {nameof(currentScore)}: {currentScore}, {nameof(isBot)}: {isBot}, {nameof(longestWord)}: {longestWord},  {nameof(currentWord)}: {currentWord}, {nameof(wordScore)}: {wordScore}, {nameof(highestWordScore)}: {highestWordScore}, {nameof(highestWordScoreWord)}: {highestWordScoreWord}, {nameof(numWords)}: {numWords}, {nameof(numChangedWords)}: {numChangedWords}";
+    // }
 }

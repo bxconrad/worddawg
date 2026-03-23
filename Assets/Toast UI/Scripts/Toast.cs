@@ -6,8 +6,10 @@ using UnityEngine;
    hamza95herbou@gmail.com
 ---------------------------------- */
 
-namespace EasyUI.Toast{
-    public enum ToastColor{
+namespace EasyUI.Toast
+{
+    public enum ToastColor
+    {
         Black,
         Red,
         Purple,
@@ -18,7 +20,8 @@ namespace EasyUI.Toast{
         Orange
     }
 
-    public enum ToastPosition{
+    public enum ToastPosition
+    {
         TopLeft,
         TopCenter,
         TopRight,
@@ -30,7 +33,8 @@ namespace EasyUI.Toast{
         BottomRight
     }
 
-    public static class Toast{
+    public static class Toast
+    {
         public static bool isLoaded;
 
         private static ToastUI toastUI;

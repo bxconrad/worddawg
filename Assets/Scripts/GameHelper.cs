@@ -1,4 +1,7 @@
-﻿public static class GameHelper {
+﻿using EasyUI.Toast;
+using UnityEngine;
+
+public static class GameHelper {
     public static string LANGUAGE = MyPrefs.PREFS_LANG_EN;
 
     public static string ContractDoubleLetter(string word) {
@@ -23,5 +26,13 @@
         }
 
         return word;
+    }
+
+    public static bool IsLandscape() {
+        return Screen.width > Screen.height;
+    }
+
+    public static ToastPosition GetToastPosition() {
+        return IsLandscape() ? ToastPosition.BottomRight : ToastPosition.BottomCenter;
     }
 }

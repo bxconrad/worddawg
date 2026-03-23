@@ -1,4 +1,3 @@
-using EasyUI.Toast;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,7 +37,6 @@ public class UpdatePanelLayout : MonoBehaviour {
         rightPanel.SetActive(false);
         // scrollRect.transform.SetParent(leftPanel.transform, false);
         wordGridVerticalLayout.transform.SetParent(leftPanel.transform, false);
-        UpdateBoard.toastPosition = ToastPosition.BottomCenter;
     }
 
     // viewPortImage was not resetting width. 
@@ -65,9 +63,6 @@ public class UpdatePanelLayout : MonoBehaviour {
         isPortrait = false;
         rightPanel.SetActive(true);
         // reparent wordList to right panel
-        // scrollRect.transform.SetParent(rightPanel.transform, false);
         wordGridVerticalLayout.transform.SetParent(rightPanel.transform, false);
-
-        UpdateBoard.toastPosition = ToastPosition.BottomRight;
     }
 }

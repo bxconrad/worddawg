@@ -50,8 +50,18 @@ public class Dealer : MonoBehaviour {
         }
 
         Shuffle(letters);
-        //    letters.Insert(1, "I");
+        //InsertLettersForTesting();
         print("Dealer.FillLetterBag #letters " + letters.Count + "\n");
+    }
+
+    private void InsertLettersForTesting() {
+        letters.Insert(0, "B");
+        letters.Insert(1, "E");
+        letters.Insert(2, "A");
+        letters.Insert(3, "G");
+        letters.Insert(4, "L");
+        letters.Insert(5, "E");
+        letters.Insert(6, "S");
     }
 
     private void Shuffle<T>(IList<T> list) {
@@ -97,11 +107,13 @@ public class Dealer : MonoBehaviour {
             return;
         }
 
-        betterRack.InitializeTiles(rackLetters);
         countDown.SetText(GetTotalNumLettersLeft().ToString());
 
         print("~~Dealer.Deal rackLetters  rack " + betterRack.GetWord() + " numLettersNeeded " + numLettersNeeded +
               " numLettersDealt " + numLettersDealt + "\n");
+
+        betterRack.InitializeTiles(rackLetters);
+        //betterRack.InitializeTilesCoroutine(rackLetters);
     }
 
     private string FixLetterDistribution(string dealString) {
@@ -112,14 +124,15 @@ public class Dealer : MonoBehaviour {
         dealString = FixDuplicates(dealString);
         // If we fixed the dealString, put the orignal last letter back in the bag and remove the new last letter from the bag
         if (!savedDealString.Equals(dealString)) {
-            print("Dealer.FixLetterDistribution *FIXa*  savedDealString " + savedDealString + "\n");
+            //print("Dealer.FixLetterDistribution *FIXa*  savedDealString " + savedDealString + "\n");
             // put the orignal last letter back in the bag 
             var savedLastLetter = savedDealString.Substring(savedDealString.Length - 1, 1);
             letters.Insert(0, savedLastLetter);
             //remove the new last letter from the bag
             var newLastLetter = dealString.Substring(dealString.Length - 1, 1);
             letters.Remove(newLastLetter);
-            print("Dealer.FixLetterDistribution *FIXb*  dealString " + dealString + "\n");
+            print("Dealer.FixLetterDistribution *FIXb*  dealString " + dealString + " savedDealString " +
+                  savedDealString + "\n");
         }
 
         return dealString;

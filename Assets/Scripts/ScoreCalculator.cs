@@ -63,8 +63,8 @@ public class ScoreCalculator {
 
     private int CalculateLetterScore(string newWord) {
         var newWordLetterScore = 0;
-        MonoBehaviour.print("ScoreCalculator.CalculateLetterScore " + gameParameters.language + "  " +
-                            LetterInfo.letterDictionaryDictionary["SP"] + "\n");
+        // MonoBehaviour.print("ScoreCalculator.CalculateLetterScore " + gameParameters.language + "  " +
+        //                     LetterInfo.letterDictionaryDictionary["SP"] + "\n");
         var letterDictionary = LetterInfo.letterDictionaryDictionary[gameParameters.language];
         newWord = newWord.Trim();
         foreach (var letter in newWord) {

@@ -37,10 +37,11 @@ public class WordGrid : MonoBehaviour {
     public void Initialize() {
         print("WordGrid.Initialize beforeDestroy \n");
         foreach (Transform child in transform) {
-            //print("WordGrid.DestroyDisplayButtons destroying " + child.gameObject.name + "\n");
+            // print("WordGrid.Initialize destroying " + child.gameObject.name + "\n");
             Destroy(child.gameObject);
         }
     }
+
 
     // If we created a new word, instantiate
     // if we updated an existing word, find it and change it to have the new word
@@ -126,7 +127,10 @@ public class WordGrid : MonoBehaviour {
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
 
         foreach (var displayButton in displayButtons) {
-            words.Add(displayButton.GetWord());
+            if (displayButton.enabled) {
+                // ? buttons are there first time around even though they were destroyed
+                words.Add(displayButton.GetWord());
+            }
         }
 
         return words;

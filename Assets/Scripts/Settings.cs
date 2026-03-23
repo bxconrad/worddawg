@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Toggle = UnityEngine.UI.Toggle;
 
@@ -11,18 +12,65 @@ public class Settings : MonoBehaviour {
     [SerializeField] public TMP_InputField userNameText;
 
     private void Start() {
-        botLevelDropdown.value = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_BOT_LEVEL);
         soundToggle.onValueChanged.AddListener(delegate { SoundToggleValueChanged(soundToggle); });
         soundToggle.isOn = GetIsSound();
-        twoPlayerToggle.onValueChanged.AddListener(delegate { TwoPlayerToggleValueChanged(twoPlayerToggle); });
         userNameText.onValueChanged.AddListener(delegate { UserNameInputFieldValueChanged(userNameText); });
         userNameText.text = GetUserName();
+        twoPlayerToggle.onValueChanged.AddListener(delegate { TwoPlayerToggleValueChanged(twoPlayerToggle); });
         twoPlayerToggle.isOn = GetIsTwoPlayer();
+        botLevelDropdown.interactable = twoPlayerToggle.isOn;
+        BotSelectList();
         print("Settings.Start end " + PlayerPrefs.GetInt(MyPrefs.PREFS_RT_BOT_LEVEL) + "\n");
     }
 
+    private void OnEnable() {
+        print("Settings.OnEnable  \n");
+        Start();
+    }
 
-    public void BotLevelDropdown(int index) {
+    public void OnResetStatsButtonClicked() {
+        print("Settings.OnResetStatsButtonClicked \n");
+
+        foreach (var statKey in Stats.STAT_KEYS) {
+            PlayerPrefs.DeleteKey(statKey);
+            foreach (var gameMode in Stats.STAT_GAME_MODES) {
+                var key = statKey + "_" + gameMode;
+                PlayerPrefs.DeleteKey(key);
+                print("Settings.OnResetStatsButtonClicked " + key + " \n");
+            }
+        }
+
+        //ResetPrefs();
+     }
+
+    private void ResetPrefs() {
+        print("Settings.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
+        foreach (var key in MyPrefs.PREFS_KEYS) {
+            PlayerPrefs.DeleteKey(key);
+        }
+    }
+
+
+    private void BotSelectList() {
+        botLevelDropdown.ClearOptions();
+        var options = new List<string>();
+        for (var i = 0; i < MyPrefs.BOT_NAMES.Count; i++) {
+            options.Add(MyPrefs.BOT_NAMES[i]);
+        }
+
+        botLevelDropdown.AddOptions(options);
+        botLevelDropdown.value = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_BOT_LEVEL);
+        botLevelDropdown.RefreshShownValue();
+    }
+
+    private void BotLevelDropdown(int index) {
+        //var difficulty = index + 1; // 1–5
+        var botName = MyPrefs.BOT_NAMES[index];
+        PlayerPrefs.SetInt(MyPrefs.PREFS_RT_BOT_LEVEL, index);
+        Debug.Log("Settings.BotLevelDropdown Selected: " + botName + " (" + index + ")");
+    }
+
+    public void xBotLevelDropdown(int index) {
         print("Settings.BotLevelDropdown " + index + " \n");
         PlayerPrefs.SetInt(MyPrefs.PREFS_RT_BOT_LEVEL, index);
     }
@@ -37,12 +85,13 @@ public class Settings : MonoBehaviour {
     private void TwoPlayerToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(MyPrefs.PREFS_RT_IS_TWOPLAYER, val.ToString());
+        botLevelDropdown.interactable = val;
         print("Settings.TwoPlayerToggleValueChanged " + val + " \n");
     }
 
     private void UserNameInputFieldValueChanged(TMP_InputField val) {
         PlayerPrefs.SetString(MyPrefs.PREFS_RT_USER_NAME, val.text);
-        print("Settings.UserNameInputFieldValueChanged " + val + " \n");
+        //print("Settings.UserNameInputFieldValueChanged " + val + " \n");
     }
 
 
@@ -78,8 +127,10 @@ public class Settings : MonoBehaviour {
 
 
     public static bool GetIsTwoPlayer() {
-        return PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_TWOPLAYER, MyPrefs.DEFAULT_IS_TWOPLAYER).ToUpper()
+        var retVal = PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_TWOPLAYER, MyPrefs.DEFAULT_IS_TWOPLAYER).ToUpper()
             .Equals("TRUE");
+        print("Settings.GetIsTwoPlayer " + retVal + " \n");
+        return retVal;
     }
 
     public static bool GetIsShowButtons() {

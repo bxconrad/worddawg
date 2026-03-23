@@ -1,35 +1,43 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
+public class BetterRack : MonoBehaviour {
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] private BTile bTilePrefab;
 
-    private float firstPos;
-    private bool isFirstDrag = true;
 
     private BTile[] tiles { get; set; }
 
-    public void OnDrag(PointerEventData eventData) {
-        //print("BetterRack.OnDrag " + eventData.position.x + "\n");
-        if (isFirstDrag) {
-            isFirstDrag = false;
-            firstPos = eventData.position.x;
-            print("BetterRack.OnDrag setting " + eventData.position.x + isFirstDrag + "\n");
+    public void AutomateRemoveSelectedLetters() {
+        print("BetterRack.AutomateRemoveSelectedLetters\n");
+        StartCoroutine(RemoveSelectedLettersAutomationSequence());
+    }
+
+    private IEnumerator RemoveSelectedLettersAutomationSequence() {
+        print("BetterRack.RemoveSelectedLettersAutomationSequence yield\n");
+        //yield return new WaitForSeconds(.5f);
+
+        foreach (var tile in tiles) {
+            if (tile.IsSelected()) {
+                tile.SetLetter("");
+                tile.SetState(Tile.State.unselectedState);
+            }
+        }
+
+        for (var i = 0; i < tiles.Length; i++)
+        for (var j = i + 1; j < tiles.Length; j++) {
+            // j is the index of the next tile to the right
+            if ("".Equals(tiles[i].letter)) {
+                //bcdo compare to isSelected
+                tiles[i].SetLetter(tiles[j].letter); // move the letter from the next tile to this tile
+                tiles[j].SetLetter("");
+                print("BetterRack.RemoveSelectedLettersAutomationSequence yield move letter i " + i + " j" + j + "\n");
+                yield return new WaitForSeconds(.2f);
+            }
         }
     }
-
-    public void OnEndDrag(PointerEventData eventData) {
-        var distance = eventData.position.x - firstPos;
-        print("BetterRack.OnEndDrag pos " + eventData.position.x + " distance " + distance + " firstpos " + firstPos +
-              "\n");
-        isFirstDrag = true;
-        if (Mathf.Abs(distance) > 100) updateBoard.ReplaceRackButton();
-    }
-
 
     public void Initialize() {
         print("BetterRack.Initialize " + gameParameters.numRackLetters + " \n");
@@ -53,6 +61,32 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
         newDisplayButton.transform.SetParent(transform, false);
         return newDisplayButton;
         //    print("BetterRack.InstantiateDisplayButton " + newDisplayButton + "\n");
+    }
+
+    public void InitializeTilesCoroutine(string word) {
+        print("BetterRack.InitializeTilesCoroutine\n");
+        StartCoroutine(InitializeTilesAutomated(word));
+    }
+
+    private IEnumerator InitializeTilesAutomated(string word) {
+        var wordChars = word.ToCharArray();
+        print("BetterRack.InitializeTilesAutomated word {" + word + "} #tiles " + tiles.Length + "\n");
+        for (var i = 0; i < Mathf.Min(wordChars.Length, tiles.Length); i++) {
+            //print("BetterRack.InitializeTilesAutomated i " + i + "\n");
+            var isYield = false;
+            if (tiles[i].letter == "" || tiles[i].letter == null) {
+                isYield = true;
+            }
+
+            tiles[i].SetLetter(wordChars[i].ToString());
+            tiles[i].SetState(Tile.State.unselectedState);
+            if (isYield) {
+                print("~~BetterRack.InitializeTilesAutomated i " + i + "\n");
+                yield return new WaitForSeconds(.3f);
+            }
+        }
+
+        print("~~BetterRack.InitializeTilesAutomated done\n");
     }
 
 
@@ -118,8 +152,8 @@ public class BetterRack : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
 
-    // called on Submit to determine how many new letters are needed
-    // and shifting letters to the left
+// called on Submit to determine how many new letters are needed
+// and shifting letters to the left
     public int RemoveSelectedLetters() {
         var numRemoved = 0;
         foreach (var tile in tiles) {

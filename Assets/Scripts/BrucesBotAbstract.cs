@@ -1,73 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using Random = System.Random;
 
 // bcdo have a bot factory that returns a bot with the code for that level
-public class BrucesBot {
-    public ITrieDictionary _dictionary;
-    public int maxLetters = 0;
+public abstract class BrucesBotAbstract {
+    protected int maxLetters = 0;
+    public ScoreCalculator scoreCalculator;
+    public ITrieDictionary trieDictionary;
 
-    public BrucesBot() {
-    }
 
-    public BrucesBot(ITrieDictionary dictionary) {
-        _dictionary = dictionary;
-    }
-
-    public virtual ResultMatch FindBestWord(List<ResultMatch> newWordCombinations, ScoreCalculator scoreCalculator,
-        int botLevel) {
-        var bestResultMatch = new ResultMatch();
-        if (botLevel == 0) {
-            // find lowest scoring word
-            var lowScore = 10000;
-
-            foreach (var combination in newWordCombinations) {
-                var originalWord = combination.SourceObject == null
-                    ? ""
-                    : combination.SourceObject.GetCurrentContents();
-                var score = scoreCalculator.CalculateWordScore(originalWord, combination.GeneratedWord);
-                if (score < lowScore) {
-                    lowScore = score;
-                    bestResultMatch = combination;
-                }
-            }
-
-            MonoBehaviour.print("BrucesBot.FindBestWord  lowestWord " + bestResultMatch + " lowScore " + lowScore +
-                                " botLevel " + botLevel + "\n");
-
-            return bestResultMatch;
-        }
-
-        if (botLevel <= 2) {
-            // return random word
-            var index = new Random().Next(0, newWordCombinations.Count);
-            bestResultMatch = newWordCombinations[index];
-            MonoBehaviour.print("BrucesBot.FindBestWord  random " + bestResultMatch + " index " + index + " botLevel " +
-                                botLevel + "\n");
-            return bestResultMatch;
-        }
-
-        var highScore = 0;
-
-        foreach (var combination in newWordCombinations) {
-            var originalWord = combination.SourceObject == null
-                ? ""
-                : combination.SourceObject.GetCurrentContents();
-            var score = scoreCalculator.CalculateWordScore(originalWord, combination.GeneratedWord);
-            if (score > highScore) {
-                highScore = score;
-                bestResultMatch = combination;
-            }
-        }
-
-        MonoBehaviour.print("BrucesBot.FindBestWord  highest " + bestResultMatch + " highScore " + highScore +
-                            " botLevel " +
-                            botLevel + "\n");
-
-        return bestResultMatch;
-    }
-
+    public abstract ResultMatch FindBestWord(List<ResultMatch> newWordCombinations);
 
     public List<ResultMatch> GetCombinations(
         List<Word> sourceWords,
@@ -78,7 +19,8 @@ public class BrucesBot {
         bool stopAtFirst = false) {
         var results = new List<ResultMatch>();
 
-        maxAddedLetters = maxLetters > 0 ? maxLetters : maxAddedLetters;
+        maxAddedLetters = maxLetters;
+        //maxAddedLetters = maxLetters > 0 ? maxLetters : maxAddedLetters;
 
         foreach (var source in sourceWords) {
             // Create a combined pool of letters (Original + Rack)
@@ -140,13 +82,13 @@ public class BrucesBot {
         HashSet<string> foundWords,
         bool stopAtFirst) {
         // 1. TRIE CHECK: Prune if this prefix doesn't exist
-        if (currentPrefix.Length > 0 && !_dictionary.HasPrefix(currentPrefix))
+        if (currentPrefix.Length > 0 && !trieDictionary.HasPrefix(currentPrefix))
             return;
 
         // 2. DICTIONARY CHECK: Is it a valid word?
         if (currentPrefix.Length >= minLength) {
             if (MeetsRequirements(currentPrefix, requiredLetters)) {
-                if (_dictionary.Contains(currentPrefix)) {
+                if (trieDictionary.Contains(currentPrefix)) {
                     foundWords.Add(currentPrefix);
                     if (stopAtFirst) return;
                 }

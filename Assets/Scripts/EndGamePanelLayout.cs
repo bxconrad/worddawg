@@ -1,4 +1,3 @@
-using EasyUI.Toast;
 using UnityEngine;
 
 public class EndGamePanelLayout : MonoBehaviour {
@@ -22,7 +21,6 @@ public class EndGamePanelLayout : MonoBehaviour {
         // reparent helpLayout to left panel
         endGameButtons.transform.SetParent(leftPanel.transform, false);
         rightPanel.SetActive(false);
-        UpdateBoard.toastPosition = ToastPosition.BottomCenter;
     }
 
 
@@ -32,6 +30,5 @@ public class EndGamePanelLayout : MonoBehaviour {
         rightPanel.SetActive(true);
         // reparent helpLayout to right panel
         endGameButtons.transform.SetParent(rightPanel.transform, false);
-        UpdateBoard.toastPosition = ToastPosition.BottomRight;
     }
 }

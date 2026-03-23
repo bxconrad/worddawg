@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UpdateBoard : MonoBehaviour {
-    public static ToastPosition toastPosition = ToastPosition.BottomCenter;
-
     [Header("UI")] [SerializeField] private GameObject updateButtons;
 
     [SerializeField] private ScoreManager scoreManager;
@@ -14,6 +12,7 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private InputWord inputWord;
     [SerializeField] private SelectedWord selectedWord;
     [SerializeField] private GameObject dummyPanel;
+    [SerializeField] private GameObject logoImage2;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private Dealer dealer;
     [SerializeField] private BetterRack betterRack;
@@ -28,9 +27,11 @@ public class UpdateBoard : MonoBehaviour {
     [SerializeField] private GameObject botButton;
     [SerializeField] private CanvasGroup scorePanelCanvasGroup;
     [SerializeField] private GameObject scorePanel;
-    private BrucesBot brucesBot;
+    private BrucesBotAbstract brucesBot;
+
     private Player currentPlayer;
-    private int maxLetters = 1;
+
+    // private int maxLetters = 1;
     private int playerNumber;
     private Player[] players;
     private int saveBotLevel = -1;
@@ -47,32 +48,34 @@ public class UpdateBoard : MonoBehaviour {
     }
 
 
-    public void NewGame(Player player1) {
+    public void NewGame(Player player1, Player player2) {
         //bcdo only need to reload dictionary at startup and custom goame. vm should use trie
         print("UpdateBoard.NewGame botlevel {" + gameParameters.botLevel + "(" + botButton + "}} \n");
         turnNumber = 0;
         BuildDictionaries();
 
         wordGrid.Initialize();
-        //var player1 = new Player(gameParameters.userName, wordGrid, scoreGrid1);
+        scoreGrid1.Initialize();
+
         player1.wordGrid = wordGrid;
         player1.scoreGrid = scoreGrid1;
         print("UpdateBoard.NewGame player {" + player1 + "} \n");
 
         wordGrid.UpdateGridLayoutConstraint(2);
         if (gameParameters.isTwoPlayer) {
-            var player2 = new Player("Bot" + gameParameters.botLevel, wordGrid2, scoreGrid2);
+            player2.Initialize(MyPrefs.BOT_NAMES[gameParameters.botLevel], wordGrid2, scoreGrid2);
             players = new[] { player1, player2 };
             player2.isBot = true;
             wordGrid.UpdateGridLayoutConstraint(1);
             wordGrid2.Initialize();
+            scoreGrid2.Initialize();
         }
         else {
             players = new[] { player1 };
         }
 
-        // scorePanelCanvasGroup.alpha = gameParameters.isTwoPlayer ? 0.0f : 1.0f;
         scorePanel.SetActive(gameParameters.isTwoPlayer);
+        logoImage2.SetActive(gameParameters.isTwoPlayer);
         wordGridScrollPanel2.SetActive(gameParameters.isTwoPlayer);
         scoreGrid1.gameObject.SetActive(gameParameters.isTwoPlayer);
         scoreGrid2.gameObject.SetActive(gameParameters.isTwoPlayer);
@@ -91,7 +94,9 @@ public class UpdateBoard : MonoBehaviour {
 
         Toast.Show(
             "To start the game, create a word by clicking on the letters in the rack. After that, you can create or modify new words.",
-            15f, Color.magenta, toastPosition);
+            15f, Color.magenta, GameHelper.GetToastPosition());
+        turnNumber = 0;
+        // NextTurn();
     }
 
     private void BuildDictionaries() {
@@ -111,14 +116,7 @@ public class UpdateBoard : MonoBehaviour {
             }
 
             var botDictionaryTrie = BuildDictionaryTrie(dictionaryName);
-            brucesBot = new BrucesBot(botDictionaryTrie);
-            maxLetters = gameParameters.botLevel;
-            if (gameParameters.botLevel == 0) {
-                maxLetters = 1;
-            }
-            else if (gameParameters.botLevel == 4) {
-                maxLetters = 99;
-            }
+            brucesBot = BotFactory.Create(gameParameters.botLevel, botDictionaryTrie, scoreCalculator);
         }
 
         if (saveLanguage == null) {
@@ -127,7 +125,7 @@ public class UpdateBoard : MonoBehaviour {
             scoreCalculator.dogBonusWords = dogBonusWords;
         }
 
-        print("UpdateBoard.BuildDictionaries maxLetters {" + maxLetters + "  dictionaryName " + dictionaryName + " \n");
+        print("UpdateBoard.BuildDictionaries maxLetters   dictionaryName " + dictionaryName + " \n");
         saveLanguage = gameParameters.language;
         saveBotLevel = gameParameters.botLevel;
     }
@@ -178,6 +176,8 @@ public class UpdateBoard : MonoBehaviour {
         }
 
         currentPlayer.UpdateScoreForReplaceRack(points);
+        scoreManager.UpdateScoreText(currentPlayer);
+        print("UpdateBoard.ReplaceRackButton   currentPlayer " + currentPlayer + "\n");
 
         ClearInputWord();
         dealer.DealNewRack();
@@ -200,7 +200,7 @@ public class UpdateBoard : MonoBehaviour {
             UpdateBoardForValidSubmit(expandedInputString, wordScore);
         }
         else {
-            Toast.Show(validationResult, 2f, Color.red, toastPosition);
+            Toast.Show(validationResult, 2f, Color.red, GameHelper.GetToastPosition());
             transformShaker.BeginShake(inputWord.transform);
         }
     }
@@ -223,7 +223,7 @@ public class UpdateBoard : MonoBehaviour {
 
     private void HandleNearEndGame() {
         if (dealer.IsNearEndGame()) {
-            print("UpdateBoard.IsNearEndGame end game.  " + dealer.GetTotalNumLettersLeft() + "\n");
+            print("UpdateBoard.HandleNearEndGame true  " + dealer.GetTotalNumLettersLeft() + "\n");
             replaceRackButton.ChangeForEndGame();
         }
     }
@@ -268,28 +268,26 @@ public class UpdateBoard : MonoBehaviour {
         dummyPanel.SetActive(true);
         scoreManager.UpdateScoreText(currentPlayer);
         currentPlayer.UpdateScoreText();
-        //if (currentPlayer.isBot) {
         currentPlayer.currentWord.currentWordHistory.isDogBonusWord =
             scoreCalculator.CalculateDogBonusWord(word.contents); // repeat for bot for toast message
-        // // }
 
         scoreManager.ShowToastMessage(currentPlayer);
         betterRack.RemoveSelectedLetters();
-        //betterRack.TestRemoveSelectedLetters();
-        //betterRack.CountRemoveSelectedLetters();
-        //betterRack.AutomateRemoveSelectedLetters();
-        dealer.Deal();
-        HandleNearEndGame();
-
 
         scrollRect.verticalNormalizedPosition = 1.0f;
         ClearInputWord();
         RemoveSelectedWord();
 
+        dealer.Deal();
+        HandleNearEndGame();
+        NextTurn();
+    }
+
+    private void NextTurn() {
         turnNumber++;
         playerNumber = gameParameters.isTwoPlayer ? turnNumber % 2 : turnNumber % 1;
         currentPlayer = players[playerNumber];
-        print("~~UpdateBoard.SubmitInputWordButton {" + playerNumber + "} \n");
+        print("~~UpdateBoard.NextTurn playerNumber {" + playerNumber + "} \n");
         OtherPlayer().Activate(false);
         currentPlayer.Activate(true);
         if (currentPlayer.isBot) {
@@ -307,30 +305,35 @@ public class UpdateBoard : MonoBehaviour {
     }
 
     public void CallPlayerBot() {
+        print("~~UpdateBoard.CallPlayerBot begin \n");
         var words = new List<Word>();
         foreach (var player in players) {
             words.AddRange(player.wordGrid.FindWordObjects());
         }
 
-        var newWordCombinations = brucesBot.GetCombinations(words, betterRack.GetWord(), 3, maxLetters);
-        print("~~CallPlayerBot  New words formed: " + newWordCombinations.Count + " rack " + betterRack.GetWord() +
-              "\n");
-        var bestResultMatch = brucesBot.FindBestWord(newWordCombinations, scoreCalculator, gameParameters.botLevel);
+        var newWordCombinations = brucesBot.GetCombinations(words, betterRack.GetWord());
+        print("~~UpdateBoard.CallPlayerBot  New words formed: " + newWordCombinations.Count + " rack " +
+              betterRack.GetWord() + "\n");
+        var bestResultMatch = brucesBot.FindBestWord(newWordCombinations);
 
         if (bestResultMatch.GeneratedWord != null) {
             AutomateWordEntry(bestResultMatch.SourceObject, bestResultMatch.GeneratedWord);
+        }
+        else {
+            print("~~UpdateBoard.CallPlayerBot  No word Found call ReplaceRack \n");
+            ReplaceRackButton();
         }
     }
 
     // Call this method to start a pause for a specific duration
     private void AutomateWordEntry(Word word, string contents) {
-        print("AutomateWordEntry\n");
+        print("UpdateBoard.AutomateWordEntry\n");
         StartCoroutine(AutomationSequence(word, contents));
     }
 
     private IEnumerator AutomationSequence(Word word, string contents) {
-        print("AutomationSequence yield \n");
-        yield return new WaitForSeconds(1.5f);
+        print("UpdateBoard.AutomationSequence yield \n");
+        yield return new WaitForSeconds(3.5f);
         if (word != null) {
             LoadSelectedWord(word);
             var button = currentPlayer.wordGrid.FindMatchingButton(word);
@@ -349,9 +352,9 @@ public class UpdateBoard : MonoBehaviour {
             }
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
 
-        print("AutomationSequence selectLetters \n");
+        print("UpdateBoard.AutomationSequence selectLetters \n");
         for (var i = 0; i < contents.Length; i++) {
             var letter = contents.Substring(i, 1);
             if (!selectedWord.SelectLetter(letter)) {
@@ -359,7 +362,7 @@ public class UpdateBoard : MonoBehaviour {
             }
 
             inputWord.AddLetter(letter, i);
-            print("AutomationSequence selectLetter " + letter + " \n");
+            // print("UpdateBoard.AutomationSequence selectLetter " + letter + " \n");
             yield return new WaitForSeconds(.75f);
         }
 

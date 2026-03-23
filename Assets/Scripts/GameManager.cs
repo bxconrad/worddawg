@@ -13,23 +13,25 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject settingsContainer;
     [SerializeField] private GameObject settingsWidget;
     [SerializeField] private GameObject timeScorePanel;
+    [SerializeField] private GameObject logoImage2;
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private BetterRack betterRack;
     [SerializeField] private Stats stats;
+    [SerializeField] private StatsTwoPlayer statsTwoPlayer;
     [SerializeField] private HelpDisplay helpDisplay;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private LogoImage logoImage;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private Toggle twoPlayerToggle;
 
     private readonly List<Image> panelImages = new();
 
-//        -diag-temp-memory-leak-validation
-    //   private string gameMode;
     private Player player;
+    private Player player2;
 
     private string savedGameMode;
 
@@ -56,6 +58,7 @@ public class GameManager : MonoBehaviour {
         prefsContainer.SetActive(false);
         timeScorePanel.SetActive(false);
         settingsContainer.SetActive(false);
+        logoImage2.SetActive(false);
         helpDisplay.Initialize();
     }
 
@@ -119,6 +122,8 @@ public class GameManager : MonoBehaviour {
         gameParameters.numLetters = MyPrefs.GetNumLetters();
         gameParameters.numRackLetters = MyPrefs.GetNumRackLetters();
         gameParameters.language = MyPrefs.GetLanguage();
+        gameParameters.botLevel = MyPrefs.GetBotLevel();
+        gameParameters.isTwoPlayer = MyPrefs.GetIsTwoPlayer();
         if (gameParameters.language == null) {
             gameParameters.language = MyPrefs.PREFS_LANG_EN; //? it happens
             print("GameManager.InitializeCustomGameParameters ?? lanuage null set to EN " + gameParameters.language +
@@ -139,10 +144,10 @@ public class GameManager : MonoBehaviour {
 
     public void OpenSettings() {
         print("GameManager.OpenSettings \n");
-        var isActive = settingsContainer.activeSelf;
+        var isGameManagerActive = settingsContainer.activeSelf;
         InactivateOtherCanvases();
-        settingsContainer.SetActive(!isActive);
-        gameObject.SetActive(isActive);
+        settingsContainer.SetActive(!isGameManagerActive);
+        gameObject.SetActive(isGameManagerActive);
     }
 
     public void RepeatGame() {
@@ -180,19 +185,20 @@ public class GameManager : MonoBehaviour {
         audioSource.mute = !Settings.GetIsSound();
         GameHelper.LANGUAGE = MyPrefs.GetLanguage();
         updateBoard.gameObject.SetActive(true);
-        print("GameManager.NewGame 1 " + gameObject.activeInHierarchy + "\n");
         gameObject.SetActive(false);
-        print("GameManager.NewGame 2 " + gameObject.activeInHierarchy + "\n");
         player = new Player(gameParameters.userName);
+        player2 = new Player("dummy");
 
-        updateBoard.NewGame(player);
+        updateBoard.NewGame(player, player2);
         settingsWidget.SetActive(false);
-        print("GameManager.NewGame done " + gameObject.activeInHierarchy + "\n");
+        print("GameManager.NewGame done \n");
     }
 
     private async Task Spinit() {
         var tasks = new Task[2];
-        tasks[0] = transformShaker.ASpin(logoImage.transform, .24f, 18, 3, false);
+        var transforms = new[] { logoImage.transform, logoImage2.transform };
+        tasks[0] = transformShaker.ABeginRandomSpins(transforms, .3f, 16);
+//        tasks[0] = transformShaker.ASpin(transforms, .24f, 18, 3, false);
         tasks[1] = transformShaker.ASpin(updateBoard.transform, .48f, 9, 1, true);
 
         await Task.WhenAll(tasks);
@@ -201,7 +207,7 @@ public class GameManager : MonoBehaviour {
 
     public async Task EndGame() {
         print("GameManager.EndGame\n");
-        //Toast.Dismiss();
+        Toast.Dismiss();
         updateBoard.EndGame();
         await Spinit();
         InactivateOtherCanvases();
@@ -209,7 +215,18 @@ public class GameManager : MonoBehaviour {
         scoreManager.End();
 
         endGameContainer.SetActive(true);
-        stats.UpdateStats(gameParameters.gameMode, player);
+        if (gameParameters.isTwoPlayer) {
+            stats.gameObject.SetActive(false);
+            statsTwoPlayer.gameObject.SetActive(true);
+            logoImage2.SetActive(true);
+            statsTwoPlayer.UpdateStats(gameParameters.gameMode, player, player2);
+        }
+        else {
+            statsTwoPlayer.gameObject.SetActive(false);
+            stats.gameObject.SetActive(true);
+            stats.UpdateStats(gameParameters.gameMode, player);
+        }
+
         print("GameManager.EndGame complete\n");
     }
 

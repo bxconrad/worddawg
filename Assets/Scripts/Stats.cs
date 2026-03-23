@@ -3,11 +3,11 @@ using TMPro;
 using UnityEngine;
 
 public class Stats : MonoBehaviour {
-    private static readonly string PREFS_ST_SCORE = "ST_SCORE";
-    private static readonly string PREFS_ST_WORDS = "ST_WORDS";
+    public static readonly string PREFS_ST_SCORE = "ST_SCORE";
+    public static readonly string PREFS_ST_WORDS = "ST_WORDS";
     private static readonly string PREFS_ST_LETTERS = "ST_LETTERS";
-    private static readonly string PREFS_ST_CHANGED_WORDS = "ST_CHANGED_WORDS";
-    private static readonly string PREFS_ST_LONG_WORD = "ST_LONG_WORD";
+    public static readonly string PREFS_ST_CHANGED_WORDS = "ST_CHANGED_WORDS";
+    public static readonly string PREFS_ST_LONG_WORD = "ST_LONG_WORD";
     private static readonly string PREFS_ST_BEST_WORD = "ST_BEST_WORD";
     private static readonly string PREFS_ST_BEST_WORD_SCORE = "ST_BEST_WORD_SCORE";
     public static readonly string PREFS_ST_MODE_GOTD = "Game Of The Day";
@@ -15,12 +15,12 @@ public class Stats : MonoBehaviour {
     public static readonly string PREFS_ST_MODE_TIMED_4 = "Timed, 4 Minutes";
     public static readonly string PREFS_ST_MODE_CUSTOM = "Custom";
 
-    private static readonly string[] STAT_KEYS = {
-        PREFS_ST_BEST_WORD, PREFS_ST_BEST_WORD_SCORE, PREFS_ST_LETTERS,
-        PREFS_ST_LONG_WORD, PREFS_ST_CHANGED_WORDS, PREFS_ST_SCORE, PREFS_ST_WORDS
+    public static readonly string[] STAT_KEYS = {
+        PREFS_ST_BEST_WORD, PREFS_ST_BEST_WORD_SCORE, PREFS_ST_CHANGED_WORDS,
+        PREFS_ST_LETTERS, PREFS_ST_LONG_WORD, PREFS_ST_SCORE, PREFS_ST_WORDS
     };
 
-    private static readonly string[] STAT_GAME_MODES = {
+    public static readonly string[] STAT_GAME_MODES = {
         PREFS_ST_MODE_GOTD, PREFS_ST_MODE_UNTIMED_50, PREFS_ST_MODE_TIMED_4, PREFS_ST_MODE_CUSTOM
     };
 
@@ -112,26 +112,26 @@ public class Stats : MonoBehaviour {
         rowNum++;
     }
 
-    public void OnResetStatsButtonClicked() {
-        print("Stats.OnResetStatsButtonClicked \n");
-
-        foreach (var statKey in STAT_KEYS) {
-            PlayerPrefs.DeleteKey(statKey);
-            foreach (var gameMode in STAT_GAME_MODES) {
-                var key = statKey + "_" + gameMode;
-                PlayerPrefs.DeleteKey(key);
-                print("Stats.OnResetStatsButtonClicked " + key + " \n");
-            }
-        }
-
-        ResetPrefs();
-        //UpdateStats(currentGameMode);
-    }
-
-    private void ResetPrefs() {
-        print("Stats.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
-        foreach (var key in MyPrefs.PREFS_KEYS) {
-            PlayerPrefs.DeleteKey(key);
-        }
-    }
+    // public void OnResetStatsButtonClicked() {
+    //     print("Stats.OnResetStatsButtonClicked \n");
+    //
+    //     foreach (var statKey in STAT_KEYS) {
+    //         PlayerPrefs.DeleteKey(statKey);
+    //         foreach (var gameMode in STAT_GAME_MODES) {
+    //             var key = statKey + "_" + gameMode;
+    //             PlayerPrefs.DeleteKey(key);
+    //             print("Stats.OnResetStatsButtonClicked " + key + " \n");
+    //         }
+    //     }
+    //
+    //     ResetPrefs();
+    //     //UpdateStats(currentGameMode);
+    // }
+    //
+    // private void ResetPrefs() {
+    //     print("Stats.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
+    //     foreach (var key in MyPrefs.PREFS_KEYS) {
+    //         PlayerPrefs.DeleteKey(key);
+    //     }
+    // }
 }

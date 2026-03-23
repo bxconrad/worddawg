@@ -1,4 +1,5 @@
-﻿using EasyUI.Toast;
+﻿using System.Collections.Generic;
+using EasyUI.Toast;
 using TMPro;
 using UnityEngine;
 using Toggle = UnityEngine.UI.Toggle;
@@ -32,8 +33,17 @@ public class MyPrefs : MonoBehaviour {
     public static readonly string PREFS_RT_USER_NAME = "RT_USER_NAME";
 
     public static readonly string[] PREFS_KEYS = {
-        PREFS_RT_DURATION, PREFS_RT_IS_SHOW_BUTTON, PREFS_RT_IS_GOTD, PREFS_RT_IS_TIMER, PREFS_RT_IS_TWOPLAYER,
-        PREFS_RT_LANGUAGE, PREFS_RT_LETTERS, PREFS_RT_RACK_LETTERS, PREFS_RT_BOT_LEVEL
+        PREFS_RT_BOT_LEVEL, PREFS_RT_DURATION, PREFS_RT_IS_GOTD, PREFS_RT_IS_SHOW_BUTTON,
+        PREFS_RT_IS_SOUND, PREFS_RT_IS_TIMER, PREFS_RT_IS_TWOPLAYER,
+        PREFS_RT_LANGUAGE, PREFS_RT_LETTERS, PREFS_RT_RACK_LETTERS, PREFS_RT_USER_NAME
+    };
+
+    public static Dictionary<int, string> BOT_NAMES = new() {
+        { 0, "LittleBot" },
+        { 1, "DinoBot" },
+        { 2, "RaptorBot" },
+        { 3, "TRexBot" },
+        { 4, "BotZilla" }
     };
 
     [SerializeField] private TMP_Dropdown durationDropdown;
@@ -69,7 +79,35 @@ public class MyPrefs : MonoBehaviour {
         soundToggle.isOn = GetIsSound();
         twoPlayerToggle.onValueChanged.AddListener(delegate { TwoPlayerToggleValueChanged(twoPlayerToggle); });
         twoPlayerToggle.isOn = GetIsTwoPlayer();
+        twoPlayerToggle.isOn = GetIsTwoPlayer();
+        BotSelectList();
         print("MyPrefs.Start end\n");
+    }
+
+
+    private void OnEnable() {
+        print("MyPrefs.OnEnable  \n");
+        Start();
+    }
+
+    private void BotSelectList() {
+        botLevelDropdown.ClearOptions();
+        var options = new List<string>();
+        for (var i = 0; i < BOT_NAMES.Count; i++) {
+            options.Add(BOT_NAMES[i]);
+        }
+
+        botLevelDropdown.AddOptions(options);
+        botLevelDropdown.value = PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL);
+        botLevelDropdown.RefreshShownValue();
+    }
+
+    private void BotLevelDropdown(int index) {
+        //var difficulty = index + 1; // 1–5
+        var botName = BOT_NAMES[index];
+        PlayerPrefs.SetInt(PREFS_RT_BOT_LEVEL, index);
+        Debug.Log("Settings.BotLevelDropdown Selected: " + botName + " (" + index + ")");
+        //GetBotLevel();
     }
 
 
@@ -90,7 +128,7 @@ public class MyPrefs : MonoBehaviour {
         PlayerPrefs.SetInt(PREFS_RT_RACK_LETTERS, numLetters);
     }
 
-    public void BotLevelDropdown(int index) {
+    public void xBotLevelDropdown(int index) {
         print("MyPrefs.BotLevelDropdown " + index + " \n");
         PlayerPrefs.SetInt(PREFS_RT_BOT_LEVEL, index);
         GetBotLevel();
@@ -119,6 +157,7 @@ public class MyPrefs : MonoBehaviour {
     private void TwoPlayerToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(PREFS_RT_IS_TWOPLAYER, val.ToString());
+        botLevelDropdown.interactable = val;
         print("MyPrefs.TwoPlayerToggleValueChanged " + val + " \n");
     }
 
@@ -132,8 +171,8 @@ public class MyPrefs : MonoBehaviour {
         var isTimerActive = PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
         print("MyPrefs.ShowTimerOnOff isTimerActive " + isTimerActive + " \n");
 
-        durationDropdown.gameObject.SetActive(isTimerActive);
-        letterDropdown.gameObject.SetActive(!isTimerActive);
+        durationDropdown.interactable = isTimerActive;
+        letterDropdown.interactable = !isTimerActive;
     }
 
     public void OnResetPrefsButtonClicked() {
@@ -154,7 +193,7 @@ public class MyPrefs : MonoBehaviour {
         return PlayerPrefs.GetInt(PREFS_RT_RACK_LETTERS, DEFAULT_NUM_RACK_LETTERS);
     }
 
-    private static int GetBotLevel() {
+    public static int GetBotLevel() {
         print("MyPrefs.GetBotLevel" + PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL, DEFAULT_BOT_LEVEL) + " \n");
         return PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL, DEFAULT_BOT_LEVEL);
     }
@@ -184,7 +223,7 @@ public class MyPrefs : MonoBehaviour {
         return PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
     }
 
-    private static bool GetIsTwoPlayer() {
+    public static bool GetIsTwoPlayer() {
         return PlayerPrefs.GetString(PREFS_RT_IS_TWOPLAYER, DEFAULT_IS_TWOPLAYER).ToUpper().Equals("TRUE");
     }
 
