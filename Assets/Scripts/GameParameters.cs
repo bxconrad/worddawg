@@ -32,6 +32,7 @@ public class GameParameters : MonoBehaviour {
         botLevel = Settings.GetBotLevel();
         isTwoPlayer = Settings.GetIsTwoPlayer();
         userName = Settings.GetUserName();
+        language = MyPrefs.PREFS_LANG_EN;
         //gameMode = ""; don't init gameMode, need it for same game replay
     }
 

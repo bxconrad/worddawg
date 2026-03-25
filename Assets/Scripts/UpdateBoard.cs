@@ -49,7 +49,7 @@ public class UpdateBoard : MonoBehaviour {
 
 
     public void NewGame(Player player1, Player player2) {
-        //bcdo only need to reload dictionary at startup and custom goame. vm should use trie
+        //bcdo only need to reload dictionary at startup and custom goame. 
         print("UpdateBoard.NewGame botlevel {" + gameParameters.botLevel + "(" + botButton + "}} \n");
         turnNumber = 0;
         BuildDictionaries();
@@ -189,8 +189,10 @@ public class UpdateBoard : MonoBehaviour {
     }
 
     public void SubmitInputWordButton() {
-        print("UpdateBoard.SubmitInputWordButton {" + currentPlayer + "} \n");
+        print("UpdateBoard.SubmitInputWordButton {" + currentPlayer.name + " inputWord " + inputWord.GetWord() +
+              "} \n");
         Toast.Dismiss();
+       
         var expandedInputString = GameHelper.ExpandDoubleLetter(inputWord.GetWord());
         var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, expandedInputString);
         if ("TRUE".Equals(validationResult)) {

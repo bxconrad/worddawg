@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour {
         }
 
         audioSource.mute = !Settings.GetIsSound();
-        GameHelper.LANGUAGE = MyPrefs.GetLanguage();
+        GameHelper.LANGUAGE = gameParameters.language;
         updateBoard.gameObject.SetActive(true);
         gameObject.SetActive(false);
         player = new Player(gameParameters.userName);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 // bcdo have a bot factory that returns a bot with the code for that level
 public abstract class BrucesBotAbstract {
@@ -49,6 +50,8 @@ public abstract class BrucesBotAbstract {
                     return results;
             }
         }
+
+        MonoBehaviour.print("BrucesBotAbstract.GetCombinations  No modified words found. Use rack " + rackWord + "\n");
 
         // FALLBACK: If no words found, use only the rack
         if (results.Count == 0) {

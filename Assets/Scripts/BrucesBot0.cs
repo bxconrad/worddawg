@@ -22,7 +22,7 @@ public class BrucesBot0 : BrucesBotAbstract {
             }
 
             MonoBehaviour.print(
-                "BrucesBot.FindBestWord  lowestWord " + bestResultMatch + " lowScore " + lowScore + "\n");
+                "BrucesBoto.FindBestWord  lowestWord " + bestResultMatch + " lowScore " + lowScore + "\n");
 
             return bestResultMatch;
         }
