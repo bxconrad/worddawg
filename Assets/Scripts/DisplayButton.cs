@@ -8,10 +8,12 @@ public class DisplayButton : MonoBehaviour {
     private Color originalColor;
     private TextMeshProUGUI text;
     private Word word { get; set; }
+    public Button button { get; set; }
 
     private void Awake() {
         text = GetComponentInChildren<TextMeshProUGUI>();
         image = GetComponentInChildren<Image>();
+        button = GetComponentInChildren<Button>();
         originalColor = image.color;
         //print("DisplayButton.Awake \n");
     }
@@ -43,5 +45,9 @@ public class DisplayButton : MonoBehaviour {
     public void DeSelectButton() {
         print("DisplayButton.DeSelectButton\n");
         image.color = originalColor;
+    }
+
+    public void SetInteractable(bool isInteractable) {
+        button.interactable = isInteractable;
     }
 }

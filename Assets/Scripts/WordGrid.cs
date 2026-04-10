@@ -108,6 +108,14 @@ public class WordGrid : MonoBehaviour {
         return null;
     }
 
+    public void SetInteractable(bool isInteractable) {
+        //print("WordGrid.SetInteractable " + isInteractable + "\n");
+        var displayButtons = GetComponentsInChildren<DisplayButton>();
+        foreach (var displayButton in displayButtons) {
+            displayButton.SetInteractable(isInteractable);
+        }
+    }
+
 
     public List<string> FindWordList() {
         print("WordGrid.FindWordListt\n");

@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour {
+public class ToastMaster : MonoBehaviour {
     [SerializeField] private TransformShaker transformShaker;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] private LogoImage logoImage;
@@ -36,6 +36,7 @@ public class ScoreManager : MonoBehaviour {
     }
 
     public void ShowToastMessage(Player player) {
+        //if (player.isBot) return;
         var wordContents = player.currentWord.GetCurrentContents();
         var wordScore = player.currentWord.currentWordHistory.score;
         var msg = "";

@@ -16,7 +16,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject logoImage2;
     [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
-    [SerializeField] private ScoreManager scoreManager;
+
+    [SerializeField] private ToastMaster toastMaster;
+
     [SerializeField] private BetterRack betterRack;
     [SerializeField] private Stats stats;
     [SerializeField] private StatsTwoPlayer statsTwoPlayer;
@@ -42,7 +44,7 @@ public class GameManager : MonoBehaviour {
         settingsWidget.SetActive(true);
         // end components
         countdownTimer.EndTimer();
-        scoreManager.End();
+        toastMaster.End();
         gameParameters.Initialize();
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -169,6 +171,7 @@ public class GameManager : MonoBehaviour {
         InactivateOtherCanvases();
         betterRack.Initialize();
         countdownTimer.enabled = false;
+        //bcdo move to updateBoard?
         timeScorePanel.SetActive(!gameParameters.isTwoPlayer);
         if (gameParameters.isTimed) {
             print("GameManager.NewGame isTimed " + gameParameters.isTimed + "\n");
@@ -186,10 +189,10 @@ public class GameManager : MonoBehaviour {
         GameHelper.LANGUAGE = gameParameters.language;
         updateBoard.gameObject.SetActive(true);
         gameObject.SetActive(false);
-        player = new Player(gameParameters.userName);
-        player2 = new Player("dummy");
+        // player = new Player(gameParameters.userName);
+        // player2 = new Player("dummy");
 
-        updateBoard.NewGame(player, player2);
+        updateBoard.NewGame();
         settingsWidget.SetActive(false);
         print("GameManager.NewGame done \n");
     }
@@ -212,19 +215,20 @@ public class GameManager : MonoBehaviour {
         await Spinit();
         InactivateOtherCanvases();
         countdownTimer.EndTimer();
-        scoreManager.End();
+        toastMaster.End();
 
         endGameContainer.SetActive(true);
+        var players = updateBoard.GetPlayers();
         if (gameParameters.isTwoPlayer) {
             stats.gameObject.SetActive(false);
             statsTwoPlayer.gameObject.SetActive(true);
             logoImage2.SetActive(true);
-            statsTwoPlayer.UpdateStats(gameParameters.gameMode, player, player2);
+            statsTwoPlayer.UpdateStats(gameParameters.gameMode, players[1], players[0]);
         }
         else {
             statsTwoPlayer.gameObject.SetActive(false);
             stats.gameObject.SetActive(true);
-            stats.UpdateStats(gameParameters.gameMode, player);
+            stats.UpdateStats(gameParameters.gameMode, players[0]);
         }
 
         print("GameManager.EndGame complete\n");

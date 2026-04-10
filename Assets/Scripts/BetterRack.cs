@@ -100,6 +100,13 @@ public class BetterRack : MonoBehaviour {
         }
     }
 
+    public void SetInteractable(bool isInteractable) {
+        //print("BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
+        foreach (var tile in tiles) {
+            tile.SetInteractable(isInteractable);
+        }
+    }
+
     public void ClearRack() {
         print("BetterRack.InitializeTiles  #tiles " + tiles.Length + "\n");
         for (var i = 0; i < tiles.Length; i++) {

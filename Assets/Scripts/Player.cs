@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Player {
     private static Player DUMMY_PLAYER;
+    private readonly ScoreGrid scoreGrid;
     private readonly List<Word> words = new();
     public int currentScore;
     public bool isBot;
     public string longestWord = "";
     public string name;
-    public ScoreGrid scoreGrid;
     public WordGrid wordGrid;
 
 
@@ -17,8 +17,11 @@ public class Player {
         this.name = name;
     }
 
-    public Player(string name, WordGrid wordGrid, ScoreGrid scoreGrid) {
-        Initialize(name, wordGrid, scoreGrid);
+    public Player(string aname, WordGrid awordGrid, ScoreGrid ascoreGrid) {
+        name = aname;
+        wordGrid = awordGrid;
+        scoreGrid = ascoreGrid;
+        Initialize();
     }
 
     public Word currentWord { get; private set; }
@@ -30,13 +33,13 @@ public class Player {
     public int numChangedWords { get; private set; }
     public int numLettersUsed { get; set; }
 
-    public void Initialize(string name, WordGrid wordGrid, ScoreGrid scoreGrid) {
-        this.name = name;
-        this.wordGrid = wordGrid;
-        this.scoreGrid = scoreGrid;
+    public bool IsStolenWord() {
+        return currentWord.IsStolenWord();
     }
 
-    public void Initialize() {
+    private void Initialize() {
+        if (scoreGrid == null)
+            return;
         var currentWordScore = currentWord != null ? currentWord.currentWordHistory.score : 0;
         scoreGrid.totalScore.text = currentScore.ToString().PadRight(5) + currentWordScore;
         scoreGrid.name.text = name;
@@ -86,18 +89,13 @@ public class Player {
     }
 
     public void UpdateScoreForReplaceRack(int points) {
-        var subtractPoints = Math.Min(currentScore, points) * -1;
+        var subtractPoints = isBot ? points * -1 : Math.Min(currentScore, points) * -1;
         currentScore += subtractPoints;
         scoreGrid.totalScore.text = currentScore.ToString().PadRight(5) + subtractPoints;
-        MonoBehaviour.print("Player.UpdateScoreForReplaceRack " + points + "\n");
+        MonoBehaviour.print($"Player.UpdateScoreForReplaceRack subtractPoints {subtractPoints}  points {points}\n");
     }
 
     public override string ToString() {
         return $"CurrentScore: {currentScore}, IsBot: {isBot}, Name: {name}, wordScore: {wordScore}";
     }
-    // public override string ToString() {
-    //     return
-    //         $"{nameof(name)}: {name}";
-    //    // $"{nameof(name)}: {name}, {nameof(words)}: {words}, {nameof(currentScore)}: {currentScore}, {nameof(isBot)}: {isBot}, {nameof(longestWord)}: {longestWord},  {nameof(currentWord)}: {currentWord}, {nameof(wordScore)}: {wordScore}, {nameof(highestWordScore)}: {highestWordScore}, {nameof(highestWordScoreWord)}: {highestWordScoreWord}, {nameof(numWords)}: {numWords}, {nameof(numChangedWords)}: {numChangedWords}";
-    // }
 }

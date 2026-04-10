@@ -26,11 +26,21 @@ public class Word {
     }
 
     public string GetPreviousContents() {
+        return GetPreviousHistory() != null ? GetPreviousHistory().contents : "";
+    }
+
+
+    public WordHistory GetPreviousHistory() {
         if (histories.Count >= 2) {
-            return histories[^2].contents;
+            return histories[^2];
         }
 
-        return "";
+        return null;
+    }
+
+    public bool IsStolenWord() {
+        var history = GetPreviousHistory();
+        return history == null ? false : history.player == currentWordHistory.player;
     }
 
     public void CreateWord(string contents, Player player, int score) {
@@ -38,7 +48,7 @@ public class Word {
         var history = new WordHistory(contents, player, score);
         histories.Add(history);
         currentWordHistory = history;
-        player.currentScore += score;
+        player.currentScore += score; // bcdo don't do this here. have updateScore on Player
         Console.WriteLine(history.ToString());
     }
 

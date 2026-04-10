@@ -19,6 +19,10 @@ public class ScoreCalculator {
 
 
     public int CalculateWordScore(string originalWord, string newWord) {
+        return CalculateWordScore(originalWord, newWord, false);
+    }
+
+    public int CalculateWordScore(string originalWord, string newWord, bool isSteal) {
         var letterScore = CalculateLetterScore(newWord);
         var multiplier = CalculateMultiplier(originalWord, newWord);
 
@@ -37,9 +41,10 @@ public class ScoreCalculator {
             MonoBehaviour.print("ScoreCalculator.CalculateWordScore 100 bonus ");
         }
 
-        MonoBehaviour.print("ScoreCalculator.CalculateWordScore wordScore " + wordScore + "  letterScore " +
-                            letterScore + "  multiplier " + multiplier + " originalWord " + originalWord + " newWord " +
-                            newWord + "\n");
+        wordScore += CalculateStealScore(originalWord, isSteal);
+        // MonoBehaviour.print("ScoreCalculator.CalculateWordScore wordScore " + wordScore + "  letterScore " +
+        //                     letterScore + "  multiplier " + multiplier + " originalWord " + originalWord + " newWord " +
+        //                     newWord + "\n");
 
         return wordScore;
     }
@@ -84,6 +89,12 @@ public class ScoreCalculator {
         var factor = IsAddedSorD(originalWord, newWord) ? 1 : 1.5;
         var multiplier = newWord.Length > 4 ? (newWord.Length - 1) * factor : 1;
         return multiplier;
+    }
+
+    private int CalculateStealScore(string originalWord, bool isSteal) {
+        var stealScore = isSteal ? originalWord.Length * 10 : 0;
+        //MonoBehaviour.print($"~~ScoreCalculator.CalculateStealScore  {stealScore} length {originalWord.Length}\n");
+        return stealScore;
     }
 
     private bool IsAddedSorD(string originalWord, string newWord) {

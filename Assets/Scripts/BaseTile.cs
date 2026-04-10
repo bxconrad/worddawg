@@ -7,7 +7,7 @@ public abstract class BaseTile : MonoBehaviour {
     private Color originalColor;
     public Tile.State state;
     private TextMeshProUGUI text;
-    public Button button { get; set; }
+    private Button button { get; set; }
 
     public string letter { get; private set; }
 
@@ -16,6 +16,10 @@ public abstract class BaseTile : MonoBehaviour {
     protected void Awake() {
         //print("BaseTile.Awake\n");
         AwakeMe();
+    }
+
+    public void SetInteractable(bool isInteractable) {
+        button.interactable = isInteractable;
     }
 
     protected void AwakeMe() {
