@@ -119,6 +119,9 @@ public class GameManager : MonoBehaviour {
         if (gameParameters.isGameOfTheDay) {
             gameParameters.dealerSeed = DateTime.Today.DayOfYear;
         }
+        else {
+            gameParameters.dealerSeed = MyPrefs.GetDealerSeed();
+        }
 
         gameParameters.numSeconds = MyPrefs.GetDuration();
         gameParameters.numLetters = MyPrefs.GetNumLetters();

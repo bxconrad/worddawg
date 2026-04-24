@@ -64,9 +64,7 @@ namespace bot {
                 }
             }
 
-            MonoBehaviour.print("BrucesBotAbstract.GetCombinations  No modified words found. Use rack " + rackWord +
-                                "\n");
-
+            MonoBehaviour.print($"BrucesBotAbstract.GetCombinations  No modified words found. Use rack {rackWord}\n");
             // FALLBACK: If no words found, use only the rack
             if (results.Count == 0) {
                 var rackOnlyFound = new HashSet<string>();
@@ -79,11 +77,14 @@ namespace bot {
                     rackOnlyFound,
                     stopAtFirst
                 );
-
+                MonoBehaviour.print($"BrucesBotAbstract.GetCombinations #Rack words {rackOnlyFound.Count}\n");
                 foreach (var word in rackOnlyFound) {
                     results.Add(new ResultMatch { GeneratedWord = word, SourceObject = null });
-                    if (stopAtFirst || (maxTotalWords.HasValue && results.Count >= maxTotalWords))
+                    if (stopAtFirst || (maxTotalWords.HasValue && results.Count >= maxTotalWords)) {
+                        MonoBehaviour.print(
+                            $"BrucesBotAbstract.GetCombinations Rack words early return. word {word}\n");
                         return results;
+                    }
                 }
             }
 
@@ -105,6 +106,9 @@ namespace bot {
             // 2. DICTIONARY CHECK: Is it a valid word?
             if (currentPrefix.Length >= minLength) {
                 if (MeetsRequirements(currentPrefix, requiredLetters)) {
+                    // MonoBehaviour.print(
+                    //     $"BrucesBotAbstract.GetCombinations  currentPrefix {currentPrefix} \n");
+
                     if (trieDictionary.Contains(currentPrefix)) {
                         foundWords.Add(currentPrefix);
                         if (stopAtFirst) return;

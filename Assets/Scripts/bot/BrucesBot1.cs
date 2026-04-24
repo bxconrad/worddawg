@@ -10,6 +10,8 @@ namespace bot {
 
         protected override ResultMatch FindBestWord(List<ResultMatch> resultMatches) {
             // return random word
+            MonoBehaviour.print($"BrucesBot1.FindBestWord  Count {resultMatches.Count}\n");
+            if (resultMatches.Count == 0) return new ResultMatch();
             for (var i = 0; i < 10; i++) {
                 var index = new Random().Next(0, resultMatches.Count);
                 var randomResultMatch = resultMatches[index];

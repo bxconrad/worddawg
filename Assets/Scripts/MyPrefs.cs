@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using EasyUI.Toast;
 using TMPro;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class MyPrefs : MonoBehaviour {
     public static readonly int DEFAULT_NUM_RACK_LETTERS = 7;
     public static readonly int DEFAULT_BOT_LEVEL = 0;
     public static readonly string DEFAULT_USER_NAME = "User1";
+    public static readonly int DEFAULT_DEALER_SEED = DateTime.Today.DayOfYear;
 
     private static readonly string PREFS_RT_DURATION = "RT_DURATION";
     public static readonly string PREFS_RT_IS_SHOW_BUTTON = "RT_IS_SHOW_BUTTON";
@@ -30,6 +32,7 @@ public class MyPrefs : MonoBehaviour {
     private static readonly string PREFS_RT_LETTERS = "RT_LETTERS";
     private static readonly string PREFS_RT_RACK_LETTERS = "RT_RACK_LETTERS";
     public static readonly string PREFS_RT_BOT_LEVEL = "RT_BOT_LEVEL";
+    public static readonly string PREFS_RT_DEALER_SEED = "RT_DEALER_SEED";
     public static readonly string PREFS_RT_USER_NAME = "RT_USER_NAME";
 
     public static readonly string[] PREFS_KEYS = {
@@ -56,6 +59,7 @@ public class MyPrefs : MonoBehaviour {
     [SerializeField] private Toggle soundToggle;
     [SerializeField] private Toggle twoPlayerToggle;
     [SerializeField] private GameParameters gameParameters;
+    [SerializeField] public TMP_InputField dealerSeed;
 
     private void Start() {
         print("MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
@@ -65,10 +69,9 @@ public class MyPrefs : MonoBehaviour {
 
         gameOfTheDayToggle.onValueChanged.AddListener(delegate { GameOfTheDayToggleValueChanged(gameOfTheDayToggle); });
         gameOfTheDayToggle.isOn = GetIsGOTD();
+        dealerSeed.text = GetDealerSeed().ToString();
+        dealerSeed.interactable = !gameOfTheDayToggle.isOn;
 
-        botLevelDropdown.value = PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL);
-        letterDropdown.value = GetNumLetters() / 50 - 1;
-        print("MyPrefs.Start LetterDropdown" + letterDropdown.value + " \n");
         rackLettersDropdown.value = GetNumRackLetters() - 7;
         // print("MyPrefs.Start rackLettersDropdown" + rackLettersDropdown.value + " \n");
 
@@ -79,8 +82,8 @@ public class MyPrefs : MonoBehaviour {
         soundToggle.isOn = GetIsSound();
         twoPlayerToggle.onValueChanged.AddListener(delegate { TwoPlayerToggleValueChanged(twoPlayerToggle); });
         twoPlayerToggle.isOn = GetIsTwoPlayer();
-        twoPlayerToggle.isOn = GetIsTwoPlayer();
-        BotSelectList();
+        BotSelectList(botLevelDropdown);
+        LetterSelectList();
         print("MyPrefs.Start end\n");
     }
 
@@ -90,17 +93,37 @@ public class MyPrefs : MonoBehaviour {
         Start();
     }
 
-    private void BotSelectList() {
-        botLevelDropdown.ClearOptions();
+    public void DealerSeedInputFieldValueChanged(TMP_InputField val) {
+        print($"Settings.DealerSeedInputFieldValueChanged start {val.text}  \n");
+        if (int.TryParse(val.text, out var intValue)) {
+            PlayerPrefs.SetInt(PREFS_RT_DEALER_SEED, intValue);
+        }
+        else {
+            val.text = "0";
+        }
+
+        print($"Settings.DealerSeedInputFieldValueChanged {val.text}  \n");
+    }
+
+
+    public static int GetDealerSeed() {
+        var adealerSeed = PlayerPrefs.GetInt(PREFS_RT_DEALER_SEED, DEFAULT_DEALER_SEED);
+        print("Settings.GetDealerSeed " + adealerSeed + " \n");
+        return adealerSeed;
+    }
+
+    public static void BotSelectList(TMP_Dropdown myBotlevelDropdown) {
+        myBotlevelDropdown.ClearOptions();
         var options = new List<string>();
         for (var i = 0; i < BOT_NAMES.Count; i++) {
             options.Add(BOT_NAMES[i]);
         }
 
-        botLevelDropdown.AddOptions(options);
-        botLevelDropdown.value = PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL);
-        botLevelDropdown.RefreshShownValue();
+        myBotlevelDropdown.AddOptions(options);
+        myBotlevelDropdown.value = PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL);
+        myBotlevelDropdown.RefreshShownValue();
     }
+
 
     private void BotLevelDropdown(int index) {
         //var difficulty = index + 1; // 1–5
@@ -116,8 +139,17 @@ public class MyPrefs : MonoBehaviour {
         PlayerPrefs.SetInt(PREFS_RT_DURATION, index + 1);
     }
 
+    public void LetterSelectList() {
+        letterDropdown.ClearOptions();
+        List<string> options = new() { "25", "50", "75", "100", "125", "150", "175", "200" };
+        letterDropdown.AddOptions(options);
+        letterDropdown.value = GetNumLetters() / 25 - 1;
+        print("MyPrefs.Start LetterDropdown " + letterDropdown.value + " \n");
+        letterDropdown.RefreshShownValue();
+    }
+
     public void LetterDropdown(int index) {
-        var numLetters = (index + 1) * 50;
+        var numLetters = (index + 1) * 25;
         print("MyPrefs.LetterDropdown " + index + "  nl " + numLetters + " \n");
         PlayerPrefs.SetInt(PREFS_RT_LETTERS, numLetters);
     }
@@ -164,6 +196,7 @@ public class MyPrefs : MonoBehaviour {
     private void GameOfTheDayToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(PREFS_RT_IS_GOTD, val.ToString());
+        dealerSeed.interactable = !val;
         print("MyPrefs.GameOfTheDayToggleValueChanged " + val + " \n");
     }
 

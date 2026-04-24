@@ -93,6 +93,7 @@ public class TransformShaker : MonoBehaviour {
 
     public async Task ASpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
         print("ShakeTransform.ASpin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
+        var startEuler = theTransform[0].eulerAngles;
         var startRotation = theTransform[0].eulerAngles.x;
         var direction = isForward ? -360.0f : 360.0f; // minus goes fwd, + bwd
         var endRotation = startRotation + direction;
@@ -123,6 +124,8 @@ public class TransformShaker : MonoBehaviour {
                 await Task.Yield();
             }
         }
+
+        transform.eulerAngles = startEuler;
     }
 }
 // public void BeginRandomSpin(Transform theTransform, float duration, int rotations) {

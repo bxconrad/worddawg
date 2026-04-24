@@ -130,7 +130,7 @@ public class WordGrid : MonoBehaviour {
     }
 
     public List<Word> FindWordObjects() {
-        print("WordGrid.FindWordObjects\n");
+        //Sprint("WordGrid.FindWordObjects\n");
         var words = new List<Word>();
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
 

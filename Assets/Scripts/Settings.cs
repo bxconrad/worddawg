@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using Toggle = UnityEngine.UI.Toggle;
 
@@ -8,7 +7,6 @@ public class Settings : MonoBehaviour {
     [SerializeField] private Toggle soundToggle;
     [SerializeField] private Toggle twoPlayerToggle;
     [SerializeField] private GameParameters gameParameters;
-
     [SerializeField] public TMP_InputField userNameText;
 
     private void Start() {
@@ -19,7 +17,7 @@ public class Settings : MonoBehaviour {
         twoPlayerToggle.onValueChanged.AddListener(delegate { TwoPlayerToggleValueChanged(twoPlayerToggle); });
         twoPlayerToggle.isOn = GetIsTwoPlayer();
         botLevelDropdown.interactable = twoPlayerToggle.isOn;
-        BotSelectList();
+        MyPrefs.BotSelectList(botLevelDropdown);
         print("Settings.Start end " + PlayerPrefs.GetInt(MyPrefs.PREFS_RT_BOT_LEVEL) + "\n");
     }
 
@@ -28,51 +26,12 @@ public class Settings : MonoBehaviour {
         Start();
     }
 
-    public void OnResetStatsButtonClicked() {
-        print("Settings.OnResetStatsButtonClicked \n");
-
-        foreach (var statKey in Stats.STAT_KEYS) {
-            PlayerPrefs.DeleteKey(statKey);
-            foreach (var gameMode in Stats.STAT_GAME_MODES) {
-                var key = statKey + "_" + gameMode;
-                PlayerPrefs.DeleteKey(key);
-                print("Settings.OnResetStatsButtonClicked " + key + " \n");
-            }
-        }
-
-        //ResetPrefs();
-     }
-
-    private void ResetPrefs() {
-        print("Settings.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
-        foreach (var key in MyPrefs.PREFS_KEYS) {
-            PlayerPrefs.DeleteKey(key);
-        }
-    }
-
-
-    private void BotSelectList() {
-        botLevelDropdown.ClearOptions();
-        var options = new List<string>();
-        for (var i = 0; i < MyPrefs.BOT_NAMES.Count; i++) {
-            options.Add(MyPrefs.BOT_NAMES[i]);
-        }
-
-        botLevelDropdown.AddOptions(options);
-        botLevelDropdown.value = PlayerPrefs.GetInt(MyPrefs.PREFS_RT_BOT_LEVEL);
-        botLevelDropdown.RefreshShownValue();
-    }
 
     private void BotLevelDropdown(int index) {
         //var difficulty = index + 1; // 1–5
         var botName = MyPrefs.BOT_NAMES[index];
         PlayerPrefs.SetInt(MyPrefs.PREFS_RT_BOT_LEVEL, index);
         Debug.Log("Settings.BotLevelDropdown Selected: " + botName + " (" + index + ")");
-    }
-
-    public void xBotLevelDropdown(int index) {
-        print("Settings.BotLevelDropdown " + index + " \n");
-        PlayerPrefs.SetInt(MyPrefs.PREFS_RT_BOT_LEVEL, index);
     }
 
 
@@ -92,16 +51,6 @@ public class Settings : MonoBehaviour {
     private void UserNameInputFieldValueChanged(TMP_InputField val) {
         PlayerPrefs.SetString(MyPrefs.PREFS_RT_USER_NAME, val.text);
         //print("Settings.UserNameInputFieldValueChanged " + val + " \n");
-    }
-
-
-    public void OnResetPrefsButtonClicked() {
-        print("Settings.OnResetPrefsButtonClicked \n");
-        foreach (var key in MyPrefs.PREFS_KEYS) {
-            PlayerPrefs.DeleteKey(key);
-        }
-
-        Start();
     }
 
 
@@ -132,9 +81,41 @@ public class Settings : MonoBehaviour {
         print("Settings.GetIsTwoPlayer " + retVal + " \n");
         return retVal;
     }
-
+/*
     public static bool GetIsShowButtons() {
         return PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_SHOW_BUTTON, MyPrefs.DEFAULT_IS_SHOW_BUTTON).ToUpper()
             .Equals("TRUE");
     }
+      public void OnResetPrefsButtonClicked() {
+        print("Settings.OnResetPrefsButtonClicked \n");
+        foreach (var key in MyPrefs.PREFS_KEYS) {
+            PlayerPrefs.DeleteKey(key);
+        }
+
+        Start();
+    }
+
+
+    public void OnResetStatsButtonClicked() {
+        print("Settings.OnResetStatsButtonClicked \n");
+
+        foreach (var statKey in Stats.STAT_KEYS) {
+            PlayerPrefs.DeleteKey(statKey);
+            foreach (var gameMode in Stats.STAT_GAME_MODES) {
+                var key = statKey + "_" + gameMode;
+                PlayerPrefs.DeleteKey(key);
+                print("Settings.OnResetStatsButtonClicked " + key + " \n");
+            }
+        }
+
+        //ResetPrefs();
+    }
+       private void ResetPrefs() {
+        print("Settings.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
+        foreach (var key in MyPrefs.PREFS_KEYS) {
+            PlayerPrefs.DeleteKey(key);
+        }
+    }
+
+*/
 }

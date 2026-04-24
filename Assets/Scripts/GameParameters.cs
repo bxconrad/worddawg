@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class GameParameters : MonoBehaviour {
     public int numLetters { get; set; }
@@ -16,6 +17,7 @@ public class GameParameters : MonoBehaviour {
     public int minimumLetters { get; set; }
     public int dealerSeed { get; set; }
     public int botLevel { get; set; }
+    public int seedNumber { get; set; }
     public bool isTwoPlayer { get; set; }
 
 
@@ -33,6 +35,7 @@ public class GameParameters : MonoBehaviour {
         isTwoPlayer = Settings.GetIsTwoPlayer();
         userName = Settings.GetUserName();
         language = MyPrefs.PREFS_LANG_EN;
+        seedNumber = DateTime.Today.DayOfYear;
         //gameMode = ""; don't init gameMode, need it for same game replay
     }
 
