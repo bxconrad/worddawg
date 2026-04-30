@@ -92,7 +92,7 @@ public class LetterInfo {
 
         letterDictionaryDictionary.Add(MyPrefs.PREFS_LANG_SP, letterDictionary);
 
-        MonoBehaviour.print("LetterInfo.LetterInfo letterDictionaryDictionary " +
+        MonoBehaviour.print("~LetterInfo.LetterInfo letterDictionaryDictionary " +
                             letterDictionaryDictionary["SP"].Count + "\n");
     }
 

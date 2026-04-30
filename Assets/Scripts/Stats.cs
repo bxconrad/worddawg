@@ -29,7 +29,7 @@ public class Stats : MonoBehaviour {
     private int rowNum;
 
     public void UpdateStats(string gameMode, Player player) {
-        print("Stats.UpdateStats\n");
+        print("~Stats.UpdateStats\n");
         currentGameMode = gameMode;
         // Add the gameModeSuffix to the key to set different stats for each gameMode (timed, untimed, etc)
         var currentGameModeSuffix = "_" + gameMode;
@@ -52,12 +52,12 @@ public class Stats : MonoBehaviour {
     private void UpdateStat(string key, string label, int current, string highestWordScoreWord) {
         var high = PlayerPrefs.GetInt(key);
         var bestMarker = "";
-        print("Stats.UpdateStat key " + key + " current " + current + " high  " + high + "\n");
+        print("~Stats.UpdateStat key " + key + " current " + current + " high  " + high + "\n");
         if (current > high) {
             bestMarker = "*";
             high = current;
             PlayerPrefs.SetInt(key, high);
-            print("Stats.UpdateStat HIGH key " + key + "  current " + current + " high  " + high + "\n");
+            print("~Stats.UpdateStat HIGH key " + key + "  current " + current + " high  " + high + "\n");
         }
 
         UpdateBestWordStats(key, bestMarker, highestWordScoreWord);
@@ -80,7 +80,7 @@ public class Stats : MonoBehaviour {
                 allTimeBestWord = PlayerPrefs.GetString(bestWordKey);
             }
 
-            print("Stats.UpdateBestWordStats bestWordKey " + bestWordKey +
+            print("~Stats.UpdateBestWordStats bestWordKey " + bestWordKey +
                   " allTimeBestWord " + allTimeBestWord + " \n");
 
             UpdateRow("Best Word", currentBestWord, allTimeBestWord, bestMarker);
@@ -90,7 +90,7 @@ public class Stats : MonoBehaviour {
 
     private void UpdateStat(string key, string label, string current) {
         var high = PlayerPrefs.GetString(key);
-        print("Stats.UpdateStat" + label + key + high + " \n");
+        print("~Stats.UpdateStat" + label + key + high + " \n");
         var bestMarker = "";
         if (current.Length > high.Length) {
             bestMarker = "*";
@@ -102,7 +102,7 @@ public class Stats : MonoBehaviour {
     }
 
     private void UpdateRow(string label, string var1, string var2, string bestMarker) {
-        print("Stats.UpdateRow" + label + " " + var1 + " " + var2 + " \n");
+        print("~Stats.UpdateRow" + label + " " + var1 + " " + var2 + " \n");
         var statRow = transform.GetChild(rowNum);
         var textUpdaters = statRow.GetComponentsInChildren<TextUpdater>();
         textUpdaters[0].SetMyText(label);
@@ -113,14 +113,14 @@ public class Stats : MonoBehaviour {
     }
 
     // public void OnResetStatsButtonClicked() {
-    //     print("Stats.OnResetStatsButtonClicked \n");
+    //     print("~Stats.OnResetStatsButtonClicked \n");
     //
     //     foreach (var statKey in STAT_KEYS) {
     //         PlayerPrefs.DeleteKey(statKey);
     //         foreach (var gameMode in STAT_GAME_MODES) {
     //             var key = statKey + "_" + gameMode;
     //             PlayerPrefs.DeleteKey(key);
-    //             print("Stats.OnResetStatsButtonClicked " + key + " \n");
+    //             print("~Stats.OnResetStatsButtonClicked " + key + " \n");
     //         }
     //     }
     //
@@ -129,7 +129,7 @@ public class Stats : MonoBehaviour {
     // }
     //
     // private void ResetPrefs() {
-    //     print("Stats.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
+    //     print("~Stats.ResetPrefs " + MyPrefs.GetNumRackLetters() + " \n");
     //     foreach (var key in MyPrefs.PREFS_KEYS) {
     //         PlayerPrefs.DeleteKey(key);
     //     }

@@ -12,7 +12,7 @@ public class Dragger : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     public void OnDrag(PointerEventData eventData) {
-        //print("InputWord.OnDrag " + eventData.position.x + "\n");
+        //print("~InputWord.OnDrag " + eventData.position.x + "\n");
         if (isFirstDrag) {
             isFirstDrag = false;
             firstPos = eventData.position.x;
@@ -21,7 +21,7 @@ public class Dragger : MonoBehaviour, IDragHandler, IEndDragHandler {
 
     public void OnEndDrag(PointerEventData eventData) {
         var distance = eventData.position.x - firstPos;
-        print("Dragger.OnEndDrag pos " + eventData.position.x + " distance " + distance + " firstpos " + firstPos +
+        print("~Dragger.OnEndDrag pos " + eventData.position.x + " distance " + distance + " firstpos " + firstPos +
               "\n");
         isFirstDrag = true;
         if (distance < -75) updateBoard.CancelUpdateButton();

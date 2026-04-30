@@ -11,23 +11,23 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     public void Awake() {
         tiles = GetComponentsInChildren<BTile>();
         updateBoard = GetComponentInParent<UpdateBoard>();
-        print("SelectedWord.Awake tiles (" + tiles.Length + "}\n");
+        print("~SelectedWord.Awake tiles (" + tiles.Length + "}\n");
     }
 
     // bcdo for some reason doesn't span entire width, it has to be in an active tile ??
     public void OnDrag(PointerEventData eventData) {
-        // print("SelectedWord.OnDrag " + eventData.position.x + "\n");
+        // print("~SelectedWord.OnDrag " + eventData.position.x + "\n");
         if (isFirstDrag) {
             isFirstDrag = false;
             firstPos = eventData.position.x;
-            //   print("SelectedWord.OnDrag setting " + eventData.position.x + isFirstDrag + "\n");
+            //   print("~SelectedWord.OnDrag setting " + eventData.position.x + isFirstDrag + "\n");
         }
     }
 
     public void OnEndDrag(PointerEventData eventData) {
         var distance = eventData.position.x - firstPos;
         isFirstDrag = true;
-        print("SelectedWord.OnEndDrag " + distance + "\n");
+        print("~SelectedWord.OnEndDrag " + distance + "\n");
         if (distance > 50) {
             SelectAllLetters();
         }
@@ -48,7 +48,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     private bool HasSelectedLetter() {
-        print("SelectedWord.SelectAllLetters after drag\n");
+        print("~SelectedWord.SelectAllLetters after drag\n");
         foreach (var tile in tiles) {
             if (tile.IsSelected() && tile.isActiveAndEnabled) return true;
         }
@@ -57,7 +57,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     private void SelectAllLetters() {
-        print("SelectedWord.SelectAllLetters after drag\n");
+        print("~SelectedWord.SelectAllLetters after drag\n");
         foreach (var tile in tiles) {
             tile.SelectLetter();
         }
@@ -71,7 +71,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     public void InitializeTiles(string word) {
-        print("SelectedWord.InitializeTiles tiles " + tiles.Length + " word {" + word + "}\n");
+        print("~SelectedWord.InitializeTiles tiles " + tiles.Length + " word {" + word + "}\n");
         var wordChars = word.ToCharArray();
 
         for (var i = 0; i < tiles.Length; i++) {
@@ -90,7 +90,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     public void ResetStateUnselected() {
-        //print("SelectedWord.ResetStateUnselected \n");
+        //print("~SelectedWord.ResetStateUnselected \n");
 
         foreach (var tile in tiles) {
             if ("".Equals(tile.letter)) return;
@@ -121,7 +121,7 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     public bool isAllLettersUsed() {
         for (var i = 0; i < tiles.Length; i++) {
             if (tiles[i].IsUnselected()) {
-                print("SelectedWord.isAllLettersUsed rtn false i=" + i + " letter " + tiles[i].state.name + "\n");
+                print("~SelectedWord.isAllLettersUsed rtn false i=" + i + " letter " + tiles[i].state.name + "\n");
                 return false;
             }
         }

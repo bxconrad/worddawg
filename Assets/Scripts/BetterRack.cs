@@ -11,12 +11,12 @@ public class BetterRack : MonoBehaviour {
     private BTile[] tiles { get; set; }
 
     public void AutomateRemoveSelectedLetters() {
-        print("BetterRack.AutomateRemoveSelectedLetters\n");
+        print("~BetterRack.AutomateRemoveSelectedLetters\n");
         StartCoroutine(RemoveSelectedLettersAutomationSequence());
     }
 
     private IEnumerator RemoveSelectedLettersAutomationSequence() {
-        print("BetterRack.RemoveSelectedLettersAutomationSequence yield\n");
+        print("~BetterRack.RemoveSelectedLettersAutomationSequence yield\n");
         //yield return new WaitForSeconds(.5f);
 
         foreach (var tile in tiles) {
@@ -33,17 +33,17 @@ public class BetterRack : MonoBehaviour {
                 //bcdo compare to isSelected
                 tiles[i].SetLetter(tiles[j].letter); // move the letter from the next tile to this tile
                 tiles[j].SetLetter("");
-                print("BetterRack.RemoveSelectedLettersAutomationSequence yield move letter i " + i + " j" + j + "\n");
+                print("~BetterRack.RemoveSelectedLettersAutomationSequence yield move letter i " + i + " j" + j + "\n");
                 yield return new WaitForSeconds(.2f);
             }
         }
     }
 
     public void Initialize() {
-        print("BetterRack.Initialize " + gameParameters.numRackLetters + " \n");
+        print("~BetterRack.Initialize " + gameParameters.numRackLetters + " \n");
         var tilesx = GetComponentsInChildren<BTile>();
         foreach (var child in tilesx) {
-            //print("WordGrid.BetterRack destroying " + child.gameObject.name + "\n");
+            //print("~WordGrid.BetterRack destroying " + child.gameObject.name + "\n");
             Destroy(child.gameObject);
         }
 
@@ -60,19 +60,19 @@ public class BetterRack : MonoBehaviour {
         var newDisplayButton = Instantiate(bTilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
         newDisplayButton.transform.SetParent(transform, false);
         return newDisplayButton;
-        //    print("BetterRack.InstantiateDisplayButton " + newDisplayButton + "\n");
+        //    print("~BetterRack.InstantiateDisplayButton " + newDisplayButton + "\n");
     }
 
     public void InitializeTilesCoroutine(string word) {
-        print("BetterRack.InitializeTilesCoroutine\n");
+        print("~BetterRack.InitializeTilesCoroutine\n");
         StartCoroutine(InitializeTilesAutomated(word));
     }
 
     private IEnumerator InitializeTilesAutomated(string word) {
         var wordChars = word.ToCharArray();
-        print("BetterRack.InitializeTilesAutomated word {" + word + "} #tiles " + tiles.Length + "\n");
+        print("~BetterRack.InitializeTilesAutomated word {" + word + "} #tiles " + tiles.Length + "\n");
         for (var i = 0; i < Mathf.Min(wordChars.Length, tiles.Length); i++) {
-            //print("BetterRack.InitializeTilesAutomated i " + i + "\n");
+            //print("~BetterRack.InitializeTilesAutomated i " + i + "\n");
             var isYield = false;
             if (tiles[i].letter == "" || tiles[i].letter == null) {
                 isYield = true;
@@ -81,36 +81,36 @@ public class BetterRack : MonoBehaviour {
             tiles[i].SetLetter(wordChars[i].ToString());
             tiles[i].SetState(Tile.State.unselectedState);
             if (isYield) {
-                print("~~BetterRack.InitializeTilesAutomated i " + i + "\n");
+                print("~~~BetterRack.InitializeTilesAutomated i " + i + "\n");
                 yield return new WaitForSeconds(.3f);
             }
         }
 
-        print("~~BetterRack.InitializeTilesAutomated done\n");
+        print("~~~BetterRack.InitializeTilesAutomated done\n");
     }
 
 
     public void InitializeTiles(string word) {
         var wordChars = word.ToCharArray();
-        //print("BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
+        //print("~BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
         for (var i = 0; i < Mathf.Min(wordChars.Length, tiles.Length); i++) {
-            //    print("BetterRack.InitializeTiles i " + i + "\n");
+            //    print("~BetterRack.InitializeTiles i " + i + "\n");
             tiles[i].SetLetter(wordChars[i].ToString());
             tiles[i].SetState(Tile.State.unselectedState);
         }
     }
 
     public void SetInteractable(bool isInteractable) {
-        //print("BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
+        //print("~BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
         foreach (var tile in tiles) {
             tile.SetInteractable(isInteractable);
         }
     }
 
     public void ClearRack() {
-        print("BetterRack.InitializeTiles  #tiles " + tiles.Length + "\n");
+        print("~BetterRack.InitializeTiles  #tiles " + tiles.Length + "\n");
         for (var i = 0; i < tiles.Length; i++) {
-            //print("BetterRack.InitializeTiles i " + i + "\n");
+            //print("~BetterRack.InitializeTiles i " + i + "\n");
             tiles[i].SetLetter("");
             tiles[i].SetState(Tile.State.unselectedState);
         }
@@ -118,7 +118,7 @@ public class BetterRack : MonoBehaviour {
 
 
     public void ResetStateUnselected() {
-        //print("BetterRack.ResetStateUnselected");
+        //print("~BetterRack.ResetStateUnselected");
         foreach (var tile in tiles) {
             tile.SetState(Tile.State.unselectedState);
         }

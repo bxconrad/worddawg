@@ -16,7 +16,7 @@ public class EndGamePanelLayout : MonoBehaviour {
     }
 
     private void DisplayPortrait() {
-        print("EndGamePanelLayout.DisplayPortrait \n");
+        print("~EndGamePanelLayout.DisplayPortrait \n");
         isPortrait = true;
         // reparent helpLayout to left panel
         endGameButtons.transform.SetParent(leftPanel.transform, false);
@@ -25,7 +25,7 @@ public class EndGamePanelLayout : MonoBehaviour {
 
 
     private void DisplayLandscape() {
-        print("EndGamePanelLayout.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
+        print("~EndGamePanelLayout.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
         isPortrait = false;
         rightPanel.SetActive(true);
         // reparent helpLayout to right panel

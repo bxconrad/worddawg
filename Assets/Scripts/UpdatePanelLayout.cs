@@ -31,7 +31,7 @@ public class UpdatePanelLayout : MonoBehaviour {
     }
 
     private void DisplayPortrait() {
-        print("UpdatePanelLayout.DisplayPortrait \n"); // + leftPanel.GetComponent<RectTransform>().rect.width + "\n");
+        print("~UpdatePanelLayout.DisplayPortrait \n"); // + leftPanel.GetComponent<RectTransform>().rect.width + "\n");
         isPortrait = true;
         // reparent wordList to left panel
         rightPanel.SetActive(false);
@@ -49,7 +49,7 @@ public class UpdatePanelLayout : MonoBehaviour {
 
         var gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>();
         var newSize = new Vector2((float)newWidth, gridLayoutGroup.cellSize.y);
-        print("UpdatePanelLayout.UpdateWordGrid " +
+        print("~UpdatePanelLayout.UpdateWordGrid " +
               " isPportrait=" + isPortrait +
               " newWidth=" + newWidth +
               " screenWidthw=" + Screen.width +
@@ -59,7 +59,7 @@ public class UpdatePanelLayout : MonoBehaviour {
     }
 
     private void DisplayLandscape() {
-        print("UpdatePanelLayout.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
+        print("~UpdatePanelLayout.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
         isPortrait = false;
         rightPanel.SetActive(true);
         // reparent wordList to right panel

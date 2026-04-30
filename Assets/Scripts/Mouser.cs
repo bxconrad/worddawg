@@ -7,7 +7,7 @@ public class Mouser : MonoBehaviour, IPointerDownHandler {
     private bool isOpen;
 
     public void OnPointerDown(PointerEventData eventData) {
-        print("Mouser.OnPointerDown " + isOpen + "\n");
+        print("~Mouser.OnPointerDown " + isOpen + "\n");
         isOpen = !isOpen;
         howToPlayText.gameObject.SetActive(isOpen);
     }

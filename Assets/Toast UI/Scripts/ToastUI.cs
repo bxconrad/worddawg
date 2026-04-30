@@ -9,8 +9,10 @@ using UnityEngine.UI;
    hamza95herbou@gmail.com
 ---------------------------------- */
 
-namespace EasyUI.Helpers{
-    public class ToastUI : MonoBehaviour, IPointerClickHandler{
+namespace EasyUI.Helpers
+{
+    public class ToastUI : MonoBehaviour, IPointerClickHandler
+    {
         [Header("UI References :")] [SerializeField]
         private CanvasGroup uiCanvasGroup;
 
@@ -41,10 +43,10 @@ namespace EasyUI.Helpers{
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            print("ToastUI.OnPointerClick");
+            print("~ToastUI.OnPointerClick");
             if (eventData.clickCount == 2)
             {
-                print("ToastUI.OnPointerClick double click");
+                print("~ToastUI.OnPointerClick double click");
                 Dismiss();
             }
         }

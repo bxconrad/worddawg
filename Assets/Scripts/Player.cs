@@ -85,14 +85,14 @@ public class Player {
 
         if (word.GetNumModified() > 1) numChangedWords++;
 
-        MonoBehaviour.print("Player.UpdateScore " + currentScore + " wordScore " + wordScore + "\n");
+        MonoBehaviour.print("~Player.UpdateScore " + currentScore + " wordScore " + wordScore + "\n");
     }
 
     public void UpdateScoreForReplaceRack(int points) {
         var subtractPoints = isBot ? points * -1 : Math.Min(currentScore, points) * -1;
         currentScore += subtractPoints;
         scoreGrid.totalScore.text = currentScore.ToString().PadRight(5) + subtractPoints;
-        MonoBehaviour.print($"Player.UpdateScoreForReplaceRack subtractPoints {subtractPoints}  points {points}\n");
+        MonoBehaviour.print($"~Player.UpdateScoreForReplaceRack subtractPoints {subtractPoints}  points {points}\n");
     }
 
     public override string ToString() {

@@ -14,7 +14,7 @@ public abstract class BaseTile : MonoBehaviour {
     public BTile originTile { get; set; }
 
     protected void Awake() {
-        //print("BaseTile.Awake\n");
+        //print("~BaseTile.Awake\n");
         AwakeMe();
     }
 
@@ -39,7 +39,7 @@ public abstract class BaseTile : MonoBehaviour {
 
 
     public void SetState(Tile.State state) {
-        // print("BaseTile.SetState  " + state.name + "\n");
+        // print("~BaseTile.SetState  " + state.name + "\n");
         this.state = state;
         image.color = Tile.State.UNSELECTED.Equals(state.name) ? originalColor : state.fillColor;
     }
@@ -53,7 +53,7 @@ public abstract class BaseTile : MonoBehaviour {
     }
 
     public void SetLetter(string inLetter) {
-        //print("BaseTile.SetLetter  inLetter {" + inLetter + "}\n");
+        //print("~BaseTile.SetLetter  inLetter {" + inLetter + "}\n");
         letter = inLetter.ToUpper();
         // quLogic
         // this just handles how QU and LL appear. It does not affect validation or how it appears in word list

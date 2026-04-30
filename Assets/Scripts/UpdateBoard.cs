@@ -44,7 +44,7 @@ public class UpdateBoard : MonoBehaviour {
     private ValidatorManager validatorManager;
 
     public void Start() {
-        print($"UpdateBoard.Start {botButton} {gameParameters}\n");
+        print($"~UpdateBoard.Start {botButton} {gameParameters}\n");
         validatorManager = new ValidatorManager();
         scoreCalculator = new ScoreCalculator(gameParameters);
     }
@@ -52,11 +52,12 @@ public class UpdateBoard : MonoBehaviour {
 
     public void NewGame() {
         //bcdo only need to reload dictionary at startup and custom goame. 
-        print($"UpdateBoard.NewGame botlevel {gameParameters.botLevel} \n");
+        print($"~UpdateBoard.NewGame botlevel {gameParameters.botLevel} \n");
         isEndGame = false;
         BuildDictionaries();
 
         ActivatePanels();
+        UpdateButtonsInteractable(true);
         if (gameParameters.isTwoPlayer) {
             var player1 = new Player(MyPrefs.BOT_NAMES[gameParameters.botLevel], wordGrid, scoreGrid1);
             var player2 = new Player(gameParameters.userName, wordGrid2, scoreGrid2);
@@ -67,7 +68,7 @@ public class UpdateBoard : MonoBehaviour {
             Toast.Show(msg, 15f, Color.magenta, GameHelper.GetToastPosition());
         }
         else {
-            var player1 = new Player(gameParameters.name, wordGrid, scoreGrid1);
+            var player1 = new Player(gameParameters.userName, wordGrid, scoreGrid1);
             players = new[] { player1 };
             Toast.Show(
                 "To start the game, create a word by clicking on the letters in the rack. After that, you can create or modify new words.",
@@ -83,7 +84,7 @@ public class UpdateBoard : MonoBehaviour {
         dealer.Initialize();
         replaceRackButton.Initialize();
         updateButtons.SetActive(MyPrefs.GetIsShowButtons());
-        print($"UpdateBoard.NewGame done  {scorePanelCanvasGroup.alpha}\n");
+        print($"~UpdateBoard.NewGame done  {scorePanelCanvasGroup.alpha}\n");
 
         turnNumber = -1;
         NextTurn();
@@ -111,8 +112,11 @@ public class UpdateBoard : MonoBehaviour {
 
         var botDictionaryName = "dictionary-" + gameParameters.language;
         if (!gameParameters.language.Equals(saveLanguage) || gameParameters.botLevel != saveBotLevel) {
-            if (gameParameters.botLevel < 4 && MyPrefs.PREFS_LANG_EN.Equals(gameParameters.language)) {
+            if (gameParameters.botLevel <= 1 && MyPrefs.PREFS_LANG_EN.Equals(gameParameters.language)) {
                 botDictionaryName = "dictionaryTiny-" + gameParameters.language;
+            }
+            else if (gameParameters.botLevel < 4 && MyPrefs.PREFS_LANG_EN.Equals(gameParameters.language)) {
+                botDictionaryName = "dictionarySmall-" + gameParameters.language;
             }
 
             var botDictionaryTrie = BuildDictionaryTrie(botDictionaryName);
@@ -126,17 +130,17 @@ public class UpdateBoard : MonoBehaviour {
         }
 
         print(
-            $"UpdateBoard.BuildDictionaries dictionaryName {dictionaryName} botDictionaryName {botDictionaryName} \n");
+            $"~UpdateBoard.BuildDictionaries dictionaryName {dictionaryName} botDictionaryName {botDictionaryName} \n");
         saveLanguage = gameParameters.language;
         saveBotLevel = gameParameters.botLevel;
     }
 
     private static TrieDictionary BuildDictionaryTrie(string name) {
-        print($"UpdateBoard.BuildDictionaryTrie {name}\n");
+        print($"~UpdateBoard.BuildDictionaryTrie {name}\n");
         var dictionaryTrie = new TrieDictionary();
         var textFile1 = Resources.Load(name) as TextAsset;
         var words = textFile1.text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
-        print($"UpdateBoard.BuildDictionaryTrie {name} # {words.Length}\n");
+        print($"~UpdateBoard.BuildDictionaryTrie {name} # {words.Length}\n");
         dictionaryTrie.LoadDictionary(words);
         return dictionaryTrie;
     }
@@ -145,7 +149,7 @@ public class UpdateBoard : MonoBehaviour {
     // Called onButtonClick from wordGrid
     public void LoadSelectedWord(Word wordObject) {
         if (wordObject != null) {
-            print($"UpdateBoard.LoadSelectedWord {wordObject.GetCurrentContents()}\n");
+            print($"~UpdateBoard.LoadSelectedWord {wordObject.GetCurrentContents()}\n");
             selectedWord.gameObject.SetActive(true);
             dummyPanel.SetActive(false);
             wordGrid.DeselectMismatchButton(wordObject);
@@ -167,7 +171,7 @@ public class UpdateBoard : MonoBehaviour {
 
     // Called from UpdateBoard button
     public void ReplaceRackButton() {
-        print($"UpdateBoard.ReplaceRackButton {dealer.IsNearEndGame()}\n");
+        print($"~UpdateBoard.ReplaceRackButton {dealer.IsNearEndGame()}\n");
 
         var points = 50;
         if (dealer.IsNearEndGame()) {
@@ -181,7 +185,7 @@ public class UpdateBoard : MonoBehaviour {
 
         currentPlayer.UpdateScoreForReplaceRack(points);
         toastMaster.UpdateScoreText(currentPlayer);
-        print($"UpdateBoard.ReplaceRackButton   currentPlayer {currentPlayer}\n");
+        print($"~UpdateBoard.ReplaceRackButton   currentPlayer {currentPlayer}\n");
 
         ClearInputWord();
         dealer.DealNewRack();
@@ -191,11 +195,11 @@ public class UpdateBoard : MonoBehaviour {
 
     public void EndGame() {
         isEndGame = true;
-        print($"UpdateBoard.EndGame {betterRack.GetWord()} \n");
+        print($"~UpdateBoard.EndGame {betterRack.GetWord()} \n");
     }
 
     public void SubmitInputWordButton() {
-        print($"UpdateBoard.SubmitInputWordButton {currentPlayer.name} inputWord {inputWord.GetWord()} \n");
+        print($"~UpdateBoard.SubmitInputWordButton {currentPlayer.name} inputWord {inputWord.GetWord()} \n");
         Toast.Dismiss();
 
         var expandedInputString = GameHelper.ExpandDoubleLetter(inputWord.GetWord());
@@ -211,7 +215,7 @@ public class UpdateBoard : MonoBehaviour {
 
 
     public void ClearInputWord() {
-        //print("UpdateBoard.ClearInputWordButton\n");
+        //print("~UpdateBoard.ClearInputWordButton\n");
         inputWord.Initialize();
         selectedWord.ResetStateUnselected();
         betterRack.ResetStateUnselected();
@@ -219,7 +223,7 @@ public class UpdateBoard : MonoBehaviour {
 
     public void CancelUpdateButton() {
         ClearInputWord();
-        print("UpdateBoard.CancelInputWordButton calling deselect \n");
+        print("~UpdateBoard.CancelInputWordButton calling deselect \n");
         currentPlayer.wordGrid.DeselectButton();
         OtherPlayer().wordGrid.DeselectButton();
         RemoveSelectedWord();
@@ -227,7 +231,7 @@ public class UpdateBoard : MonoBehaviour {
 
     private void HandleNearEndGame() {
         if (dealer.IsNearEndGame()) {
-            print($"UpdateBoard.HandleNearEndGame true  {dealer.GetTotalNumLettersLeft()}\n");
+            print($"~UpdateBoard.HandleNearEndGame true  {dealer.GetTotalNumLettersLeft()}\n");
             replaceRackButton.ChangeForEndGame();
         }
     }
@@ -244,7 +248,7 @@ public class UpdateBoard : MonoBehaviour {
         // if there is an active selectedWord we are modifying
 
         if (isNewWord) {
-            print("UpdateBoard.UpdateBoardForValidSubmit new word\n");
+            print("~UpdateBoard.UpdateBoardForValidSubmit new word\n");
             word = new Word(expandedInputString, currentPlayer, score);
             currentPlayer.AddNewWord(word);
             currentPlayer.wordGrid.InstantiateDisplayButton(word);
@@ -255,7 +259,7 @@ public class UpdateBoard : MonoBehaviour {
         }
         else {
             // It's a steal!
-            print("UpdateBoard.UpdateBoardForValidSubmit  STEAL!!! \n");
+            print("~UpdateBoard.UpdateBoardForValidSubmit  STEAL!!! \n");
             currentPlayer.UpdateExistingWord(word, expandedInputString, score);
             currentPlayer.wordGrid.InstantiateDisplayButton(word);
 
@@ -264,7 +268,7 @@ public class UpdateBoard : MonoBehaviour {
                 Destroy(button.gameObject);
             }
             else {
-                print("UpdateBoard.UpdateBoardForValidSubmit couldnt find button for other player\n");
+                print("~UpdateBoard.UpdateBoardForValidSubmit couldnt find button for other player\n");
             }
         }
 
@@ -292,7 +296,7 @@ public class UpdateBoard : MonoBehaviour {
         turnNumber++;
         playerNumber = gameParameters.isTwoPlayer ? turnNumber % 2 : turnNumber % 1;
         currentPlayer = players[playerNumber];
-        print($"UpdateBoard.NextTurn playerNumber {playerNumber}  name {currentPlayer.name} \n");
+        print($"~UpdateBoard.NextTurn playerNumber {playerNumber}  name {currentPlayer.name} \n");
         OtherPlayer().Activate(false);
         currentPlayer.Activate(true);
         if (currentPlayer.isBot) {
@@ -310,45 +314,45 @@ public class UpdateBoard : MonoBehaviour {
     }
 
     private void CallPlayerBot() {
-        print("UpdateBoard.CallPlayerBot begin \n");
+        print("~UpdateBoard.CallPlayerBot begin \n");
         var words = new List<Word>();
         foreach (var player in players) {
             words.AddRange(player.wordGrid.FindWordObjects());
         }
 
         var bestResultMatch = brucesBot.FindBestestWord(words, betterRack.GetWord());
-        print($"~~UpdateBoard.CallPlayerBot bestResultMatch {bestResultMatch}\n");
+        print($"~~~UpdateBoard.CallPlayerBot bestResultMatch {bestResultMatch}\n");
 
         if (!string.IsNullOrEmpty(bestResultMatch.GeneratedWord)) {
             //bcdo fix qu
             AutomateWordEntry(bestResultMatch.SourceObject, bestResultMatch.GeneratedWord);
         }
         else {
-            print($"UpdateBoard.CallPlayerBot  No word Found. Rack {betterRack.GetWord()} call ReplaceRack \n");
+            print($"~UpdateBoard.CallPlayerBot  No word Found. Rack {betterRack.GetWord()} call ReplaceRack \n");
             AutomatedReplaceRack(3.0f);
         }
     }
 
     // Call this method to start a pause for a specific duration
     private void AutomatedReplaceRack(float time) {
-        print("UpdateBoard.AutomatedReplaceRack\n");
+        print("~UpdateBoard.AutomatedReplaceRack\n");
         StartCoroutine(AutomatedReplaceRackCoroutine(time));
     }
 
     private IEnumerator AutomatedReplaceRackCoroutine(float time) {
-        print("UpdateBoard.AutomatedReplaceRackCoroutine\n");
+        print("~UpdateBoard.AutomatedReplaceRackCoroutine\n");
         yield return new WaitForSeconds(time);
         ReplaceRackButton();
         NextTurn();
     }
 
     private void AutomateWordEntry(Word word, string contents) {
-        print("UpdateBoard.AutomateWordEntry\n");
+        print("~UpdateBoard.AutomateWordEntry\n");
         StartCoroutine(AutomateWordEntryCoroutine(word, contents));
     }
 
     private IEnumerator AutomateWordEntryCoroutine(Word word, string contents) {
-        print($"UpdateBoard.AutomateWordEntryCoroutine yield turnNumber {turnNumber}\n");
+        print($"~UpdateBoard.AutomateWordEntryCoroutine yield turnNumber {turnNumber}\n");
         betterRack.SetInteractable(false);
         wordGrid.SetInteractable(false);
         wordGrid2.SetInteractable(false);
@@ -374,7 +378,7 @@ public class UpdateBoard : MonoBehaviour {
 
         yield return new WaitForSeconds(1.0f);
 
-        print("UpdateBoard.AutomateWordEntryCoroutine selectLetters \n");
+        print("~UpdateBoard.AutomateWordEntryCoroutine selectLetters \n");
         for (var i = 0; i < contents.Length; i++) {
             var letter = contents.Substring(i, 1);
             if (!selectedWord.SelectLetter(letter)) {
@@ -382,7 +386,7 @@ public class UpdateBoard : MonoBehaviour {
             }
 
             inputWord.AddLetter(letter, i);
-            // print($"UpdateBoard.AutomateWordEntryCoroutine selectLetter {letter} \n");
+            // print($"~UpdateBoard.AutomateWordEntryCoroutine selectLetter {letter} \n");
             yield return new WaitForSeconds(.75f);
         }
 
@@ -406,7 +410,7 @@ public class UpdateBoard : MonoBehaviour {
         return players;
     }
 }
-// print("UpdateBoard.CancelInputWordButton\n");
+// print("~UpdateBoard.CancelInputWordButton\n");
 //scoreManager.CalculateWordScore("BLOOM", "BLOOMING");
 //scoreManager.CalculateWordScore("", "HEARTEN");
 //scoreManager.CalculateWordScore("HOOD", "HOODED");

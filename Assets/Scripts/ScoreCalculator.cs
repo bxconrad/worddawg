@@ -12,9 +12,9 @@ public class ScoreCalculator {
     }
 
     public ScoreCalculator(string[] dogBonusWords) {
-        MonoBehaviour.print("ScoreCalculator.Start\n");
+        MonoBehaviour.print("~ScoreCalculator.Start\n");
         this.dogBonusWords = dogBonusWords;
-        MonoBehaviour.print("ScoreCalculator.LoadData dogBonusWords " + dogBonusWords.Length + "\n");
+        MonoBehaviour.print("~ScoreCalculator.LoadData dogBonusWords " + dogBonusWords.Length + "\n");
     }
 
 
@@ -30,7 +30,7 @@ public class ScoreCalculator {
         if (CalculateDogBonusWord(newWord)) {
             // bcdo calling CalculateDogBonusWord 2x, fix
             wordScore += 100;
-            MonoBehaviour.print("ScoreCalculator.CalculateWordScore CalculateDogBonusWord ");
+            MonoBehaviour.print("~ScoreCalculator.CalculateWordScore CalculateDogBonusWord ");
         }
 
         // If entire rack is used
@@ -38,23 +38,25 @@ public class ScoreCalculator {
         if (newWord.Length - originalWord.Length >= 7) {
             // gameParameters.numRackLetters) {
             wordScore += 100;
-            MonoBehaviour.print("ScoreCalculator.CalculateWordScore 100 bonus ");
+            MonoBehaviour.print("~ScoreCalculator.CalculateWordScore 100 bonus ");
         }
 
-        wordScore += CalculateStealScore(originalWord, isSteal);
-        // MonoBehaviour.print("ScoreCalculator.CalculateWordScore wordScore " + wordScore + "  letterScore " +
-        //                     letterScore + "  multiplier " + multiplier + " originalWord " + originalWord + " newWord " +
-        //                     newWord + "\n");
+        if (!IsAddedSorD(originalWord, newWord)) {
+            wordScore += CalculateStealScore(originalWord, isSteal);
+            // MonoBehaviour.print("~ScoreCalculator.CalculateWordScore wordScore " + wordScore + "  letterScore " +
+            //                     letterScore + "  multiplier " + multiplier + " originalWord " + originalWord + " newWord " +
+            //                     newWord + "\n");
+        }
 
         return wordScore;
     }
 
     public bool CalculateDogBonusWord(string word) {
         isDogBonusWord = false;
-        // MonoBehaviour.print("ScoreCalculator.CalculateDogBonusWord word " + word + "\n");
+        // MonoBehaviour.print("~ScoreCalculator.CalculateDogBonusWord word " + word + "\n");
         for (var i = 0; i < dogBonusWords.Length; i++) {
             if (word.Equals(dogBonusWords[i].ToUpper())) {
-                MonoBehaviour.print("ScoreCalculator.CalculateDogBonusWord " + i + " dogBonusWords[i] " +
+                MonoBehaviour.print("~ScoreCalculator.CalculateDogBonusWord " + i + " dogBonusWords[i] " +
                                     dogBonusWords[i] + "\n");
 
                 isDogBonusWord = true;
@@ -62,13 +64,13 @@ public class ScoreCalculator {
             }
         }
 
-        //MonoBehaviour.print("ScoreCalculator.CalculateDogBonusWord false  word " + word + "\n");
+        //MonoBehaviour.print("~ScoreCalculator.CalculateDogBonusWord false  word " + word + "\n");
         return false;
     }
 
     private int CalculateLetterScore(string newWord) {
         var newWordLetterScore = 0;
-        // MonoBehaviour.print("ScoreCalculator.CalculateLetterScore " + gameParameters.language + "  " +
+        // MonoBehaviour.print("~ScoreCalculator.CalculateLetterScore " + gameParameters.language + "  " +
         //                     LetterInfo.letterDictionaryDictionary["SP"] + "\n");
         var letterDictionary = LetterInfo.letterDictionaryDictionary[gameParameters.language];
         newWord = newWord.Trim();
@@ -77,7 +79,7 @@ public class ScoreCalculator {
                 newWordLetterScore += letterDictionary[letter.ToString()];
             }
             catch (KeyNotFoundException e) {
-                MonoBehaviour.print("ScoreCalculator.CalculateLetterScore KeyNotFoundException letter {" + letter +
+                MonoBehaviour.print("~ScoreCalculator.CalculateLetterScore KeyNotFoundException letter {" + letter +
                                     "}  newWord {" + newWord + "} \n");
             }
         }
@@ -93,7 +95,7 @@ public class ScoreCalculator {
 
     private int CalculateStealScore(string originalWord, bool isSteal) {
         var stealScore = isSteal ? originalWord.Length * 10 : 0;
-        //MonoBehaviour.print($"~~ScoreCalculator.CalculateStealScore  {stealScore} length {originalWord.Length}\n");
+        //MonoBehaviour.print($"~~~ScoreCalculator.CalculateStealScore  {stealScore} length {originalWord.Length}\n");
         return stealScore;
     }
 

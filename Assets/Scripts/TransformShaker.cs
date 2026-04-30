@@ -21,12 +21,12 @@ public class TransformShaker : MonoBehaviour {
     }
 
     public async Task ABeginSpin(Transform theTransform, float duration, int rotations, int axis, bool isForward) {
-        print("ABeginSpin");
+        print("~ABeginSpin");
         await ASpin(theTransform, duration, rotations, axis, isForward);
     }
 
     public async Task ABeginSpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
-        print("ABeginSpin");
+        print("~ABeginSpin");
         await ASpin(theTransform, duration, rotations, axis, isForward);
     }
 
@@ -44,7 +44,7 @@ public class TransformShaker : MonoBehaviour {
 
 
     private IEnumerator Shake(Transform theTransform, float duration, float delay, float distance) {
-        print("ShakeTransform.Shake duration " + duration + " delay " + delay + " distance " +
+        print("~ShakeTransform.Shake duration " + duration + " delay " + delay + " distance " +
               distance + "\n");
         var _startPos = theTransform.position;
         var elapsedTime = 0f;
@@ -53,7 +53,7 @@ public class TransformShaker : MonoBehaviour {
             numShakes++;
             var deltaTime = Time.deltaTime;
             elapsedTime += deltaTime;
-            // print("ShakeTransform.Shake elapsedTime " + elapsedTime + " deltaTime " + deltaTime + "\n");
+            // print("~ShakeTransform.Shake elapsedTime " + elapsedTime + " deltaTime " + deltaTime + "\n");
             var _randomPos = _startPos + UnityEngine.Random.insideUnitSphere * distance;
             theTransform.position = _randomPos;
             if (delay > 0f)
@@ -63,12 +63,12 @@ public class TransformShaker : MonoBehaviour {
         }
 
         theTransform.position = _startPos;
-        print("ShakeTransform.Shake end " + numShakes + "\n");
+        print("~ShakeTransform.Shake end " + numShakes + "\n");
     }
 
 
     public async Task ASpin(Transform theTransform, float duration, int rotations, int axis, bool isForward) {
-        print("ShakeTransform.ASpin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
+        print("~ShakeTransform.ASpin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
         var startRotation = theTransform.eulerAngles.x;
         var direction = isForward ? -360.0f : 360.0f; // minus goes fwd, + bwd
         var endRotation = startRotation + direction;
@@ -92,7 +92,7 @@ public class TransformShaker : MonoBehaviour {
     }
 
     public async Task ASpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
-        print("ShakeTransform.ASpin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
+        print("~ShakeTransform.ASpin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
         var startEuler = theTransform[0].eulerAngles;
         var startRotation = theTransform[0].eulerAngles.x;
         var direction = isForward ? -360.0f : 360.0f; // minus goes fwd, + bwd
@@ -135,13 +135,13 @@ public class TransformShaker : MonoBehaviour {
 // }
 
 // private void BeginSpin(Transform theTransform, float duration, int rotations, int axis, bool isForward) {
-//     print("BeginSpin");
+//     print("~BeginSpin");
 //     StopAllCoroutines();
 //     StartCoroutine(Spin(theTransform, duration, rotations, axis, isForward));
 // }
 
 // private IEnumerator Spin(Transform theTransform, float duration, int rotations, int axis, bool isForward) {
-//     print("ShakeTransform.Spin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
+//     print("~ShakeTransform.Spin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
 //     var startRotation = theTransform.eulerAngles.x;
 //     var direction = isForward ? -360.0f : 360.0f; // minus goes fwd, + bwd
 //     var endRotation = startRotation + direction;

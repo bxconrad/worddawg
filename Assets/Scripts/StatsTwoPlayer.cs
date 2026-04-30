@@ -10,8 +10,8 @@ public class StatsTwoPlayer : MonoBehaviour {
     private int rowNum;
 
     public void UpdateStats(string gameMode, Player player, Player player2) {
-        print("StatsTwoPlayer.UpdateStats player1 " + player + "\n");
-        print("StatsTwoPlayer.UpdateStats player2 " + player2 + "\n");
+        print("~StatsTwoPlayer.UpdateStats player1 " + player + "\n");
+        print("~StatsTwoPlayer.UpdateStats player2 " + player2 + "\n");
 
         ShowToastMessage(player, player2);
         currentGameMode = gameMode;
@@ -46,12 +46,12 @@ public class StatsTwoPlayer : MonoBehaviour {
     private void UpdateStat(string key, string label, int current, int currentPlayer2) {
         var high = PlayerPrefs.GetInt(key);
         var bestMarker = "";
-        print("StatsTwoPlayer.UpdateStat key " + key + " current " + current + " high  " + high + "\n");
+        print("~StatsTwoPlayer.UpdateStat key " + key + " current " + current + " high  " + high + "\n");
         if (current > high) {
             bestMarker = "*";
             high = current;
             PlayerPrefs.SetInt(key, high);
-            print("StatsTwoPlayer.UpdateStat HIGH key " + key + "  current " + current + " high  " + high + "\n");
+            print("~StatsTwoPlayer.UpdateStat HIGH key " + key + "  current " + current + " high  " + high + "\n");
         }
 
         UpdateRow(label, current.ToString(), currentPlayer2.ToString(), bestMarker);
@@ -61,7 +61,7 @@ public class StatsTwoPlayer : MonoBehaviour {
     // called for longest word
     private void UpdateStatLongestWord(string key, string label, string current, string currentPlayer2) {
         var high = PlayerPrefs.GetString(key);
-        print("StatsTwoPlayer.UpdateStat" + label + key + high + " \n");
+        print("~StatsTwoPlayer.UpdateStat" + label + key + high + " \n");
         var bestMarker = "";
         if (current.Length > high.Length) {
             bestMarker = "*";
@@ -73,7 +73,7 @@ public class StatsTwoPlayer : MonoBehaviour {
     }
 
     private void UpdateRow(string label, string var1, string var2, string bestMarker) {
-        print("StatsTwoPlayer.UpdateRow" + label + " " + var1 + " " + var2 + " \n");
+        print("~StatsTwoPlayer.UpdateRow" + label + " " + var1 + " " + var2 + " \n");
         var statRow = transform.GetChild(rowNum);
         var textUpdaters = statRow.GetComponentsInChildren<TextUpdater>();
         textUpdaters[0].SetMyText(label);

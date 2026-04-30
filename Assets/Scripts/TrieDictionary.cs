@@ -28,11 +28,11 @@ public class TrieDictionary : ITrieDictionary {
 
     public void Initialize(string lang) {
         var dictionaryName = "dictionary-" + lang;
-        MonoBehaviour.print("TrieDictionary.Initialize " + dictionaryName + "\n");
+        MonoBehaviour.print("~TrieDictionary.Initialize " + dictionaryName + "\n");
         var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
         LoadDictionary(allWords);
-        MonoBehaviour.print("TrieDictionary.Initialize allWords " + allWords.Length + " dictionary " +
+        MonoBehaviour.print("~TrieDictionary.Initialize allWords " + allWords.Length + " dictionary " +
                             dictionaryName +
                             "\n");
     }
@@ -57,7 +57,7 @@ public class TrieDictionary : ITrieDictionary {
                 count++;
             }
 
-            Debug.Log($"DictionaryTrie count {count}");
+            Debug.Log($"~DictionaryTrie count {count}");
 
             isDictionaryRead = true;
         }

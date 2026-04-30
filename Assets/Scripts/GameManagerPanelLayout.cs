@@ -19,7 +19,7 @@ public class GameManagerPanelLayout : MonoBehaviour {
     }
 
     private void DisplayPortrait() {
-        print("GameManagerPanelLayout.DisplayPortrait \n");
+        print("~GameManagerPanelLayout.DisplayPortrait \n");
         isPortrait = true;
         // reparent helpLayout to left panel
         helpLayout.transform.SetParent(leftPanel.transform, false);
@@ -28,7 +28,7 @@ public class GameManagerPanelLayout : MonoBehaviour {
 
 
     private void DisplayLandscape() {
-        print("GameManagerPanelLayout.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
+        print("~GameManagerPanelLayout.DisplayLandscape w=" + Screen.width + " h=" + Screen.height + "\n");
         isPortrait = false;
         rightPanel.SetActive(true);
         // reparent helpLayout to right panel
