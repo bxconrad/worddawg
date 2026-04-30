@@ -43,17 +43,17 @@ public class ToastMaster : MonoBehaviour {
         var toastTime = 15f;
         Toast.Dismiss();
         if (player.currentWord.currentWordHistory.isDogBonusWord) {
-            print("ScoreManager.SendToastMessage howl ");
+            print("~ScoreManager.SendToastMessage howl ");
             audioSource.PlayOneShot(howl);
             msg = "Arooo! Special Word Dawg Bonus for " + wordContents + "!!!\n";
             _ = transformShaker.ABeginRandomSpins(logoImages, .3f, 4);
 
-            print("ScoreManager.SendToastMessage IsDogBonusWord ");
+            print("~ScoreManager.SendToastMessage IsDogBonusWord ");
         }
 
         // If entire rack is used
         if (wordContents.Length - player.currentWord.GetPreviousContents().Length >= gameParameters.numRackLetters) {
-            print("ScoreManager.SendToastMessage 100 bonus ");
+            print("~ScoreManager.SendToastMessage 100 bonus ");
             audioSource.PlayOneShot(howl);
             msg += "100 Point Bonus for using all letters!!! Great Job!";
             _ = transformShaker.ABeginRandomSpins(logoImages, .3f, 4);
@@ -90,7 +90,7 @@ public class ToastMaster : MonoBehaviour {
             msg = ComplimentHandler.instance.GetRandomCompliment();
         }
 
-        print("ScoreManager.ShowToastMessage msg " + msg + "\n");
+        print("~ScoreManager.ShowToastMessage msg " + msg + "\n");
 
         if (!msg.Equals("")) Toast.Show(msg, toastTime, toastColor, GameHelper.GetToastPosition());
     }

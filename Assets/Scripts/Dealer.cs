@@ -24,7 +24,7 @@ public class Dealer : MonoBehaviour {
     }
 
     public void Initialize() {
-        print("Dealer.Initialize \n");
+        print("~Dealer.Initialize \n");
         numLettersDealt = 0;
         numLettersDealt = 0;
         letters.Clear();
@@ -35,11 +35,11 @@ public class Dealer : MonoBehaviour {
         betterRack.ClearRack();
         Deal();
         print(
-            $"Dealer.Initialize complete #letters  {letters.Count} consMax {consMax} vowelMax {vowelMax} lengthForDuplicates {lengthForDuplicates}\n");
+            $"~Dealer.Initialize complete #letters  {letters.Count} consMax {consMax} vowelMax {vowelMax} lengthForDuplicates {lengthForDuplicates}\n");
     }
 
     private void FillLetterBag() {
-        print($"Dealer.FillLetterBag *start* #letters  {letters.Count} lang {gameParameters.language}\n");
+        print($"~Dealer.FillLetterBag *start* #letters  {letters.Count} lang {gameParameters.language}\n");
         var letterInfos = LetterInfo.letterInfosEN;
         if (MyPrefs.PREFS_LANG_SP.Equals(gameParameters.language))
             letterInfos = LetterInfo.letterInfosSP;
@@ -50,24 +50,24 @@ public class Dealer : MonoBehaviour {
         }
 
         Shuffle(letters);
-        // InsertLettersForTesting();
-        print($"Dealer.FillLetterBag #letters {letters.Count}\n");
+        //nsertLettersForTesting();
+        print($"~Dealer.FillLetterBag #letters {letters.Count}\n");
     }
 
     private void InsertLettersForTesting() {
-        letters.Insert(0, "X");
-        letters.Insert(1, "Z");
-        letters.Insert(2, "Q");
-        letters.Insert(3, "Y");
-        letters.Insert(4, "W");
-        letters.Insert(5, "U");
-        letters.Insert(6, "U");
+        letters.Insert(0, "S");
+        letters.Insert(1, "H");
+        letters.Insert(2, "A");
+        letters.Insert(3, "M");
+        letters.Insert(4, "E");
+        letters.Insert(5, "X");
+        letters.Insert(6, "Q");
     }
 
     private void Shuffle<T>(IList<T> list) {
         var n = list.Count;
         aRandom = GetRandom();
-        //bcdo print($"Dealer.Shuffle randomSeed  [{gameParameters.dealerSeed}] aRandom {aRandom}\n");
+        //bcdo print($"~Dealer.Shuffle randomSeed  [{gameParameters.dealerSeed}] aRandom {aRandom}\n");
         while (n > 1) {
             n--;
             var k = aRandom.Next(n + 1);
@@ -82,24 +82,24 @@ public class Dealer : MonoBehaviour {
 
     public void Deal() {
         print(
-            $"Dealer.Deal begin word *{betterRack.GetWord().Trim()} timed {gameParameters.isTimed} lettersCount {letters.Count()}  lt? {letters.Count() <= gameParameters.numRackLetters}\n");
+            $"~Dealer.Deal begin word *{betterRack.GetWord().Trim()} timed {gameParameters.isTimed} lettersCount {letters.Count()}  lt? {letters.Count() <= gameParameters.numRackLetters}\n");
 
         // calculate how many letters are needed from the rack
         var numLettersNeeded = gameParameters.numRackLetters - betterRack.GetWord().Trim().Length;
         var rackLetters = betterRack.GetWord().Trim();
 
         for (var i = 0; i < numLettersNeeded && IsDealable(); i++) {
-            //print($"Dealer.Deal i{i}\n");
+            //print($"~Dealer.Deal i{i}\n");
             numLettersDealt++;
             rackLetters += letters[0];
-            //print($"Dealer.Deal addLetter rackLetters {rackLetters}\n");
+            //print($"~Dealer.Deal addLetter rackLetters {rackLetters}\n");
             letters.RemoveAt(0);
             rackLetters = FixLetterDistribution(rackLetters);
         }
 
         if (rackLetters.Length == 0) {
             print(
-                $"Dealer.Deal calling endGame  rackLetters {rackLetters} muteSound? {audioSource.mute} numLettersNeeded {numLettersNeeded}\n");
+                $"~Dealer.Deal calling endGame  rackLetters {rackLetters} muteSound? {audioSource.mute} numLettersNeeded {numLettersNeeded}\n");
             // bcHack. audio would not play in EndGame so we do it here.
             audioSource.PlayOneShot(howl);
             _ = gameManager.EndGame();
@@ -109,7 +109,7 @@ public class Dealer : MonoBehaviour {
         betterRack.InitializeTiles(rackLetters);
         countDown.SetText(GetTotalNumLettersLeft().ToString());
         print(
-            $"Dealer.Deal return  rack {betterRack.GetWord()} numLettersNeeded {numLettersNeeded} numLettersDealt {numLettersDealt}\n");
+            $"~Dealer.Deal return  rack {betterRack.GetWord()} numLettersNeeded {numLettersNeeded} numLettersDealt {numLettersDealt}\n");
         //betterRack.InitializeTilesCoroutine(rackLetters);
     }
 
@@ -121,14 +121,14 @@ public class Dealer : MonoBehaviour {
         dealString = FixDuplicates(dealString);
         // If we fixed the dealString, put the orignal last letter back in the bag and remove the new last letter from the bag
         if (!savedDealString.Equals(dealString)) {
-            //print($"Dealer.FixLetterDistribution *FIXa*  savedDealString {savedDealString}\n");
+            //print($"~Dealer.FixLetterDistribution *FIXa*  savedDealString {savedDealString}\n");
             // put the orignal last letter back in the bag 
             var savedLastLetter = savedDealString.Substring(savedDealString.Length - 1, 1);
             letters.Insert(0, savedLastLetter);
             //remove the new last letter from the bag
             var newLastLetter = dealString.Substring(dealString.Length - 1, 1);
             letters.Remove(newLastLetter);
-            print($"Dealer.FixLetterDistribution *FIXb*  dealString {dealString} savedDealString {savedDealString}\n");
+            print($"~Dealer.FixLetterDistribution *FIXb*  dealString {dealString} savedDealString {savedDealString}\n");
         }
 
         return dealString;
@@ -143,11 +143,11 @@ public class Dealer : MonoBehaviour {
         var isFix = false;
         while (distinctCount <= dealString.Length - 2) {
             isFix = true;
-            print($"Dealer.FixDuplicates *FIX*  dealString {dealString} distinctCount {distinctCount}\n");
+            print($"~Dealer.FixDuplicates *FIX*  dealString {dealString} distinctCount {distinctCount}\n");
             var lastLetter = updatedDealString.ToString().Substring(dealString.Length - 1, 1);
 
             var isVowel = IsAllVowels(lastLetter);
-            // print($"Dealer.FixDuplicates *Found* updatedDealString {updatedDealString +
+            // print($"~Dealer.FixDuplicates *Found* updatedDealString {updatedDealString +
             //       " lastLetter {lastLetter} isVowel {isVowel}\n");
             // // if letter is vowel, find different vowel. if consonant, find a different consonant
             lettersIndex = BuyMeAVowelOrConsonant(isVowel, lettersIndex + 1);
@@ -159,17 +159,17 @@ public class Dealer : MonoBehaviour {
                 // found a different letter of same type (vowel or consonant)
                 // replace the old letter with the new letter 
                 ReplaceLetter(updatedDealString, lettersIndex);
-                //   print($"Dealer.FixDuplicates Fixed updatedDealString {updatedDealString}\n");
+                //   print($"~Dealer.FixDuplicates Fixed updatedDealString {updatedDealString}\n");
             }
 
             distinctCount = updatedDealString.ToString().Distinct().Count();
-            // print($"Dealer.FixDuplicates *Fix* updatedDealString {updatedDealString} dealString {dealString +
+            // print($"~Dealer.FixDuplicates *Fix* updatedDealString {updatedDealString} dealString {dealString +
             //       " distinctCount {distinctCount}\n");
         }
 
         if (isFix)
             print(
-                $"Dealer.FixDuplicates return updatedDealString {updatedDealString} dealString {dealString} distinctCount {distinctCount} \n");
+                $"~Dealer.FixDuplicates return updatedDealString {updatedDealString} dealString {dealString} distinctCount {distinctCount} \n");
         return updatedDealString.ToString();
     }
 
@@ -186,12 +186,12 @@ public class Dealer : MonoBehaviour {
             numVowels = dealString.Length - numCons;
         }
 
-        // print($"Dealer.FixConsonantOrVowels dealString {dealString} numCons  {numCons}\n");
+        // print($"~Dealer.FixConsonantOrVowels dealString {dealString} numCons  {numCons}\n");
         var updatedDealString = new StringBuilder(dealString);
         var lastLetterIndex = dealString.Length - 1;
         // switch the last letter if we have too many cons or vowels
         if (numCons > consMax || numVowels > vowelMax) {
-            print($"Dealer.FixConsonantOrVowels  ~~~ dealString  {dealString} sb {updatedDealString}\n");
+            print($"~Dealer.FixConsonantOrVowels  ~~~ dealString  {dealString} sb {updatedDealString}\n");
             var dealLetter = updatedDealString[lastLetterIndex].ToString(); // get the letter from the dealString
             // update if we now have a good distribution
             var isConsMax = numCons > consMax;
@@ -206,24 +206,24 @@ public class Dealer : MonoBehaviour {
                 }
                 else {
                     print(
-                        $"Dealer.FixConsonantOrVowels Could not fix  dealString {dealString} updatedDealString {updatedDealString}\n");
+                        $"~Dealer.FixConsonantOrVowels Could not fix  dealString {dealString} updatedDealString {updatedDealString}\n");
                 }
 
                 print(
-                    $"Dealer.FixConsonantOrVowels  *** dealString  {dealString} updatedDealString {updatedDealString}\n");
-                //print($"Dealer.FixConsonantOrVowels  *** numCons  {numCons}\n");
+                    $"~Dealer.FixConsonantOrVowels  *** dealString  {dealString} updatedDealString {updatedDealString}\n");
+                //print($"~Dealer.FixConsonantOrVowels  *** numCons  {numCons}\n");
             }
         }
 
-        //print($"Dealer.FixConsonantOrVowels dealString  {dealString} with " + updatedDealString}\n");
+        //print($"~Dealer.FixConsonantOrVowels dealString  {dealString} with " + updatedDealString}\n");
         return updatedDealString.ToString();
     }
 
     private void ReplaceLetter(StringBuilder updatedDealString, int lettersIndex) {
-        //print($"Dealer.ReplaceLetter *B4Replace*  updatedDealString " + updatedDealString}\n");
+        //print($"~Dealer.ReplaceLetter *B4Replace*  updatedDealString " + updatedDealString}\n");
         updatedDealString.Replace(updatedDealString[updatedDealString.Length - 1].ToString(), letters[lettersIndex],
             updatedDealString.Length - 1, 1);
-        //print($"Dealer.ReplaceLetter  *AFReplace updatedDealString " + updatedDealString}\n");
+        //print($"~Dealer.ReplaceLetter  *AFReplace updatedDealString " + updatedDealString}\n");
     }
 
     private bool IsCheckingVowelDistribution(string dealString) {
@@ -233,24 +233,24 @@ public class Dealer : MonoBehaviour {
     // iterate over our array of letters and find a consonant or vowel as requested.
     // We pass in the start index so we continue where we left off
     private int BuyMeAVowelOrConsonant(bool isVowel, int startIndex) {
-        //print($"Dealer.BuyMeAVowelOrConsonant  isVowel " + isVowel} startIndex " + startIndex}\n");
+        //print($"~Dealer.BuyMeAVowelOrConsonant  isVowel " + isVowel} startIndex " + startIndex}\n");
         for (var lettersIndex = startIndex; lettersIndex < letters.Count && startIndex >= 0; lettersIndex++) {
             var letter = letters[lettersIndex];
-            //print($"Dealer.BuyMeAVowelOrConsonant  letter " + letter} index " + lettersIndex}\n");
+            //print($"~Dealer.BuyMeAVowelOrConsonant  letter " + letter} index " + lettersIndex}\n");
             if ((isVowel && IsAllVowels(letter)) || (!isVowel && !IsAllVowels(letter))) {
-                //print($"Dealer.BuyMeAVowelOrConsonant returning  letter " + letter} index " + lettersIndex}\n");
+                //print($"~Dealer.BuyMeAVowelOrConsonant returning  letter " + letter} index " + lettersIndex}\n");
                 return lettersIndex;
             }
         }
 
         var which = isVowel ? "vowel" : "consonant";
-        //bcdo     print($"Dealer.BuyMeAVowelOrConsonant  *** Unable to find {which} in letters[]. numLetters {letters.Count}\n");
+        //bcdo     print($"~Dealer.BuyMeAVowelOrConsonant  *** Unable to find {which} in letters[]. numLetters {letters.Count}\n");
         return -1;
     }
 
     private bool IsAllConsonant(string compareString) {
         var matchCons = new Regex("^[^aeiouAEIOU]+$").Match(compareString).Success;
-        //print($"Dealer.isAllConsonant compareString " + compareString} " + matchCons}\n");
+        //print($"~Dealer.isAllConsonant compareString " + compareString} " + matchCons}\n");
 
         return matchCons;
     }
@@ -273,7 +273,7 @@ public class Dealer : MonoBehaviour {
     // this includes letters in rack
     public int GetTotalNumLettersLeft() {
         var numLeft = GetNumLetters() - numLettersDealt + betterRack.GetWord().Trim().Length;
-        //bcdo   print($"Dealer.GetTotalNumLettersLeft  {numLeft} numLtrs {GetNumLetters()} numLettersDealt {numLettersDealt} ltrCount {letters.Count()}\n");
+        //bcdo   print($"~Dealer.GetTotalNumLettersLeft  {numLeft} numLtrs {GetNumLetters()} numLettersDealt {numLettersDealt} ltrCount {letters.Count()}\n");
         return numLeft;
     }
 

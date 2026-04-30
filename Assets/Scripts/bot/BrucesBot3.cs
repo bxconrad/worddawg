@@ -12,7 +12,6 @@ namespace bot {
             var highScore = 0;
 
             foreach (var combination in resultMatches) {
-                //if (IsPluralized(combination)) continue;
                 var originalWord = combination.SourceObject == null
                     ? ""
                     : combination.SourceObject.GetCurrentContents();
@@ -23,7 +22,7 @@ namespace bot {
                 }
             }
 
-            MonoBehaviour.print($"BrucesBot3.FindBestWord  highest {bestResultMatch}  highScore {highScore}\n");
+            MonoBehaviour.print($"~BrucesBot3.FindBestWord  highest {bestResultMatch}  highScore {highScore}\n");
             return bestResultMatch;
         }
     }

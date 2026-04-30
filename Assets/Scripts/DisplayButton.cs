@@ -15,7 +15,7 @@ public class DisplayButton : MonoBehaviour {
         image = GetComponentInChildren<Image>();
         button = GetComponentInChildren<Button>();
         originalColor = image.color;
-        //print("DisplayButton.Awake \n");
+        //print("~DisplayButton.Awake \n");
     }
 
     public void SetWord(Word inWord) {
@@ -28,22 +28,22 @@ public class DisplayButton : MonoBehaviour {
     }
 
     public Word GetWord() {
-        print("DisplayButton.GetWordText " + word + "\n");
+        print("~DisplayButton.GetWordText " + word + "\n");
         return word;
     }
 
     public string GetWordText() {
-        print("DisplayButton.GetWordText " + text.text + "\n");
+        print("~DisplayButton.GetWordText " + text.text + "\n");
         return word.GetCurrentContents(); // text.text;
     }
 
     public void SelectButton() {
-        print("DisplayButton.SelectButton\n");
+        print("~DisplayButton.SelectButton\n");
         image.color = selectedColor;
     }
 
     public void DeSelectButton() {
-        print("DisplayButton.DeSelectButton\n");
+        print("~DisplayButton.DeSelectButton\n");
         image.color = originalColor;
     }
 

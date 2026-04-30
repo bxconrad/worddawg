@@ -11,17 +11,17 @@ public class InputWordTile : BaseTile {
     protected new void Awake() {
         AwakeMe();
         inputWord = GetComponentInParent<InputWord>();
-        // print("InputWordTile.Awake {" + newInputWord + "} \n");
+        // print("~InputWordTile.Awake {" + newInputWord + "} \n");
     }
 
     public override void OnButtonClick(string buttonString) {
-        print("InputWordTile.OnButtonClick \n");
+        print("~InputWordTile.OnButtonClick \n");
         inputWord.RemoveLetter(GetOriginTile());
         //StartCoroutine(CoroutineShake());
     }
 
     private IEnumerator CoroutineShake() {
-        print("InputWordTile.CoroutineShake \n");
+        print("~InputWordTile.CoroutineShake \n");
         if (goingRight) {
             transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
             if (transform.position.x - startX >= shakeWidth) {
@@ -34,6 +34,7 @@ public class InputWordTile : BaseTile {
                 goingRight = true;
             }
         }
+
         yield return null;
     }
 }

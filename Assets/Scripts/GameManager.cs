@@ -48,12 +48,12 @@ public class GameManager : MonoBehaviour {
         gameParameters.Initialize();
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        print("GameManager.Start sound " + Settings.GetIsSound() + " " + gameParameters + "\n");
+        print("~GameManager.Start sound " + Settings.GetIsSound() + " " + gameParameters + "\n");
     }
 
 
     private void InactivateOtherCanvases() {
-        print("GameManager.InactivateOtherCanvases eg{" + endGameContainer + "}\n");
+        print("~GameManager.InactivateOtherCanvases eg{" + endGameContainer + "}\n");
         // set all other canvases to inactive
         updateBoard.gameObject.SetActive(false);
         endGameContainer.SetActive(false);
@@ -65,33 +65,37 @@ public class GameManager : MonoBehaviour {
     }
 
     public void Initialize() {
-        print("GameManager.Initialize\n");
+        print("~GameManager.Initialize\n");
         Start();
     }
 
     public void NewGameOfTheDay() {
-        print("GameManager.NewGameOfTheDay \n");
+        print("~GameManager.NewGameOfTheDay \n");
         gameParameters.Initialize();
         savedGameMode = Stats.PREFS_ST_MODE_GOTD;
         gameParameters.gameMode = Stats.PREFS_ST_MODE_GOTD;
         gameParameters.isGameOfTheDay = true;
-        gameParameters.numLetters = MyPrefs.DEFAULT_NUM_LETTERS;
+        gameParameters.numLetters = gameParameters.isTwoPlayer
+            ? MyPrefs.DEFAULT_NUM_LETTERS_TWO_PLAYER
+            : MyPrefs.DEFAULT_NUM_LETTERS;
         gameParameters.dealerSeed = DateTime.Today.DayOfYear;
         NewGame();
     }
 
     public void NewUntimedGame() {
-        print("GameManager.NewUntimedGame \n");
+        print("~GameManager.NewUntimedGame \n");
         gameParameters.Initialize();
         savedGameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
         gameParameters.gameMode = Stats.PREFS_ST_MODE_UNTIMED_50;
         gameParameters.isTimed = false;
-        gameParameters.numLetters = MyPrefs.DEFAULT_NUM_LETTERS;
+        gameParameters.numLetters = gameParameters.isTwoPlayer
+            ? MyPrefs.DEFAULT_NUM_LETTERS_TWO_PLAYER
+            : MyPrefs.DEFAULT_NUM_LETTERS;
         NewGame();
     }
 
     public void NewTimedGame() {
-        print("GameManager.NewTimedGame \n");
+        print("~GameManager.NewTimedGame \n");
         gameParameters.Initialize();
         savedGameMode = Stats.PREFS_ST_MODE_TIMED_4;
         gameParameters.gameMode = Stats.PREFS_ST_MODE_TIMED_4;
@@ -103,7 +107,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void NewCustomGamePrefs() {
-        print("GameManager.NewCustomGamePrefs \n");
+        print("~GameManager.NewCustomGamePrefs \n");
         Toast.Dismiss();
         prefsContainer.SetActive(true);
         gameObject.SetActive(false);
@@ -111,7 +115,7 @@ public class GameManager : MonoBehaviour {
 
 
     private void InitializeCustomGameParameters() {
-        print("GameManager.InitializeCustomGameParameters  isSound {" + Settings.GetIsSound() + "} \n");
+        print("~GameManager.InitializeCustomGameParameters  isSound {" + Settings.GetIsSound() + "} \n");
         gameParameters.Initialize();
         gameParameters.gameMode = Stats.PREFS_ST_MODE_CUSTOM;
         gameParameters.isTimed = MyPrefs.GetIsTimer();
@@ -131,15 +135,15 @@ public class GameManager : MonoBehaviour {
         gameParameters.isTwoPlayer = MyPrefs.GetIsTwoPlayer();
         if (gameParameters.language == null) {
             gameParameters.language = MyPrefs.PREFS_LANG_EN; //? it happens
-            print("GameManager.InitializeCustomGameParameters ?? lanuage null set to EN " + gameParameters.language +
+            print("~GameManager.InitializeCustomGameParameters ?? lanuage null set to EN " + gameParameters.language +
                   " \n");
         }
 
-        print("GameManager.InitializeCustomGameParameters gameParameters " + gameParameters + " \n");
+        print("~GameManager.InitializeCustomGameParameters gameParameters " + gameParameters + " \n");
     }
 
     public void NewCustomGamePlay() {
-        print("GameManager.NewCustomGamePlay \n");
+        print("~GameManager.NewCustomGamePlay \n");
         prefsContainer.SetActive(false);
         gameObject.SetActive(true);
         savedGameMode = Stats.PREFS_ST_MODE_CUSTOM;
@@ -148,7 +152,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void OpenSettings() {
-        print("GameManager.OpenSettings \n");
+        print("~GameManager.OpenSettings \n");
         var isGameManagerActive = settingsContainer.activeSelf;
         InactivateOtherCanvases();
         settingsContainer.SetActive(!isGameManagerActive);
@@ -156,7 +160,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void RepeatGame() {
-        print("GameManager.RepeatGame \n");
+        print("~GameManager.RepeatGame \n");
         if (Stats.PREFS_ST_MODE_CUSTOM.Equals(gameParameters.gameMode))
             NewCustomGamePlay();
         else if (Stats.PREFS_ST_MODE_GOTD.Equals(gameParameters.gameMode))
@@ -166,18 +170,18 @@ public class GameManager : MonoBehaviour {
         else if (Stats.PREFS_ST_MODE_UNTIMED_50.Equals(gameParameters.gameMode))
             NewUntimedGame();
         else
-            print("GameManager.RepeatGame Unknown gameMode " + gameParameters.gameMode);
+            print("~GameManager.RepeatGame Unknown gameMode " + gameParameters.gameMode);
     }
 
     private void NewGame() {
-        print("GameManager.NewGame " + gameParameters + "\n");
+        print("~GameManager.NewGame " + gameParameters + "\n");
         InactivateOtherCanvases();
         betterRack.Initialize();
         countdownTimer.enabled = false;
         //bcdo move to updateBoard?
         timeScorePanel.SetActive(!gameParameters.isTwoPlayer);
         if (gameParameters.isTimed) {
-            print("GameManager.NewGame isTimed " + gameParameters.isTimed + "\n");
+            print("~GameManager.NewGame isTimed " + gameParameters.isTimed + "\n");
             countdownTimer.Initialize();
             countdownTimer.Startx();
             countdownTimer.gameObject.SetActive(true);
@@ -197,7 +201,7 @@ public class GameManager : MonoBehaviour {
 
         updateBoard.NewGame();
         settingsWidget.SetActive(false);
-        print("GameManager.NewGame done \n");
+        print("~GameManager.NewGame done \n");
     }
 
     private async Task Spinit() {
@@ -212,7 +216,7 @@ public class GameManager : MonoBehaviour {
 
 
     public async Task EndGame() {
-        print("GameManager.EndGame\n");
+        print("~GameManager.EndGame\n");
         Toast.Dismiss();
         updateBoard.EndGame();
         await Spinit();
@@ -234,7 +238,7 @@ public class GameManager : MonoBehaviour {
             stats.UpdateStats(gameParameters.gameMode, players[0]);
         }
 
-        print("GameManager.EndGame complete\n");
+        print("~GameManager.EndGame complete\n");
     }
 
     public void ExitApplication() {

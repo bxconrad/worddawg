@@ -20,7 +20,7 @@ public class CountdownTimer : MonoBehaviour {
 
 
     private void Update() {
-        //print("CountdownTimer.Update " + isActiveAndEnabled + "\n");
+        //print("~CountdownTimer.Update " + isActiveAndEnabled + "\n");
         if (countdown <= 1 && isActiveAndEnabled) {
             enabled = false;
             audioSource.Stop();
@@ -31,7 +31,7 @@ public class CountdownTimer : MonoBehaviour {
         }
 
         if (countdown < 16 && !isSound && isActiveAndEnabled) {
-            print("CountdownTimer.Update play sound  mute? " + audioSource.mute + " \n");
+            print("~CountdownTimer.Update play sound  mute? " + audioSource.mute + " \n");
             isSound = true;
             audioSource.PlayOneShot(clockTick);
         }
@@ -42,7 +42,7 @@ public class CountdownTimer : MonoBehaviour {
 
     public void Startx() {
         gameManager.gameObject.SetActive(true);
-        print("CountdownTimer.Start gmActive " + gameManager.gameObject.activeInHierarchy + " \n");
+        print("~CountdownTimer.Start gmActive " + gameManager.gameObject.activeInHierarchy + " \n");
         enabled = false;
         SetText("");
     }
@@ -59,7 +59,7 @@ public class CountdownTimer : MonoBehaviour {
     }
 
     public void Initialize() {
-        print("CountdownTimer.Initialize \n");
+        print("~CountdownTimer.Initialize \n");
         SetText("");
         countdown = gameParameters.numSeconds;
         // countdown = 5;

@@ -11,19 +11,20 @@ public class MyPrefs : MonoBehaviour {
 
     public static readonly int DEFAULT_DURATION = 4;
     private static readonly string DEFAULT_IS_TIMER = "TRUE";
-    public static readonly string DEFAULT_IS_SHOW_BUTTON = "TRUE";
+    private static readonly string DEFAULT_IS_SHOW_BUTTON = "TRUE";
     private static readonly string DEFAULT_IS_GOTD = "TRUE";
     public static readonly string DEFAULT_IS_SOUND = "TRUE";
     public static readonly string DEFAULT_IS_TWOPLAYER = "FALSE";
     private static readonly string DEFAULT_LANG = PREFS_LANG_EN;
     public static readonly int DEFAULT_NUM_LETTERS = 50;
+    public static readonly int DEFAULT_NUM_LETTERS_TWO_PLAYER = 75;
     public static readonly int DEFAULT_NUM_RACK_LETTERS = 7;
     public static readonly int DEFAULT_BOT_LEVEL = 0;
     public static readonly string DEFAULT_USER_NAME = "User1";
-    public static readonly int DEFAULT_DEALER_SEED = DateTime.Today.DayOfYear;
+    private static readonly int DEFAULT_DEALER_SEED = DateTime.Today.DayOfYear;
 
     private static readonly string PREFS_RT_DURATION = "RT_DURATION";
-    public static readonly string PREFS_RT_IS_SHOW_BUTTON = "RT_IS_SHOW_BUTTON";
+    private static readonly string PREFS_RT_IS_SHOW_BUTTON = "RT_IS_SHOW_BUTTON";
     public static readonly string PREFS_RT_IS_SOUND = "RT_IS_SOUND";
     private static readonly string PREFS_RT_IS_GOTD = "RT_IS_GOTD";
     private static readonly string PREFS_RT_IS_TIMER = "RT_IS_TIMER";
@@ -32,10 +33,10 @@ public class MyPrefs : MonoBehaviour {
     private static readonly string PREFS_RT_LETTERS = "RT_LETTERS";
     private static readonly string PREFS_RT_RACK_LETTERS = "RT_RACK_LETTERS";
     public static readonly string PREFS_RT_BOT_LEVEL = "RT_BOT_LEVEL";
-    public static readonly string PREFS_RT_DEALER_SEED = "RT_DEALER_SEED";
+    private static readonly string PREFS_RT_DEALER_SEED = "RT_DEALER_SEED";
     public static readonly string PREFS_RT_USER_NAME = "RT_USER_NAME";
 
-    public static readonly string[] PREFS_KEYS = {
+    private static readonly string[] PREFS_KEYS = {
         PREFS_RT_BOT_LEVEL, PREFS_RT_DURATION, PREFS_RT_IS_GOTD, PREFS_RT_IS_SHOW_BUTTON,
         PREFS_RT_IS_SOUND, PREFS_RT_IS_TIMER, PREFS_RT_IS_TWOPLAYER,
         PREFS_RT_LANGUAGE, PREFS_RT_LETTERS, PREFS_RT_RACK_LETTERS, PREFS_RT_USER_NAME
@@ -62,7 +63,7 @@ public class MyPrefs : MonoBehaviour {
     [SerializeField] public TMP_InputField dealerSeed;
 
     private void Start() {
-        print("MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
+        print("~MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
         Toast.Dismiss();
         timerToggle.onValueChanged.AddListener(delegate { TimerToggleValueChanged(timerToggle); });
         timerToggle.isOn = GetIsTimer();
@@ -73,7 +74,7 @@ public class MyPrefs : MonoBehaviour {
         dealerSeed.interactable = !gameOfTheDayToggle.isOn;
 
         rackLettersDropdown.value = GetNumRackLetters() - 7;
-        // print("MyPrefs.Start rackLettersDropdown" + rackLettersDropdown.value + " \n");
+        // print("~MyPrefs.Start rackLettersDropdown" + rackLettersDropdown.value + " \n");
 
         languageDropdown.value = GetLanguage() == PREFS_LANG_SP ? 1 : 0;
         ShowTimerOnOff();
@@ -84,17 +85,17 @@ public class MyPrefs : MonoBehaviour {
         twoPlayerToggle.isOn = GetIsTwoPlayer();
         BotSelectList(botLevelDropdown);
         LetterSelectList();
-        print("MyPrefs.Start end\n");
+        print("~MyPrefs.Start end\n");
     }
 
 
     private void OnEnable() {
-        print("MyPrefs.OnEnable  \n");
+        print("~MyPrefs.OnEnable  \n");
         Start();
     }
 
     public void DealerSeedInputFieldValueChanged(TMP_InputField val) {
-        print($"Settings.DealerSeedInputFieldValueChanged start {val.text}  \n");
+        print($"~Settings.DealerSeedInputFieldValueChanged start {val.text}  \n");
         if (int.TryParse(val.text, out var intValue)) {
             PlayerPrefs.SetInt(PREFS_RT_DEALER_SEED, intValue);
         }
@@ -102,13 +103,13 @@ public class MyPrefs : MonoBehaviour {
             val.text = "0";
         }
 
-        print($"Settings.DealerSeedInputFieldValueChanged {val.text}  \n");
+        print($"~Settings.DealerSeedInputFieldValueChanged {val.text}  \n");
     }
 
 
     public static int GetDealerSeed() {
         var adealerSeed = PlayerPrefs.GetInt(PREFS_RT_DEALER_SEED, DEFAULT_DEALER_SEED);
-        print("Settings.GetDealerSeed " + adealerSeed + " \n");
+        print("~Settings.GetDealerSeed " + adealerSeed + " \n");
         return adealerSeed;
     }
 
@@ -130,12 +131,11 @@ public class MyPrefs : MonoBehaviour {
         var botName = BOT_NAMES[index];
         PlayerPrefs.SetInt(PREFS_RT_BOT_LEVEL, index);
         Debug.Log("Settings.BotLevelDropdown Selected: " + botName + " (" + index + ")");
-        //GetBotLevel();
     }
 
 
     public void DurationDropdown(int index) {
-        print("MyPrefs.DurationDropdown " + index + " \n");
+        print("~MyPrefs.DurationDropdown " + index + " \n");
         PlayerPrefs.SetInt(PREFS_RT_DURATION, index + 1);
     }
 
@@ -144,31 +144,25 @@ public class MyPrefs : MonoBehaviour {
         List<string> options = new() { "25", "50", "75", "100", "125", "150", "175", "200" };
         letterDropdown.AddOptions(options);
         letterDropdown.value = GetNumLetters() / 25 - 1;
-        print("MyPrefs.Start LetterDropdown " + letterDropdown.value + " \n");
+        print("~MyPrefs.Start LetterDropdown " + letterDropdown.value + " \n");
         letterDropdown.RefreshShownValue();
     }
 
     public void LetterDropdown(int index) {
         var numLetters = (index + 1) * 25;
-        print("MyPrefs.LetterDropdown " + index + "  nl " + numLetters + " \n");
+        print("~MyPrefs.LetterDropdown " + index + "  nl " + numLetters + " \n");
         PlayerPrefs.SetInt(PREFS_RT_LETTERS, numLetters);
     }
 
     public void RackLettersDropdown(int index) {
         var numLetters = index + 7;
-        print("MyPrefs.RackLettersDropdown " + index + "  nl " + numLetters + " \n");
+        print("~MyPrefs.RackLettersDropdown " + index + "  nl " + numLetters + " \n");
         PlayerPrefs.SetInt(PREFS_RT_RACK_LETTERS, numLetters);
-    }
-
-    public void xBotLevelDropdown(int index) {
-        print("MyPrefs.BotLevelDropdown " + index + " \n");
-        PlayerPrefs.SetInt(PREFS_RT_BOT_LEVEL, index);
-        GetBotLevel();
     }
 
     public void LanguageDropdown(int option) {
         var lang = option == 1 ? PREFS_LANG_SP : PREFS_LANG_EN;
-        print("MyPrefs.LanguageDropdown " + option + " lang " + lang + " \n");
+        print("~MyPrefs.LanguageDropdown " + option + " lang " + lang + " \n");
         PlayerPrefs.SetString(PREFS_RT_LANGUAGE, lang);
     }
 
@@ -177,39 +171,39 @@ public class MyPrefs : MonoBehaviour {
         PlayerPrefs.SetString(PREFS_RT_IS_TIMER, val.ToString());
         gameParameters.isTimed = val;
         ShowTimerOnOff();
-        print("MyPrefs.TimerToggleValueChanged " + val + " \n");
+        print("~MyPrefs.TimerToggleValueChanged " + val + " \n");
     }
 
     private void SoundToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(PREFS_RT_IS_SOUND, val.ToString());
-        print("MyPrefs.SoundToggleValueChanged " + val + " \n");
+        print("~MyPrefs.SoundToggleValueChanged " + val + " \n");
     }
 
     private void TwoPlayerToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(PREFS_RT_IS_TWOPLAYER, val.ToString());
         botLevelDropdown.interactable = val;
-        print("MyPrefs.TwoPlayerToggleValueChanged " + val + " \n");
+        print("~MyPrefs.TwoPlayerToggleValueChanged " + val + " \n");
     }
 
     private void GameOfTheDayToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(PREFS_RT_IS_GOTD, val.ToString());
         dealerSeed.interactable = !val;
-        print("MyPrefs.GameOfTheDayToggleValueChanged " + val + " \n");
+        print("~MyPrefs.GameOfTheDayToggleValueChanged " + val + " \n");
     }
 
     private void ShowTimerOnOff() {
         var isTimerActive = PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
-        print("MyPrefs.ShowTimerOnOff isTimerActive " + isTimerActive + " \n");
+        print("~MyPrefs.ShowTimerOnOff isTimerActive " + isTimerActive + " \n");
 
         durationDropdown.interactable = isTimerActive;
         letterDropdown.interactable = !isTimerActive;
     }
 
     public void OnResetPrefsButtonClicked() {
-        print("MyPrefs.OnResetPrefsButtonClicked \n");
+        print("~MyPrefs.OnResetPrefsButtonClicked \n");
         foreach (var key in PREFS_KEYS) {
             PlayerPrefs.DeleteKey(key);
         }
@@ -227,7 +221,7 @@ public class MyPrefs : MonoBehaviour {
     }
 
     public static int GetBotLevel() {
-        print("MyPrefs.GetBotLevel" + PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL, DEFAULT_BOT_LEVEL) + " \n");
+        print("~MyPrefs.GetBotLevel" + PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL, DEFAULT_BOT_LEVEL) + " \n");
         return PlayerPrefs.GetInt(PREFS_RT_BOT_LEVEL, DEFAULT_BOT_LEVEL);
     }
 
@@ -247,7 +241,7 @@ public class MyPrefs : MonoBehaviour {
     private static bool GetIsSound() {
         var retVal = PlayerPrefs.GetString(PREFS_RT_IS_SOUND, DEFAULT_IS_SOUND).ToUpper()
             .Equals("TRUE");
-        print("MyPrefs.GetIsSound " + retVal + " \n");
+        print("~MyPrefs.GetIsSound " + retVal + " \n");
         return retVal;
     }
 

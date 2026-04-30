@@ -20,14 +20,14 @@ public class PlayerBot {
                 _scrabbleDictionaryTrie.Insert(word.ToUpper());
             }
 
-            MonoBehaviour.print($"Successfully loaded {words.Length} words from the dictionary.");
+            MonoBehaviour.print($"~Successfully loaded {words.Length} words from the dictionary.");
         }
         catch (FileNotFoundException) {
-            MonoBehaviour.print($"Error: Dictionary file not found at {fullPath}");
+            MonoBehaviour.print($"~Error: Dictionary file not found at {fullPath}");
             Environment.Exit(1);
         }
         catch (Exception ex) {
-            MonoBehaviour.print($"An error occurred while loading the dictionary: {ex.Message}");
+            MonoBehaviour.print($"~An error occurred while loading the dictionary: {ex.Message}");
             return "ERROR";
         }
 
@@ -35,7 +35,7 @@ public class PlayerBot {
     }
 
     public string FindValidWord(List<string> wordList, List<char> rack) {
-        MonoBehaviour.print("FindValidWord");
+        MonoBehaviour.print("~FindValidWord");
         // var result = LoadDictionary("dictionary-EN.txt");
         // if ("ERROR".Equals(result)) return result;
         foreach (var originalWord in wordList) {
@@ -147,12 +147,12 @@ public class PlayerBot {
         var wordList1 = new List<string> { "ape", "ink", "tea" };
         var rack1 = new List<char> { 's', 't', 'n', 'k' };
         var result1 = game.FindValidWord(wordList1, rack1);
-        MonoBehaviour.print($"Result 1: {result1 ?? "No valid word found."}");
+        MonoBehaviour.print($"~Result 1: {result1 ?? "No valid word found."}");
 
         var wordList2 = new List<string> { "cat", "pen" };
         var rack2 = new List<char> { 'g', 'o', 'z' };
         var result2 = game.FindValidWord(wordList2, rack2);
-        MonoBehaviour.print($"Result 2: {result2 ?? "No valid word found."}");
+        MonoBehaviour.print($"~Result 2: {result2 ?? "No valid word found."}");
     }
 
     // Trie Data Structure for Prefix Optimization

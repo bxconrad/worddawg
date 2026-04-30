@@ -17,7 +17,7 @@ namespace bot {
             bool stopAtFirst = false) {
             var resultMatches = GetCombinations(sourceWords, rackWord);
             MonoBehaviour.print(
-                $"BrucesBotAbstract.FindBestestWord  New words formed: {resultMatches.Count} rack {rackWord}\n");
+                $"~BrucesBotAbstract.FindBestestWord  New words formed: {resultMatches.Count} rack {rackWord}\n");
 
             var bestResultMatch = FindBestWord(resultMatches);
 
@@ -48,6 +48,7 @@ namespace bot {
                 var foundForThisSource = new HashSet<string>();
 
                 FindWordsRecursive(
+                    source.contents,
                     "",
                     letterCounts,
                     requiredCounts,
@@ -64,11 +65,12 @@ namespace bot {
                 }
             }
 
-            MonoBehaviour.print($"BrucesBotAbstract.GetCombinations  No modified words found. Use rack {rackWord}\n");
             // FALLBACK: If no words found, use only the rack
             if (results.Count == 0) {
+                MonoBehaviour.print(
+                    $"~BrucesBotAbstract.GetCombinations  No modified words found. Use rack {rackWord}\n");
                 var rackOnlyFound = new HashSet<string>();
-                FindWordsRecursive(
+                FindWordsRecursive("",
                     "",
                     GetLetterCounts(rackWord),
                     new Dictionary<char, int>(), // No requirements
@@ -77,12 +79,12 @@ namespace bot {
                     rackOnlyFound,
                     stopAtFirst
                 );
-                MonoBehaviour.print($"BrucesBotAbstract.GetCombinations #Rack words {rackOnlyFound.Count}\n");
+                MonoBehaviour.print($"~BrucesBotAbstract.GetCombinations #Rack words {rackOnlyFound.Count}\n");
                 foreach (var word in rackOnlyFound) {
                     results.Add(new ResultMatch { GeneratedWord = word, SourceObject = null });
                     if (stopAtFirst || (maxTotalWords.HasValue && results.Count >= maxTotalWords)) {
                         MonoBehaviour.print(
-                            $"BrucesBotAbstract.GetCombinations Rack words early return. word {word}\n");
+                            $"~BrucesBotAbstract.GetCombinations Rack words early return. word {word}\n");
                         return results;
                     }
                 }
@@ -92,6 +94,7 @@ namespace bot {
         }
 
         private void FindWordsRecursive(
+            string sourceeWord,
             string currentPrefix,
             Dictionary<char, int> availableLetters,
             Dictionary<char, int> requiredLetters,
@@ -100,37 +103,51 @@ namespace bot {
             HashSet<string> foundWords,
             bool stopAtFirst) {
             // 1. TRIE CHECK: Prune if this prefix doesn't exist
-            if (currentPrefix.Length > 0 && !trieDictionary.HasPrefix(currentPrefix))
-                return;
+            //MonoBehaviour.print($"~BrucesBotAbstract.FindWordsRecursive start currentPrefix {currentPrefix} \n");
+            // if (currentPrefix.Length > 0 && !trieDictionary.HasPrefix(currentPrefix))
+            //     return;
 
             // 2. DICTIONARY CHECK: Is it a valid word?
             if (currentPrefix.Length >= minLength) {
                 if (MeetsRequirements(currentPrefix, requiredLetters)) {
-                    // MonoBehaviour.print(
-                    //     $"BrucesBotAbstract.GetCombinations  currentPrefix {currentPrefix} \n");
+                    //   MonoBehaviour.print($"~BrucesBotAbstract.FindWordsRecursive  currentPrefix {currentPrefix} \n");
 
                     if (trieDictionary.Contains(currentPrefix)) {
-                        foundWords.Add(currentPrefix);
-                        if (stopAtFirst) return;
+                        if (!IsPluralized(sourceeWord, currentPrefix)) {
+                            MonoBehaviour.print($"~BrucesBotAbstract.FindWordsRecursive  adding {currentPrefix} \n");
+                            foundWords.Add(currentPrefix);
+                            if (stopAtFirst) return;
+                        }
                     }
                 }
             }
 
             // 3. RECURSION LIMIT
+            // if (!trieDictionary.HasPrefix(currentPrefix))
+            //     MonoBehaviour.print(
+            //         $"~BrucesBotAbstract.FindWordsRecursive  not prefix currentPrefix {currentPrefix} \n");
             if (currentPrefix.Length >= maxLength) return;
+            if (currentPrefix.Length > 0 && !trieDictionary.HasPrefix(currentPrefix))
+                return;
 
             // 4. GENERATE PERMUTATIONS
             var keys = availableLetters.Keys.ToList();
             foreach (var c in keys) {
                 if (availableLetters[c] > 0) {
                     availableLetters[c]--;
-                    FindWordsRecursive(currentPrefix + c, availableLetters, requiredLetters, minLength, maxLength,
+                    FindWordsRecursive(sourceeWord, currentPrefix + c, availableLetters, requiredLetters, minLength,
+                        maxLength,
                         foundWords, stopAtFirst);
                     availableLetters[c]++; // Backtrack
 
                     if (stopAtFirst && foundWords.Count > 0) return;
                 }
             }
+        }
+
+        protected virtual bool IsPluralized(string originalWord, string newWord) {
+            //  MonoBehaviour.print("~BrucesBotAbstract.IsPluralized return false\n");
+            return false;
         }
 
         private bool MeetsRequirements(string word, Dictionary<char, int> required) {
@@ -155,18 +172,18 @@ namespace bot {
         }
 
 
-        protected bool IsPluralized(ResultMatch resultMatch) {
-            var originalWord = resultMatch.SourceObject == null
-                ? ""
-                : resultMatch.SourceObject.GetCurrentContents();
-            var newWord = resultMatch.GeneratedWord;
-
-            var retVal = newWord.Length - originalWord.Length == 1 && newWord.StartsWith(originalWord) &&
-                         newWord.EndsWith("S");
-            MonoBehaviour.print(
-                $"BrucesBotAbstract.IsPluralized {retVal} newWord {newWord}  originalWord {originalWord}\n");
-
-            return retVal;
-        }
+        // protected bool IsPluralized(ResultMatch resultMatch) {
+        //     var originalWord = resultMatch.SourceObject == null
+        //         ? ""
+        //         : resultMatch.SourceObject.GetCurrentContents();
+        //     var newWord = resultMatch.GeneratedWord;
+        //
+        //     var retVal = newWord.Length - originalWord.Length == 1 && newWord.StartsWith(originalWord) &&
+        //                  newWord.EndsWith("S");
+        //     MonoBehaviour.print(
+        //         $"~BrucesBotAbstract.IsPluralized {retVal} newWord {newWord}  originalWord {originalWord}\n");
+        //
+        //     return retVal;
+        // }
     }
 }
