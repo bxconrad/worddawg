@@ -28,11 +28,11 @@ public class TrieDictionary : ITrieDictionary {
 
     public void Initialize(string lang) {
         var dictionaryName = "dictionary-" + lang;
-        MonoBehaviour.print("~TrieDictionary.Initialize " + dictionaryName + "\n");
+        MonoBehaviour.print("~TrieDictionary.InitializeWord " + dictionaryName + "\n");
         var textFile = Resources.Load(dictionaryName) as TextAsset;
         allWords = textFile.text.Split();
         LoadDictionary(allWords);
-        MonoBehaviour.print("~TrieDictionary.Initialize allWords " + allWords.Length + " dictionary " +
+        MonoBehaviour.print("~TrieDictionary.InitializeWord allWords " + allWords.Length + " dictionary " +
                             dictionaryName +
                             "\n");
     }
@@ -42,7 +42,7 @@ public class TrieDictionary : ITrieDictionary {
     }
 
     public void LoadDictionary(string[] allWords) {
-        Debug.Log("DictionaryTrie.LoadDictionary ");
+        Debug.Log("~TrieDictionary.LoadDictionary ");
         foreach (var word in allWords) {
             InsertWord(word);
         }
@@ -62,7 +62,7 @@ public class TrieDictionary : ITrieDictionary {
             isDictionaryRead = true;
         }
         catch (FileNotFoundException) {
-            Debug.LogError($"Error: DictionaryTrie file not found at {filePath}");
+            Debug.LogError($"~TrieDictionary.LoadDictionary Error:  file not found at {filePath}");
         }
     }
 

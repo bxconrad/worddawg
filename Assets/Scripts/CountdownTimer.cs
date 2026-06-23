@@ -59,7 +59,7 @@ public class CountdownTimer : MonoBehaviour {
     }
 
     public void Initialize() {
-        print("~CountdownTimer.Initialize \n");
+        print("~CountdownTimer.InitializeWord \n");
         SetText("");
         countdown = gameParameters.numSeconds;
         // countdown = 5;

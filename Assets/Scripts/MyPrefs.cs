@@ -8,12 +8,14 @@ using Toggle = UnityEngine.UI.Toggle;
 public class MyPrefs : MonoBehaviour {
     public static readonly string PREFS_LANG_SP = "SP";
     public static readonly string PREFS_LANG_EN = "EN";
+    public static readonly string PREFS_LANG_FR = "FR";
 
     public static readonly int DEFAULT_DURATION = 4;
     private static readonly string DEFAULT_IS_TIMER = "TRUE";
     private static readonly string DEFAULT_IS_SHOW_BUTTON = "TRUE";
     private static readonly string DEFAULT_IS_GOTD = "TRUE";
     public static readonly string DEFAULT_IS_SOUND = "TRUE";
+    public static readonly string DEFAULT_IS_HUMANPLAYER = "FALSE";
     public static readonly string DEFAULT_IS_TWOPLAYER = "FALSE";
     private static readonly string DEFAULT_LANG = PREFS_LANG_EN;
     public static readonly int DEFAULT_NUM_LETTERS = 50;
@@ -28,6 +30,7 @@ public class MyPrefs : MonoBehaviour {
     public static readonly string PREFS_RT_IS_SOUND = "RT_IS_SOUND";
     private static readonly string PREFS_RT_IS_GOTD = "RT_IS_GOTD";
     private static readonly string PREFS_RT_IS_TIMER = "RT_IS_TIMER";
+    public static readonly string PREFS_RT_IS_HUMANPLAYER = "RT_IS_HUMANPLAYER";
     public static readonly string PREFS_RT_IS_TWOPLAYER = "RT_IS_TWOPLAYER";
     private static readonly string PREFS_RT_LANGUAGE = "RT_LANGUAGE";
     private static readonly string PREFS_RT_LETTERS = "RT_LETTERS";
@@ -59,8 +62,10 @@ public class MyPrefs : MonoBehaviour {
     [SerializeField] private Toggle gameOfTheDayToggle;
     [SerializeField] private Toggle soundToggle;
     [SerializeField] private Toggle twoPlayerToggle;
+    [SerializeField] private Toggle humanPlayerToggle;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] public TMP_InputField dealerSeed;
+    private readonly List<string> languageOptions = new() { "English", "Spanish", "French" };
 
     private void Start() {
         print("~MyPrefs.Start " + PlayerPrefs.GetString(PREFS_RT_IS_TIMER) + " \n");
@@ -74,15 +79,15 @@ public class MyPrefs : MonoBehaviour {
         dealerSeed.interactable = !gameOfTheDayToggle.isOn;
 
         rackLettersDropdown.value = GetNumRackLetters() - 7;
-        // print("~MyPrefs.Start rackLettersDropdown" + rackLettersDropdown.value + " \n");
-
-        languageDropdown.value = GetLanguage() == PREFS_LANG_SP ? 1 : 0;
+        LanguageSelectList();
         ShowTimerOnOff();
 
         soundToggle.onValueChanged.AddListener(delegate { SoundToggleValueChanged(soundToggle); });
         soundToggle.isOn = GetIsSound();
         twoPlayerToggle.onValueChanged.AddListener(delegate { TwoPlayerToggleValueChanged(twoPlayerToggle); });
         twoPlayerToggle.isOn = GetIsTwoPlayer();
+        humanPlayerToggle.onValueChanged.AddListener(delegate { HumanPlayerToggleValueChanged(humanPlayerToggle); });
+        humanPlayerToggle.isOn = GetIsHumanPlayer();
         BotSelectList(botLevelDropdown);
         LetterSelectList();
         print("~MyPrefs.Start end\n");
@@ -139,12 +144,34 @@ public class MyPrefs : MonoBehaviour {
         PlayerPrefs.SetInt(PREFS_RT_DURATION, index + 1);
     }
 
+
+    public void LanguageSelectList() {
+        languageDropdown.ClearOptions();
+        languageDropdown.AddOptions(languageOptions);
+        foreach (var lang in languageOptions) {
+            if (lang.ToUpper().StartsWith(GetLanguage())) {
+                languageDropdown.value = languageOptions.IndexOf(lang);
+            }
+        }
+
+        print("~MyPrefs.LanguageSelectList LanguageSelectList " + languageDropdown.value + " \n");
+        languageDropdown.RefreshShownValue();
+    }
+
+    public void LanguageDropdown(int option) {
+        var lang = languageOptions[option];
+        print("~MyPrefs.LanguageDropdown " + option + " lang " + lang + " \n");
+        lang = lang.ToUpper().Substring(0, 2);
+        print("~MyPrefs.LanguageDropdown " + option + " lang " + lang + " \n");
+        PlayerPrefs.SetString(PREFS_RT_LANGUAGE, lang);
+    }
+
     public void LetterSelectList() {
         letterDropdown.ClearOptions();
         List<string> options = new() { "25", "50", "75", "100", "125", "150", "175", "200" };
         letterDropdown.AddOptions(options);
         letterDropdown.value = GetNumLetters() / 25 - 1;
-        print("~MyPrefs.Start LetterDropdown " + letterDropdown.value + " \n");
+        print("~MyPrefs.LetterSelectList LetterDropdown " + letterDropdown.value + " \n");
         letterDropdown.RefreshShownValue();
     }
 
@@ -160,11 +187,6 @@ public class MyPrefs : MonoBehaviour {
         PlayerPrefs.SetInt(PREFS_RT_RACK_LETTERS, numLetters);
     }
 
-    public void LanguageDropdown(int option) {
-        var lang = option == 1 ? PREFS_LANG_SP : PREFS_LANG_EN;
-        print("~MyPrefs.LanguageDropdown " + option + " lang " + lang + " \n");
-        PlayerPrefs.SetString(PREFS_RT_LANGUAGE, lang);
-    }
 
     private void TimerToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
@@ -185,6 +207,13 @@ public class MyPrefs : MonoBehaviour {
         PlayerPrefs.SetString(PREFS_RT_IS_TWOPLAYER, val.ToString());
         botLevelDropdown.interactable = val;
         print("~MyPrefs.TwoPlayerToggleValueChanged " + val + " \n");
+    }
+
+    private void HumanPlayerToggleValueChanged(Toggle toggle) {
+        var val = toggle.isOn;
+        PlayerPrefs.SetString(PREFS_RT_IS_HUMANPLAYER, val.ToString());
+        botLevelDropdown.interactable = !val;
+        print("~MyPrefs.HumanPlayerToggleValueChanged " + val + " \n");
     }
 
     private void GameOfTheDayToggleValueChanged(Toggle toggle) {
@@ -248,6 +277,10 @@ public class MyPrefs : MonoBehaviour {
 
     public static bool GetIsTimer() {
         return PlayerPrefs.GetString(PREFS_RT_IS_TIMER, DEFAULT_IS_TIMER).ToUpper().Equals("TRUE");
+    }
+
+    public static bool GetIsHumanPlayer() {
+        return PlayerPrefs.GetString(PREFS_RT_IS_HUMANPLAYER, DEFAULT_IS_HUMANPLAYER).ToUpper().Equals("TRUE");
     }
 
     public static bool GetIsTwoPlayer() {

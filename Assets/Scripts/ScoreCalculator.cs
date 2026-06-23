@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class ScoreCalculator {
     private readonly GameParameters gameParameters;
-    public string[] dogBonusWords;
+
+    private string[] _dogBonusWords;
     public bool isDogBonusWord;
 
     public ScoreCalculator(GameParameters gameParameters) {
         this.gameParameters = gameParameters;
     }
 
-    public ScoreCalculator(string[] dogBonusWords) {
-        MonoBehaviour.print("~ScoreCalculator.Start\n");
-        this.dogBonusWords = dogBonusWords;
-        MonoBehaviour.print("~ScoreCalculator.LoadData dogBonusWords " + dogBonusWords.Length + "\n");
+    public string[] dogBonusWords {
+        get => _dogBonusWords;
+        set {
+            _dogBonusWords = value;
+            MonoBehaviour.print($"~ScoreCalculator.Set _dogBonusWords {_dogBonusWords} ");
+        }
     }
 
 
@@ -54,10 +57,10 @@ public class ScoreCalculator {
     public bool CalculateDogBonusWord(string word) {
         isDogBonusWord = false;
         // MonoBehaviour.print("~ScoreCalculator.CalculateDogBonusWord word " + word + "\n");
-        for (var i = 0; i < dogBonusWords.Length; i++) {
-            if (word.Equals(dogBonusWords[i].ToUpper())) {
-                MonoBehaviour.print("~ScoreCalculator.CalculateDogBonusWord " + i + " dogBonusWords[i] " +
-                                    dogBonusWords[i] + "\n");
+        for (var i = 0; i < _dogBonusWords.Length; i++) {
+            if (word.Equals(_dogBonusWords[i].ToUpper())) {
+                MonoBehaviour.print("~ScoreCalculator.CalculateDogBonusWord " + i + " _dogBonusWords[i] " +
+                                    _dogBonusWords[i] + "\n");
 
                 isDogBonusWord = true;
                 return true;

@@ -24,7 +24,7 @@ public class Dealer : MonoBehaviour {
     }
 
     public void Initialize() {
-        print("~Dealer.Initialize \n");
+        print("~Dealer.InitializeWord \n");
         numLettersDealt = 0;
         numLettersDealt = 0;
         letters.Clear();
@@ -35,7 +35,7 @@ public class Dealer : MonoBehaviour {
         betterRack.ClearRack();
         Deal();
         print(
-            $"~Dealer.Initialize complete #letters  {letters.Count} consMax {consMax} vowelMax {vowelMax} lengthForDuplicates {lengthForDuplicates}\n");
+            $"~Dealer.InitializeWord complete #letters  {letters.Count} consMax {consMax} vowelMax {vowelMax} lengthForDuplicates {lengthForDuplicates}\n");
     }
 
     private void FillLetterBag() {

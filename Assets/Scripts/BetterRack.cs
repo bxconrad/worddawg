@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BetterRack : MonoBehaviour {
-    [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] private BTile bTilePrefab;
 
@@ -40,7 +39,7 @@ public class BetterRack : MonoBehaviour {
     }
 
     public void Initialize() {
-        print("~BetterRack.Initialize " + gameParameters.numRackLetters + " \n");
+        print("~BetterRack.InitializeWord " + gameParameters.numRackLetters + " \n");
         var tilesx = GetComponentsInChildren<BTile>();
         foreach (var child in tilesx) {
             //print("~WordGrid.BetterRack destroying " + child.gameObject.name + "\n");
