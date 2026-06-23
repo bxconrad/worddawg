@@ -64,7 +64,7 @@ public class TestBot
 //     [Test]
 //     public void TestWordGenerator()
 //     {
-//         // 1. Initialize the dictionary (mocked for this example)
+//         // 1. InitializeWord the dictionary (mocked for this example)
 //         //  var dictionary = new WordGenerator.TrieDictionary();
 //         var dictionary = new TrieDictionary();
 //         dictionary.LoadDictionary();
@@ -110,7 +110,7 @@ public class TestBot
 //     [Test]
 //     public void TestWordGeneratorList()
 //     {
-//         // 1. Initialize the dictionary (mocked for this example)
+//         // 1. InitializeWord the dictionary (mocked for this example)
 //         //  var dictionary = new WordGenerator.TrieDictionary();
 //         var dictionary = new TrieDictionary();
 //         dictionary.LoadDictionary();

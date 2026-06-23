@@ -30,9 +30,9 @@ public class StatsTwoPlayer : MonoBehaviour {
     }
 
     private static void ShowToastMessage(Player player, Player player2) {
-        var toastMessage = "And the winner is " + player2.name + ". Better luck next time";
+        var toastMessage = $"And the winner is  {player2.name}. Better luck next time  {player.name}";
         if (player.currentScore > player2.currentScore) {
-            toastMessage = "And the winner is " + player.name + ". You Beat The Bot!!! Congratulations!!!";
+            toastMessage = $"And the winner is  {player.name}. You Beat {player2.name}!!! Congratulations!!!";
         }
         else if (player.currentScore == player2.currentScore) {
             toastMessage = "It's a tie!!! It's not easy to tie " + player2.name;

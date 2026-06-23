@@ -8,6 +8,7 @@ public class Settings : MonoBehaviour {
     [SerializeField] private Toggle twoPlayerToggle;
     [SerializeField] private GameParameters gameParameters;
     [SerializeField] public TMP_InputField userNameText;
+    [SerializeField] private Toggle humanPlayerToggle;
 
     private void Start() {
         soundToggle.onValueChanged.AddListener(delegate { SoundToggleValueChanged(soundToggle); });
@@ -16,8 +17,12 @@ public class Settings : MonoBehaviour {
         userNameText.text = GetUserName();
         twoPlayerToggle.onValueChanged.AddListener(delegate { TwoPlayerToggleValueChanged(twoPlayerToggle); });
         twoPlayerToggle.isOn = GetIsTwoPlayer();
-        botLevelDropdown.interactable = twoPlayerToggle.isOn;
+        humanPlayerToggle.onValueChanged.AddListener(delegate { HumanPlayerToggleValueChanged(humanPlayerToggle); });
+        humanPlayerToggle.isOn = GetIsHumanPlayer();
+        botLevelDropdown.interactable = GetIsTwoPlayer() && !GetIsHumanPlayer();
         MyPrefs.BotSelectList(botLevelDropdown);
+
+
         print("~Settings.Start end " + PlayerPrefs.GetInt(MyPrefs.PREFS_RT_BOT_LEVEL) + "\n");
     }
 
@@ -44,7 +49,8 @@ public class Settings : MonoBehaviour {
     private void TwoPlayerToggleValueChanged(Toggle toggle) {
         var val = toggle.isOn;
         PlayerPrefs.SetString(MyPrefs.PREFS_RT_IS_TWOPLAYER, val.ToString());
-        botLevelDropdown.interactable = val;
+        humanPlayerToggle.interactable = val;
+        botLevelDropdown.interactable = GetIsTwoPlayer() && !GetIsHumanPlayer();
         print("~Settings.TwoPlayerToggleValueChanged " + val + " \n");
     }
 
@@ -81,6 +87,19 @@ public class Settings : MonoBehaviour {
         print("~Settings.GetIsTwoPlayer " + retVal + " \n");
         return retVal;
     }
+
+    private void HumanPlayerToggleValueChanged(Toggle toggle) {
+        var val = toggle.isOn;
+        PlayerPrefs.SetString(MyPrefs.PREFS_RT_IS_HUMANPLAYER, val.ToString());
+        botLevelDropdown.interactable = GetIsTwoPlayer() && !GetIsHumanPlayer();
+        print("~MyPrefs.HumanPlayerToggleValueChanged " + val + " \n");
+    }
+
+    public static bool GetIsHumanPlayer() {
+        return PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_HUMANPLAYER, MyPrefs.DEFAULT_IS_HUMANPLAYER).ToUpper()
+            .Equals("TRUE");
+    }
+
 /*
     public static bool GetIsShowButtons() {
         return PlayerPrefs.GetString(MyPrefs.PREFS_RT_IS_SHOW_BUTTON, MyPrefs.DEFAULT_IS_SHOW_BUTTON).ToUpper()

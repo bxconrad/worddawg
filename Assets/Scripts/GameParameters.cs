@@ -19,6 +19,7 @@ public class GameParameters : MonoBehaviour {
     public int botLevel { get; set; }
     public int seedNumber { get; set; }
     public bool isTwoPlayer { get; set; }
+    public bool isHumanOpponent { get; set; }
 
 
     public void Initialize() {
@@ -34,6 +35,7 @@ public class GameParameters : MonoBehaviour {
         botLevel = Settings.GetBotLevel();
         isTwoPlayer = Settings.GetIsTwoPlayer();
         userName = Settings.GetUserName();
+        isHumanOpponent = Settings.GetIsHumanPlayer();
         language = MyPrefs.PREFS_LANG_EN;
         seedNumber = DateTime.Today.DayOfYear;
         //gameMode = ""; don't init gameMode, need it for same game replay
@@ -41,7 +43,7 @@ public class GameParameters : MonoBehaviour {
 
     public override string ToString() {
         return
-            $"{base.ToString()}, {nameof(dealerSeed)}: {dealerSeed}, {nameof(botLevel)}: {botLevel}, {nameof(isTwoPlayer)}: {isTwoPlayer}, {nameof(numLetters)}: {numLetters}, {nameof(numSeconds)}: {numSeconds}, {nameof(language)}: {language}, {nameof(gameMode)}: {gameMode}, {nameof(isTimed)}: {isTimed}, {nameof(isGameOfTheDay)}: {isGameOfTheDay},  {nameof(numRackLetters)}: {numRackLetters}, {nameof(minimumLetters)}: {minimumLetters}";
+            $"{base.ToString()}, {nameof(dealerSeed)}: {dealerSeed}, {nameof(botLevel)}: {botLevel}, {nameof(isTwoPlayer)}: {isTwoPlayer},{nameof(isHumanOpponent)}: {isHumanOpponent}, {nameof(numLetters)}: {numLetters}, {nameof(numSeconds)}: {numSeconds}, {nameof(language)}: {language}, {nameof(gameMode)}: {gameMode}, {nameof(isTimed)}: {isTimed}, {nameof(isGameOfTheDay)}: {isGameOfTheDay},  {nameof(numRackLetters)}: {numRackLetters}, {nameof(minimumLetters)}: {minimumLetters}";
     }
 
     //qulogic

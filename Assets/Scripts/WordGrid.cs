@@ -4,9 +4,14 @@ using UnityEngine.UI;
 
 public class WordGrid : MonoBehaviour {
     [SerializeField] private GameObject displayButtonPrefab;
-    [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private Image viewPortImage;
     public DisplayButton selectedButton;
+    private UpdateBoardAbstract updateBoard;
+
+    public void Start() {
+        updateBoard = GetComponentInParent<UpdateBoardAbstract>();
+        print($"~WordGrid.Start   {updateBoard}\n");
+    }
 
     public void Activate(bool isActive) {
         if (isActive) {
@@ -30,14 +35,15 @@ public class WordGrid : MonoBehaviour {
 
     public void UpdateGridLayoutConstraint(int count) {
         var gridLayout = gameObject.GetComponent<GridLayoutGroup>();
-        print("~WordGrid.UpdateGridLayoutConstraint gridLayout {" + gridLayout + "\n");
+        print($"~WordGrid.UpdateGridLayoutConstraint gridLayout -{gridLayout}-\n");
         gridLayout.constraintCount = count;
     }
 
     public void Initialize() {
-        print("~WordGrid.Initialize beforeDestroy \n");
+        updateBoard = ServiceLocator.instance.updateBoard;
+        print("~WordGrid.InitializeWord beforeDestroy \n");
         foreach (Transform child in transform) {
-            // print("~WordGrid.Initialize destroying " + child.gameObject.name + "\n");
+            // print("~WordGrid.InitializeWord destroying " + child.gameObject.name + "\n");
             Destroy(child.gameObject);
         }
     }
@@ -47,7 +53,7 @@ public class WordGrid : MonoBehaviour {
     // if we updated an existing word, find it and change it to have the new word
     //bcdo remove newWord from method call
     public void UpdateDisplayButton(Word wordObject) {
-        print("~WordGrid.UpdateDisplayButton oWord {" + wordObject + "}\n");
+        print($"~WordGrid.UpdateDisplayButton  isNewWord {wordObject.IsNewWord()} wordObject {wordObject}\n");
 
         // If there was no originalWord that means we are creating a new word
         if (wordObject.IsNewWord()) {
@@ -145,13 +151,15 @@ public class WordGrid : MonoBehaviour {
     }
 
     public DisplayButton FindDisplayButtonForWordObject(Word word) {
-        print("~WordGrid.FindDisplayButtonForWordObject\n");
         var displayButtons = GetComponentsInChildren<DisplayButton>();
         foreach (var displayButton in displayButtons) {
             if (displayButton.GetWord().Equals(word)) {
+                print($"~WordGrid.FindDisplayButtonForWordObject found {word.contents}\n");
                 return displayButton;
             }
         }
+
+        print($"~WordGrid.FindDisplayButtonForWordObject notFound word {word}\n");
 
         return null;
     }
@@ -165,7 +173,7 @@ public class WordGrid : MonoBehaviour {
     }
 
     private void SelectButton(Word wordObject) {
-        print("~WordGrid.OnButtonClick  name " + wordObject + "\n");
+        print("~WordGrid.SelectButton  name " + wordObject + "\n");
         var displayButton = FindMatchingButton(wordObject);
         if (displayButton != null) {
             DeselectButton();
@@ -177,6 +185,8 @@ public class WordGrid : MonoBehaviour {
     private void OnButtonClick(Word wordObject) {
         print("~WordGrid.OnButtonClick  name " + wordObject + "\n");
         SelectButton(wordObject);
+        print($"~WordGrid.OnButtonClick refetch updateBoard  {updateBoard}\n");
+
         updateBoard.LoadSelectedWord(wordObject);
     }
 }

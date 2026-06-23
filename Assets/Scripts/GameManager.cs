@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using EasyUI.Toast;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ * fix countdownTimer stuff - should be in update
+ * -  fix #lettters. came from twoPlayer on onePlayer
+ * - gameMgr should always show settings icon
+ * -
+ */
 public class GameManager : MonoBehaviour {
     [Header("UI")] [SerializeField] private GameObject endGameContainer;
     [SerializeField] private GameObject prefsContainer;
@@ -14,7 +19,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject settingsWidget;
     [SerializeField] private GameObject timeScorePanel;
     [SerializeField] private GameObject logoImage2;
-    [SerializeField] private UpdateBoard updateBoard;
     [SerializeField] private CountdownTimer countdownTimer;
 
     [SerializeField] private ToastMaster toastMaster;
@@ -29,13 +33,31 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private Toggle twoPlayerToggle;
-
+    [SerializeField] private GameObject updateBoardGo;
+    [SerializeField] private GameObject gameManagerHorizontalLayoutGo;
+    public UpdateBoardAbstract updateBoard;
     private readonly List<Image> panelImages = new();
+
+    private string lastUpdateBoardName;
+    private Type lastUpdateBoardType;
+
 
     private Player player;
     private Player player2;
 
-    private string savedGameMode;
+    private string savedGameMode; // this is used
+    private Type updateBoardType;
+
+    /* Will run second in Start order as defined in project properties.
+     ServiceLocator runs first so UpdateBoard can get a reference to it.
+     UpdateBoard runs third, before other components that want a reference to it.
+     */
+
+    public void Awake() {
+        print("~GameManager.Awake \n");
+        gameManagerHorizontalLayoutGo.SetActive(true);
+        print("~GameManager.Awake\n");
+    }
 
     public void Start() {
         Toast.Dismiss();
@@ -48,24 +70,26 @@ public class GameManager : MonoBehaviour {
         gameParameters.Initialize();
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        print("~GameManager.Start sound " + Settings.GetIsSound() + " " + gameParameters + "\n");
+        print($"~GameManager.Start ServiceLocator  -{ServiceLocator.instance}-  gameParamaters {gameParameters}\n");
     }
 
 
     private void InactivateOtherCanvases() {
         print("~GameManager.InactivateOtherCanvases eg{" + endGameContainer + "}\n");
+        timeScorePanel.SetActive(false); // may move to UpdateBoard
+        logoImage2.SetActive(false);
         // set all other canvases to inactive
-        updateBoard.gameObject.SetActive(false);
+        updateBoardGo.SetActive(false);
         endGameContainer.SetActive(false);
         prefsContainer.SetActive(false);
         timeScorePanel.SetActive(false);
         settingsContainer.SetActive(false);
-        logoImage2.SetActive(false);
+        //logoImage2.SetActive(false);
         helpDisplay.Initialize();
     }
 
     public void Initialize() {
-        print("~GameManager.Initialize\n");
+        print("~GameManager.InitializeWord\n");
         Start();
     }
 
@@ -131,6 +155,7 @@ public class GameManager : MonoBehaviour {
         gameParameters.numLetters = MyPrefs.GetNumLetters();
         gameParameters.numRackLetters = MyPrefs.GetNumRackLetters();
         gameParameters.language = MyPrefs.GetLanguage();
+        gameParameters.isHumanOpponent = MyPrefs.GetIsHumanPlayer();
         gameParameters.botLevel = MyPrefs.GetBotLevel();
         gameParameters.isTwoPlayer = MyPrefs.GetIsTwoPlayer();
         if (gameParameters.language == null) {
@@ -176,7 +201,45 @@ public class GameManager : MonoBehaviour {
     private void NewGame() {
         print("~GameManager.NewGame " + gameParameters + "\n");
         InactivateOtherCanvases();
-        betterRack.Initialize();
+        betterRack.Initialize(); //bcdo should not be here but removal causes error in Diealer.Initialize??
+        UpdateTimeScorePanel();
+
+        audioSource.mute = !Settings.GetIsSound();
+        GameHelper.LANGUAGE = gameParameters.language;
+        updateBoardGo.SetActive(true);
+        gameObject.SetActive(false);
+        settingsWidget.SetActive(false);
+        InitializeUpdateBoardForNewGame();
+        updateBoard.NewGame();
+        print($"~GameManager.NewGame done updateBoard {updateBoard} \n");
+    }
+
+    private void InitializeUpdateBoardForNewGame() {
+        if (gameParameters.isTwoPlayer) {
+            if (gameParameters.isHumanOpponent) {
+                updateBoardType = typeof(UpdateBoardHuman);
+            }
+            else {
+                updateBoardType = typeof(UpdateBoardBot);
+            }
+        }
+        else {
+            updateBoardType = typeof(UpdateBoardSolo);
+        }
+
+        if (updateBoardType != lastUpdateBoardType) {
+            lastUpdateBoardType = updateBoardType;
+            updateBoard = updateBoardGo.AddComponent(updateBoardType) as UpdateBoardAbstract;
+            ServiceLocator.instance.updateBoard = updateBoard;
+            print($"~GameManager.InitializeUpdateBoardForNewGame type {updateBoardType} \n");
+            updateBoard.InitializeVarialbles();
+        }
+        else {
+            print($"~GameManager.InitializeUpdateBoardForNewGame same type {updateBoardType} \n");
+        }
+    }
+
+    private void UpdateTimeScorePanel() {
         countdownTimer.enabled = false;
         //bcdo move to updateBoard?
         timeScorePanel.SetActive(!gameParameters.isTwoPlayer);
@@ -192,23 +255,13 @@ public class GameManager : MonoBehaviour {
             countdownText.text = "# Letters";
         }
 
-        audioSource.mute = !Settings.GetIsSound();
-        GameHelper.LANGUAGE = gameParameters.language;
-        updateBoard.gameObject.SetActive(true);
-        gameObject.SetActive(false);
-        // player = new Player(gameParameters.userName);
-        // player2 = new Player("dummy");
-
-        updateBoard.NewGame();
-        settingsWidget.SetActive(false);
-        print("~GameManager.NewGame done \n");
+        timeScorePanel.SetActive(false);
     }
 
     private async Task Spinit() {
         var tasks = new Task[2];
         var transforms = new[] { logoImage.transform, logoImage2.transform };
         tasks[0] = transformShaker.ABeginRandomSpins(transforms, .3f, 16);
-//        tasks[0] = transformShaker.ASpin(transforms, .24f, 18, 3, false);
         tasks[1] = transformShaker.ASpin(updateBoard.transform, .48f, 9, 1, true);
 
         await Task.WhenAll(tasks);
@@ -249,36 +302,5 @@ public class GameManager : MonoBehaviour {
 
     public void OpenHowToPlayVideo() {
         Application.OpenURL("https://sites.google.com/view/worddawg/howtoplayvideo");
-    }
-
-    private void UpdateColors() {
-        var canvas = GetComponentInParent<Canvas>();
-        panelImages.Add(GameObject.FindGameObjectWithTag("header").GetComponent<Image>());
-        panelImages.Add(GameObject.FindGameObjectWithTag("endGamePanel").GetComponent<Image>());
-        panelImages.Add(canvas.GetComponentInChildren<GameManager>().GetComponent<Image>());
-        var ub = canvas.GetComponentInChildren<UpdateBoard>();
-        ub.enabled = true;
-        var ubi = ub.GetComponent<Image>();
-        panelImages.Add(ubi);
-
-        var wg = canvas.GetComponentInChildren<WordGrid>();
-        var wgi = wg.gameObject.transform.parent.GetComponent<Image>();
-        panelImages.Add(wgi);
-        foreach (var image in panelImages) {
-            image.color = Color.red;
-        }
-
-        var buttons = canvas.GetComponentInChildren<GameManager>().GetComponentsInChildren<Button>();
-        var buttons2 = ub.GetComponentsInChildren<Button>();
-        buttons.Concat(buttons2);
-        foreach (var button in buttons) {
-            var image = button.GetComponent<Image>();
-            image.color = Color.blue;
-        }
-
-        foreach (var button in buttons2) {
-            var image = button.GetComponent<Image>();
-            image.color = Color.blue;
-        }
     }
 }

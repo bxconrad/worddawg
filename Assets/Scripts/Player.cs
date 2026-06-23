@@ -51,12 +51,9 @@ public class Player {
     }
 
     public void Activate(bool isActive) {
-        if (isActive) {
-            scoreGrid.image.color = Color.blue;
-        }
-        else {
-            scoreGrid.image.color = Color.black;
-        }
+        if (isActive)
+            scoreGrid.DisplayActiveTurn();
+        else scoreGrid.DisplayInactiveTurn();
     }
 
     public void AddNewWord(Word word) {

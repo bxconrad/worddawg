@@ -4,14 +4,16 @@ using UnityEngine.EventSystems;
 public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler {
     private float firstPos;
     private bool isFirstDrag = true;
-    private UpdateBoard updateBoard;
+    private UpdateBoardAbstract updateBoard;
     private InputWordTile[] tiles { get; set; }
 
     public void Awake() {
         tiles = GetComponentsInChildren<InputWordTile>();
-        updateBoard = GetComponentInParent<UpdateBoard>();
+        print($"~InputWord.Awake  tiles {tiles}\n");
+    }
 
-        print("~InputWord.Awake updateBoard * (" + updateBoard + "} tiles (" + tiles + "}\n");
+    public void Start() {
+        print($"~InputWord.Start updateBoard  {updateBoard}\n");
     }
 
 
@@ -47,7 +49,8 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
 
     //bcdo, extra call to this?
     public void Initialize() {
-        //print("~InputWord.Initialize tiles " + tiles.Length + "\n");
+        //print("~InputWord.InitializeWord tiles " + tiles.Length + "\n");
+        updateBoard = ServiceLocator.instance.updateBoard;
 
         for (var i = 0; i < tiles.Length; i++) {
             var tile = tiles[i];

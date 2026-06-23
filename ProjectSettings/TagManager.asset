@@ -4,21 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - displayWordButton
-  - wordGrid
-  - displayCanvas
-  - scoreManager
-  - statRows
-  - letterBag
+  - Undefined
   - inputWord
-  - toastUI
-  - endGameCanvas
-  - countdownTimer
-  - testButton
-  - inputText
-  - newInputWord
-  - header
-  - botButton
   layers:
   - Default
   - TransparentFX
@@ -58,3 +45,4 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  m_MigratedRenderPipelines: []

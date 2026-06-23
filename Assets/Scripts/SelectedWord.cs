@@ -4,14 +4,18 @@ using UnityEngine.EventSystems;
 public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     private float firstPos;
     private bool isFirstDrag = true;
-    private UpdateBoard updateBoard;
+    private UpdateBoardAbstract updateBoard;
     private Word wordObject { get; set; }
     private BTile[] tiles { get; set; }
 
     public void Awake() {
         tiles = GetComponentsInChildren<BTile>();
-        updateBoard = GetComponentInParent<UpdateBoard>();
-        print("~SelectedWord.Awake tiles (" + tiles.Length + "}\n");
+        print($"~SelectedWord.Awake tiles {tiles.Length} \n");
+    }
+
+    public void Start() {
+        //   updateBoard = GetComponentInParent<UpdateBoardAbstract>();
+        print($"~SelectedWord.Start updateBoard  {updateBoard}\n");
     }
 
     // bcdo for some reason doesn't span entire width, it has to be in an active tile ??
@@ -63,7 +67,12 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         }
     }
 
-    public void Initialize(Word inwordObject) {
+    public void Initialize() {
+        updateBoard = ServiceLocator.instance.updateBoard;
+        InitializeTiles(string.Empty);
+    }
+
+    public void InitializeWord(Word inwordObject) {
         wordObject = inwordObject;
         // Word is contracted for display as tile will display a Q as a QU 
         var contents = GameHelper.ContractDoubleLetter(wordObject.GetCurrentContents());

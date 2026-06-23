@@ -84,6 +84,8 @@ public class LetterInfo {
         }
 
         letterDictionaryDictionary.Add(MyPrefs.PREFS_LANG_EN, letterDictionary);
+        letterDictionaryDictionary.Add(MyPrefs.PREFS_LANG_FR, letterDictionary);
+
         letterDictionary = new Dictionary<string, int>();
         foreach (var letterInfo in letterInfosSP) {
             letterDictionary.Add(letterInfo.theLetter, letterInfo.value);

@@ -114,7 +114,7 @@ namespace bot {
 
                     if (trieDictionary.Contains(currentPrefix)) {
                         if (!IsPluralized(sourceeWord, currentPrefix)) {
-                            MonoBehaviour.print($"~BrucesBotAbstract.FindWordsRecursive  adding {currentPrefix} \n");
+                            //MonoBehaviour.print($"~BrucesBotAbstract.FindWordsRecursive  adding {currentPrefix} \n");
                             foundWords.Add(currentPrefix);
                             if (stopAtFirst) return;
                         }
