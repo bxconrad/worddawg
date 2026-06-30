@@ -20,7 +20,7 @@ public class DisplayButton : MonoBehaviour {
 
     public void SetWord(Word inWord) {
         word = inWord;
-        text.text = word.GetCurrentContents();
+        text.text = word.GetDisplayContents();
     }
 
     public override string ToString() {
@@ -32,10 +32,10 @@ public class DisplayButton : MonoBehaviour {
         return word;
     }
 
-    public string GetWordText() {
-        print("~DisplayButton.GetWordText " + text.text + "\n");
-        return word.GetCurrentContents(); // text.text;
-    }
+    // public string GetWordText() {
+    //     print("~DisplayButton.GetWordText " + text.text + "\n");
+    //     return word.GetCurrentContents(); // text.text;
+    // }
 
     public void SelectButton() {
         print("~DisplayButton.SelectButton\n");

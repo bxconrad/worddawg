@@ -29,6 +29,10 @@ public class Word {
         return GetPreviousHistory() != null ? GetPreviousHistory().contents : "";
     }
 
+    public string GetPreviousDisplayContents() {
+        return GetPreviousContents().Replace("#", "QU").Replace("*", "LL");
+    }
+
 
     public WordHistory GetPreviousHistory() {
         if (histories.Count >= 2) {
@@ -36,6 +40,10 @@ public class Word {
         }
 
         return null;
+    }
+
+    public string GetDisplayContents() {
+        return GetCurrentContents().Replace("#", "QU").Replace("*", "LL");
     }
 
     public bool IsStolenWord() {

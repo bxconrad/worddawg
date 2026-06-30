@@ -92,7 +92,12 @@ public class ScoreCalculator {
 
     private double CalculateMultiplier(string originalWord, string newWord) {
         var factor = IsAddedSorD(originalWord, newWord) ? 1 : 1.5;
-        var multiplier = newWord.Length > 4 ? (newWord.Length - 1) * factor : 1;
+        // add letter for QU or LL (spanish)
+        var wordLength = newWord.Contains("#") || newWord.Contains("*")
+            ? newWord.Length + 1
+            : newWord.Length;
+
+        var multiplier = wordLength > 4 ? (wordLength - 1) * factor : 1;
         return multiplier;
     }
 

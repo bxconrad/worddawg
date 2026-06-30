@@ -37,7 +37,7 @@ public class ToastMaster : MonoBehaviour {
 
     public void ShowToastMessage(Player player) {
         //if (player.isBot) return;
-        var wordContents = player.currentWord.GetCurrentContents();
+        var wordContents = player.currentWord.GetDisplayContents();
         var wordScore = player.currentWord.currentWordHistory.score;
         var msg = "";
         var toastTime = 15f;
@@ -52,7 +52,8 @@ public class ToastMaster : MonoBehaviour {
         }
 
         // If entire rack is used
-        if (wordContents.Length - player.currentWord.GetPreviousContents().Length >= gameParameters.numRackLetters) {
+        if (wordContents.Length - player.currentWord.GetPreviousDisplayContents().Length >=
+            gameParameters.numRackLetters) {
             print("~ScoreManager.SendToastMessage 100 bonus ");
             audioSource.PlayOneShot(howl);
             msg += "100 Point Bonus for using all letters!!! Great Job!";
@@ -78,8 +79,8 @@ public class ToastMaster : MonoBehaviour {
                 msg = "See if you can modify " + wordContents + ". Select " + wordContents +
                       " from the list of words. You must use ALL the letters in " + wordContents +
                       " plus at least ONE letter from the rack.";
-            else if (player.numChangedWords == 1 && player.currentWord.GetPreviousContents().Length > 0)
-                msg = "Congratulations! You turned " + player.currentWord.GetPreviousContents() + " into " +
+            else if (player.numChangedWords == 1 && player.currentWord.GetPreviousDisplayContents().Length > 0)
+                msg = "Congratulations! You turned " + player.currentWord.GetPreviousDisplayContents() + " into " +
                       wordContents +
                       ". And you scored " +
                       wordScore + " points.\n\n Well done!";

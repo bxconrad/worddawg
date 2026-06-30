@@ -20,12 +20,12 @@ public class TransformShaker : MonoBehaviour {
         StartCoroutine(Shake(theTransform, duration, delay, distance));
     }
 
-    public async Task ABeginSpin(Transform theTransform, float duration, int rotations, int axis, bool isForward) {
+    private async Task ABeginSpin(Transform theTransform, float duration, int rotations, int axis, bool isForward) {
         print("~ABeginSpin");
         await ASpin(theTransform, duration, rotations, axis, isForward);
     }
 
-    public async Task ABeginSpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
+    private async Task ABeginSpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
         print("~ABeginSpin");
         await ASpin(theTransform, duration, rotations, axis, isForward);
     }
@@ -91,7 +91,7 @@ public class TransformShaker : MonoBehaviour {
         }
     }
 
-    public async Task ASpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
+    private async Task ASpin(Transform[] theTransform, float duration, int rotations, int axis, bool isForward) {
         print("~ShakeTransform.ASpin duration " + duration + " axis " + axis + " isForward " + isForward + "\n");
         var startEuler = theTransform[0].eulerAngles;
         var startRotation = theTransform[0].eulerAngles.x;

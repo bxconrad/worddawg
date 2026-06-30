@@ -72,13 +72,13 @@ public class Player {
     private void UpdateHighScores(Word word) {
         wordScore += word.currentWordHistory.score;
         numWords++;
-        numLettersUsed += word.GetCurrentContents().Length - word.GetPreviousContents().Length;
+        numLettersUsed += word.GetDisplayContents().Length - word.GetPreviousDisplayContents().Length;
         if (word.currentWordHistory.score > highestWordScore) {
             highestWordScore = word.currentWordHistory.score;
-            highestWordScoreWord = word.GetCurrentContents();
+            highestWordScoreWord = word.GetDisplayContents();
         }
 
-        if (word.GetCurrentContents().Length > longestWord.Length) longestWord = word.GetCurrentContents();
+        if (word.GetDisplayContents().Length > longestWord.Length) longestWord = word.GetDisplayContents();
 
         if (word.GetNumModified() > 1) numChangedWords++;
 

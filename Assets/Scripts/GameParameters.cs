@@ -45,6 +45,4 @@ public class GameParameters : MonoBehaviour {
         return
             $"{base.ToString()}, {nameof(dealerSeed)}: {dealerSeed}, {nameof(botLevel)}: {botLevel}, {nameof(isTwoPlayer)}: {isTwoPlayer},{nameof(isHumanOpponent)}: {isHumanOpponent}, {nameof(numLetters)}: {numLetters}, {nameof(numSeconds)}: {numSeconds}, {nameof(language)}: {language}, {nameof(gameMode)}: {gameMode}, {nameof(isTimed)}: {isTimed}, {nameof(isGameOfTheDay)}: {isGameOfTheDay},  {nameof(numRackLetters)}: {numRackLetters}, {nameof(minimumLetters)}: {minimumLetters}";
     }
-
-    //qulogic
 }

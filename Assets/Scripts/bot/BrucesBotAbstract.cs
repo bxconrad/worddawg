@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 
-// bcdo have a bot factory that returns a bot with the code for that level
 namespace bot {
     public abstract class BrucesBotAbstract {
         protected int maxLetters = 0;

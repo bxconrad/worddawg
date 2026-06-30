@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour {
             updateBoard = updateBoardGo.AddComponent(updateBoardType) as UpdateBoardAbstract;
             ServiceLocator.instance.updateBoard = updateBoard;
             print($"~GameManager.InitializeUpdateBoardForNewGame type {updateBoardType} \n");
-            updateBoard.InitializeVarialbles();
+            updateBoard.InitializeVariables();
         }
         else {
             print($"~GameManager.InitializeUpdateBoardForNewGame same type {updateBoardType} \n");

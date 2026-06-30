@@ -10,12 +10,13 @@ public abstract class BaseTile : MonoBehaviour {
     private Button button { get; set; }
 
     public string letter { get; private set; }
+    public string displayLetter { get; private set; }
 
     public BTile originTile { get; set; }
 
     protected void Awake() {
         //print("~BaseTile.Awake\n");
-        AwakeMe();
+        AwakeMe(); // bcdo fix this, use awake
     }
 
     public void SetInteractable(bool isInteractable) {
@@ -55,9 +56,8 @@ public abstract class BaseTile : MonoBehaviour {
     public void SetLetter(string inLetter) {
         //print("~BaseTile.SetLetter  inLetter {" + inLetter + "}\n");
         letter = inLetter.ToUpper();
-        // quLogic
-        // this just handles how QU and LL appear. It does not affect validation or how it appears in word list
-        if ("Q".Equals(letter))
+        // quLogic this handles how QU and LL appear. It does not affect validation or how it appears in word list
+        if ("#".Equals(letter))
             text.text = "Qu";
         else if ("*".Equals(letter))
             text.text = "LL";

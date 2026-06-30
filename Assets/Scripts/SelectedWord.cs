@@ -74,9 +74,8 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
 
     public void InitializeWord(Word inwordObject) {
         wordObject = inwordObject;
-        // Word is contracted for display as tile will display a Q as a QU 
-        var contents = GameHelper.ContractDoubleLetter(wordObject.GetCurrentContents());
-        InitializeTiles(contents);
+        // Tile willo display Qu for #. 
+        InitializeTiles(wordObject.GetCurrentContents());
     }
 
     public void InitializeTiles(string word) {

@@ -50,7 +50,7 @@ public class Dealer : MonoBehaviour {
         }
 
         Shuffle(letters);
-        //nsertLettersForTesting();
+        //InsertLettersForTesting();
         print($"~Dealer.FillLetterBag #letters {letters.Count}\n");
     }
 
@@ -61,7 +61,7 @@ public class Dealer : MonoBehaviour {
         letters.Insert(3, "M");
         letters.Insert(4, "E");
         letters.Insert(5, "X");
-        letters.Insert(6, "Q");
+        letters.Insert(6, "#");
     }
 
     private void Shuffle<T>(IList<T> list) {

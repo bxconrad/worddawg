@@ -10,7 +10,7 @@ public class UpdateBoardTwo : UpdateBoardAbstract {
         print($"~UpdateBoardTwo.Start NewGameInitializePlayers scoreGrid1 -{scoreGrid1}- scoreGrid2 -{scoreGrid2}-\n");
         GetPlayerOrder();
         wordGrid2.Initialize();
-        var msg = players[0].name + " goes first. Then it's your turn" + players[1].name;
+        var msg = players[0].name + " goes first. Then it's your turn " + players[1].name;
         Toast.Show(msg, 15f, Color.magenta, GameHelper.GetToastPosition());
     }
 

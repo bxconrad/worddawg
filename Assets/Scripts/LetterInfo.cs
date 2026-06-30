@@ -18,7 +18,7 @@ public class LetterInfo {
     public static LetterInfo N = new("N", 2, 6);
     public static LetterInfo O = new("O", 1, 8);
     public static LetterInfo P = new("P", 4, 2);
-    public static LetterInfo Q = new("Q", 8, 1);
+    public static LetterInfo Q = new("#", 8, 1);
     public static LetterInfo R = new("R", 3, 6);
     public static LetterInfo S = new("S", 1, 5); //4   +1
     public static LetterInfo T = new("T", 2, 6);
@@ -47,7 +47,7 @@ public class LetterInfo {
     public static LetterInfo Ñ_SP = new("Ñ", 6, 3); // 8/1 or 1/3
     public static LetterInfo O_SP = new("O", 1, 8);
     public static LetterInfo P_SP = new("P", 2, 3);
-    public static LetterInfo Q_SP = new("Q", 8, 1);
+    public static LetterInfo Q_SP = new("#", 8, 1);
     public static LetterInfo R_SP = new("R", 1, 4);
     public static LetterInfo S_SP = new("S", 1, 7);
     public static LetterInfo T_SP = new("T", 1, 4);
