@@ -123,19 +123,7 @@ public class WordGrid : MonoBehaviour {
     }
 
 
-    public List<string> FindWordList() {
-        print("~WordGrid.FindWordListt\n");
-        var words = new List<string>();
-        var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
-
-        foreach (var displayButton in displayButtons) {
-            words.Add(displayButton.GetWordText());
-        }
-
-        return words;
-    }
-
-    public List<Word> FindWordObjects() {
+   public List<Word> FindWordObjects() {
         //Sprint("~WordGrid.FindWordObjects\n");
         var words = new List<Word>();
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
@@ -162,6 +150,16 @@ public class WordGrid : MonoBehaviour {
         print($"~WordGrid.FindDisplayButtonForWordObject notFound word {word}\n");
 
         return null;
+    }
+
+    public void DestroyDisplayButtonForWordObject(Word word) {
+        var button = FindDisplayButtonForWordObject(word);
+        if (button != null) {
+            Destroy(button.gameObject);
+        }
+        else {
+            print($"~WordGrid.DestroyDisplayButtonForWordObject *ERROR* button not found word {word}\n");
+        }
     }
 
     public void DeselectButton() {

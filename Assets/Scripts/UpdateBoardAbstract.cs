@@ -38,8 +38,8 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
     protected abstract void NextTurn();
 
     // --- new game initialization ---
-    public void InitializeVarialbles() {
-        print($"~UpdateBoardAbstract.InitializeVarialbles  {serviceLocator}\n");
+    public void InitializeVariables() {
+        print($"~UpdateBoardAbstract.InitializeVariables  {serviceLocator}\n");
         serviceLocator = ServiceLocator.instance;
         inputWord = serviceLocator.inputWord;
 
@@ -66,7 +66,7 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
         dictionaryManager = serviceLocator.dictionaryManager;
         validatorManager = new ValidatorManager();
         scoreCalculator = new ScoreCalculator(gameParameters);
-        print($"~UpdateBoardAbstract.InitializeVarialbles gameParameters {gameParameters} \n");
+        print($"~UpdateBoardAbstract.InitializeVariables gameParameters {gameParameters} \n");
     }
 
 
@@ -118,7 +118,7 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
     }
 
 
-    // --- Submit update loginc ---
+    // --- Submit update logic ---
 
     // Begin submit processing and validation
     public void SubmitInputWordButton() {
@@ -168,17 +168,10 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
             print("~UpdateBoardAbstract.UpdateBoardForValidSubmit  STEAL!!! \n");
             currentPlayer.UpdateExistingWord(word, expandedInputString, score);
             currentPlayer.wordGrid.InstantiateDisplayButton(word);
-
-            var button = OtherPlayer().wordGrid.FindDisplayButtonForWordObject(word);
-            if (button != null) {
-                Destroy(button.gameObject);
-            }
-            else {
-                print("~UpdateBoardAbstract.UpdateBoardForValidSubmit couldn't find button for other player\n");
-            }
+            OtherPlayer().wordGrid.DestroyDisplayButtonForWordObject(word);
         }
 
-        // Update the discplay after the submit
+        // Update the display after the submit
         UpdateAfterSubmit(word);
         print("~UpdateBoardAbstract.UpdateBoardForValidSubmit \n");
         NextTurn();
@@ -253,7 +246,7 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
     }
 
 
-    // --- Misc Resetting and reinitiaialization ---
+    // --- Misc Resetting and reinitialization ---
     private void RemoveSelectedWord() {
         selectedWord.InitializeTiles(string.Empty);
         selectedWordGo.SetActive(false);
