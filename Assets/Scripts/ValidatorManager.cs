@@ -7,11 +7,9 @@ public class ValidatorManager {
     public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWord) {
         MonoBehaviour.print($"~ValidatorManager.ValidateInputWord {inputWord}\n");
         //return "TRUE";
-
+        var displayWord = inputWord.Replace("#", "QU").Replace("*", "LL");
         // add 1  to length for Q or LL (spanish)
-        var wordLength = inputWord.Contains("#") || inputWord.Contains("*")
-            ? inputWord.Length + 1
-            : inputWord.Length;
+        var wordLength = displayWord.Length;
 
         if (wordLength < 3) {
             MonoBehaviour.print($"~ValidatorManager.ValidateInputWord is Length <3 {inputWord.Length} \n");
@@ -34,8 +32,9 @@ public class ValidatorManager {
 
         var letter = IsLettersContained(inputWord, selectedWord.GetWord(), betterRack.GetWord());
         if (letter != ' ') {
-            MonoBehaviour.print($"~ValidatorManager.ValidateInputWord isLettersAvailable false letter {letter} \n");
-            return "The letter {letter} is not in the selected word or the rack";
+            MonoBehaviour.print($"~ValidatorManager.ValidateInputWord isLettersAvailable false letter {letter}" +
+                                $"inputWord {inputWord} selectedWord {selectedWord.GetWord()} rack {betterRack.GetWord()} \n");
+            return $"The letter {letter} is not in the selected word or the rack";
         }
 
         MonoBehaviour.print("~ValidatorManager.ValidateInputWord IsRackLettersUsed true\n");
@@ -43,16 +42,15 @@ public class ValidatorManager {
         if (!IsInDictionary(inputWord)) {
             MonoBehaviour.print(
                 $"~ValidatorManager.ValidateInputWord {inputWord} IsInDictionary  isValidNew false\n");
-            return inputWord + " is not in the dictionary";
+            return $"{displayWord} is not in the dictionary";
         }
 
         MonoBehaviour.print("~ValidatorManager.ValidateInputWord  isValidNew true \n");
-
         return "TRUE";
     }
 
-    //verify that all the letters in the selectedWord have been used in the inputWord and at least one from the rack
-    // if not, return the first letter that was not used. If so, return blank.
+//verify that all the letters in the selectedWord have been used in the inputWord and at least one from the rack
+// if not, return the first letter that was not used. If so, return blank.
     private char IsLettersContained(string inputWordString, string selectedWordString, string letterRackWord) {
         MonoBehaviour.print(
             "~ValidatorManager.IsLettersContained sel {selectedWordString} letterRackWord {letterRackWord}");

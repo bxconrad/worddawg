@@ -13,11 +13,6 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         print($"~SelectedWord.Awake tiles {tiles.Length} \n");
     }
 
-    public void Start() {
-        //   updateBoard = GetComponentInParent<UpdateBoardAbstract>();
-        print($"~SelectedWord.Start updateBoard  {updateBoard}\n");
-    }
-
     // bcdo for some reason doesn't span entire width, it has to be in an active tile ??
     public void OnDrag(PointerEventData eventData) {
         // print("~SelectedWord.OnDrag " + eventData.position.x + "\n");
@@ -41,6 +36,11 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
             else
                 updateBoard.CancelUpdateButton();
         }
+    }
+
+    public void Initialize() {
+        updateBoard = ServiceLocator.instance.updateBoard;
+        InitializeTiles(string.Empty);
     }
 
     public Word GetWordObject() {
@@ -70,13 +70,9 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         }
     }
 
-    public void Initialize() {
-        updateBoard = ServiceLocator.instance.updateBoard;
-        InitializeTiles(string.Empty);
-    }
 
-    public void InitializeWord(Word inwordObject) {
-        wordObject = inwordObject;
+    public void InitializeWord(Word wordObject) {
+        wordObject = wordObject;
         // Tile willo display Qu for #. 
         InitializeTiles(wordObject.GetCurrentContents());
     }
@@ -101,8 +97,6 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
     }
 
     public void ResetStateUnselected() {
-        //print("~SelectedWord.ResetStateUnselected \n");
-
         foreach (var tile in tiles) {
             if ("".Equals(tile.letter)) return;
             tile.SetState(Tile.State.unselectedState);

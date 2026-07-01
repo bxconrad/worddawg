@@ -125,10 +125,9 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
         print($"~UpdateBoardAbstract.SubmitInputWordButton {currentPlayer} inputWord {inputWord} \n");
         Toast.Dismiss();
 
-        var expandedInputString = GameHelper.ExpandDoubleLetter(inputWord.GetWord());
-        var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, expandedInputString);
+        var validationResult = validatorManager.ValidateInputWord(selectedWord, betterRack, inputWord.GetWord());
         if ("TRUE".Equals(validationResult)) {
-            UpdateBoardForValidSubmit(expandedInputString);
+            UpdateBoardForValidSubmit(inputWord.GetWord());
         }
         else {
             Toast.Show(validationResult, 2f, Color.red, GameHelper.GetToastPosition());
@@ -235,7 +234,7 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
             print($"~UpdateBoardAbstract.LoadSelectedWord  contents {wordObject.GetCurrentContents()}\n");
             dummyPanel.SetActive(false);
             selectedWord.gameObject.SetActive(true);
-            selectedWord.InitializeWord(wordObject); // quLogic will occur
+            selectedWord.InitializeWord(wordObject);
             // make sure all other words in wordGrids are deselected except for this one
             wordGrid1.DeselectMismatchButton(wordObject);
             wordGrid2.DeselectMismatchButton(wordObject);
@@ -263,7 +262,6 @@ public abstract class UpdateBoardAbstract : MonoBehaviour {
         inputWord.Initialize();
         selectedWord.ResetStateUnselected();
         betterRack.ResetStateUnselected();
-        print($"~UpdateBoardAbstract.ClearInputWordButton betterRack {betterRack}\n");
     }
 
 

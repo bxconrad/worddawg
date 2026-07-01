@@ -11,6 +11,7 @@ public class UpdateBoardHuman : UpdateBoardTwo {
         return "Humanoid";
     }
 
+    // player order is random
     protected override void GetPlayerOrder() {
         var r = UnityEngine.Random.Range(0, 2);
         print($"~UpdateBoardHuman.GetPlayerOrder r {r}\n");
@@ -25,6 +26,4 @@ public class UpdateBoardHuman : UpdateBoardTwo {
             players = new[] { player1, player2 };
         }
     }
-    // override is steal so it workds for both
-    // override who goes first
 }

@@ -54,24 +54,4 @@ public class DictionaryManager : MonoBehaviour {
         print($"~UpdateBoardBot.BuildDictionaries  botDictionaryName {botDictionaryName} \n");
         return botDictionaryName;
     }
-
-    // public void BuildDictionaries() {
-    //     //bcdo refactor to dictionaryHandler?
-    //     if (gameParameters.language.Equals(saveLanguage)) {
-    //         return;
-    //     }
-    //
-    //     var dictionaryName = "dictionary-" + gameParameters.language;
-    //               var dictionaryTrie = BuildDictionaryTrie(dictionaryName);
-    //         //validatorManager.trieDictionary = dictionaryTrie;
-    //     
-    //
-    //     var textFile = Resources.Load("dogwords") as TextAsset;
-    //     var dogBonusWords = textFile.text.Split();
-    //     //scoreCalculator.dogBonusWords = dogBonusWords;
-    //     MonoBehaviour.print($"~DictionaryManager.BuildDictionaries dogBonusWords {dogBonusWords.Length} \n");
-    //
-    //     MonoBehaviour.print($"~DictionaryManager.BuildDictionaries dictionaryName {dictionaryName} \n");
-    //     saveLanguage = gameParameters.language;
-    // }
 }
