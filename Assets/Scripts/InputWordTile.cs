@@ -8,10 +8,10 @@ public class InputWordTile : BaseTile {
     public float speed = 20f;
     private InputWord inputWord;
 
-    protected new void Awake() {
-        AwakeMe();
+    protected override void Awake() {
+        base.Awake();
         inputWord = GetComponentInParent<InputWord>();
-        // print("~InputWordTile.Awake {" + newInputWord + "} \n");
+        // print($"~InputWordTile.Awake {inputWord} \n");
     }
 
     public override void OnButtonClick(string buttonString) {

@@ -30,7 +30,6 @@ public class UpdateBoardBot : UpdateBoardTwo {
 
         print($"~UpdateBoardBot.CallPlayerBot betterRack {betterRack} \n");
         if (!string.IsNullOrEmpty(bestResultMatch.GeneratedWord)) {
-            //bcdo fix qu
             AutomateWordEntry(bestResultMatch.SourceObject, bestResultMatch.GeneratedWord);
         }
         else {
@@ -53,7 +52,6 @@ public class UpdateBoardBot : UpdateBoardTwo {
         // if lang is same then botLevel is different. 
         // for now, we can assume that english is only language with multiple dictionaries.
         // so if language is not english , just use primary dictionary
-        // otw, 
         if (gameParameters.botLevel != saveBotLevel) {
             print("~UpdateBoardBot.NewGameBuildDictionaries newbotlevel\n");
             var botDictionaryTrie = dictionaryManager.BuildDictionaryForBot(gameParameters);
@@ -61,10 +59,4 @@ public class UpdateBoardBot : UpdateBoardTwo {
             saveBotLevel = gameParameters.botLevel;
         }
     }
-
-    // protected override void BuildDictionaries() {
-    //     //bcdo refactor to dictionaryHandler?
-    //
-    //     base.BuildDictionaries();
-    // }
 }

@@ -32,11 +32,6 @@ public class DisplayButton : MonoBehaviour {
         return word;
     }
 
-    // public string GetWordText() {
-    //     print("~DisplayButton.GetWordText " + text.text + "\n");
-    //     return word.GetCurrentContents(); // text.text;
-    // }
-
     public void SelectButton() {
         print("~DisplayButton.SelectButton\n");
         image.color = selectedColor;

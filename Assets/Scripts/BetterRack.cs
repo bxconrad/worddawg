@@ -222,4 +222,10 @@ public class BetterRack : MonoBehaviour {
 
         return numRemoved;
     }
+
+    public void ToggleTiles(bool isActive) {
+        foreach (var tile in tiles) {
+            tile.SetInteractable(isActive);
+        }
+    }
 }

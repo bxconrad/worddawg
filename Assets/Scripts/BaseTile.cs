@@ -2,32 +2,28 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// note: there are three different tile prefabs probably because i didn't know what i was doing
 public abstract class BaseTile : MonoBehaviour {
+    // had to do this field as serializedField
+    [SerializeField] private CanvasGroup canvasGroup;
     private Image image;
     private Color originalColor;
     public Tile.State state;
     private TextMeshProUGUI text;
     private Button button { get; set; }
-
     public string letter { get; private set; }
-    public string displayLetter { get; private set; }
+    public BTile originTile { get; private set; }
 
-    public BTile originTile { get; set; }
-
-    protected void Awake() {
-        //print("~BaseTile.Awake\n");
-        AwakeMe(); // bcdo fix this, use awake
-    }
-
-    public void SetInteractable(bool isInteractable) {
-        button.interactable = isInteractable;
-    }
-
-    protected void AwakeMe() {
+    protected virtual void Awake() {
         text = GetComponentInChildren<TextMeshProUGUI>();
         image = GetComponent<Image>();
         originalColor = image.color;
         button = GetComponentInChildren<Button>();
+    }
+
+    // using canvasGroup as setting button.interactable changed the color
+    public void SetInteractable(bool isInteractable) {
+        canvasGroup.blocksRaycasts = isInteractable;
     }
 
     public bool IsSelected() {

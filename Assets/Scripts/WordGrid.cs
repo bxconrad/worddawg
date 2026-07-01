@@ -13,14 +13,6 @@ public class WordGrid : MonoBehaviour {
         print($"~WordGrid.Start   {updateBoard}\n");
     }
 
-    public void Activate(bool isActive) {
-        if (isActive) {
-            viewPortImage.color = Color.magenta;
-        }
-        else {
-            viewPortImage.color = Color.black;
-        }
-    }
 
     public bool DeselectMismatchButton(Word word) {
         if (selectedButton != null && !selectedButton.GetWord().Equals(word)) {
@@ -123,7 +115,7 @@ public class WordGrid : MonoBehaviour {
     }
 
 
-   public List<Word> FindWordObjects() {
+    public List<Word> FindWordObjects() {
         //Sprint("~WordGrid.FindWordObjects\n");
         var words = new List<Word>();
         var displayButtons = GetComponentsInChildren<DisplayButton>(); //go up to parent and then from hier?
@@ -183,8 +175,6 @@ public class WordGrid : MonoBehaviour {
     private void OnButtonClick(Word wordObject) {
         print("~WordGrid.OnButtonClick  name " + wordObject + "\n");
         SelectButton(wordObject);
-        print($"~WordGrid.OnButtonClick refetch updateBoard  {updateBoard}\n");
-
         updateBoard.LoadSelectedWord(wordObject);
     }
 }

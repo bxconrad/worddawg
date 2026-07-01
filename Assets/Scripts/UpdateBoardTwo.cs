@@ -57,28 +57,24 @@ public class UpdateBoardTwo : UpdateBoardAbstract {
 
     private IEnumerator AutomateWordEntryCoroutine(Word word, string contents) {
         print($"~UpdateBoardTwo.AutomateWordEntryCoroutine yield turnNumber {turnNumber}\n");
-        //  betterRack.SetInteractable(false);
-        wordGrid1.SetInteractable(false);
-        wordGrid2.SetInteractable(false);
-        UpdateButtonsInteractable(false);
+        SetComponentsInteractable(false);
+
         yield return new WaitForSeconds(2.0f);
-        if (word != null) {
+        if (word != null) { // bcdo should never be null
             print($"~UpdateBoardTwo.AutomateWordEntryCoroutine betterRack {betterRack} \n");
 
             LoadSelectedWord(word);
-            var button = currentPlayer.wordGrid.FindMatchingButton(word);
-            if (button != null) {
-                button.gameObject.SetActive(true);
-                button.SelectButton();
-                currentPlayer.wordGrid.selectedButton = button;
+            var wordOwner = word.currentWordHistory.player;
+            // Update the selected button/word in the wordGrid
+            var button = wordOwner.wordGrid.FindMatchingButton(word);
+            if (button == null) {// bcdo should never be null
+                print($"~UpdateBoardTwo.AutomateWordEntryCoroutine *** Problem with owning player **** {wordOwner} \n");
             }
             else {
-                button = OtherPlayer().wordGrid.FindMatchingButton(word);
-                if (button != null) {
-                    button.gameObject.SetActive(true);
-                    button.SelectButton();
-                    OtherPlayer().wordGrid.selectedButton = button;
-                }
+                button.gameObject.SetActive(true);
+                button.SelectButton(); // updates color
+                // this is needed so we know which button to deselect
+                wordOwner.wordGrid.selectedButton = button;
             }
         }
 
@@ -99,11 +95,17 @@ public class UpdateBoardTwo : UpdateBoardAbstract {
         yield return new WaitForSeconds(1.0f);
 
         UpdateBoardForValidSubmit(contents);
-        betterRack.SetInteractable(true);
-        wordGrid1.SetInteractable(true);
-        wordGrid2.SetInteractable(true);
-        UpdateButtonsInteractable(true);
+        SetComponentsInteractable(true);
         print($"~UpdateBoardTwo.AutomateWordEntryCoroutine betterRack {betterRack} \n");
+    }
+
+    private void SetComponentsInteractable(bool isInteractable) {
+        UpdateButtonsInteractable(isInteractable);
+        betterRack.SetInteractable(isInteractable);
+        selectedWord.SetInteractable(isInteractable);
+        inputWord.SetInteractable(isInteractable);
+        wordGrid1.SetInteractable(isInteractable);
+        wordGrid2.SetInteractable(isInteractable);
     }
 
     protected virtual void UpdateButtonsInteractable(bool isInteractable) {

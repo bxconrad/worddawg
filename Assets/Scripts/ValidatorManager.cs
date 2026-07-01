@@ -4,17 +4,17 @@ public class ValidatorManager {
     public TrieDictionary trieDictionary;
 
 
-    public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWordString) {
-        MonoBehaviour.print($"~ValidatorManager.ValidateInputWord {inputWordString}\n");
+    public string ValidateInputWord(SelectedWord selectedWord, BetterRack betterRack, string inputWord) {
+        MonoBehaviour.print($"~ValidatorManager.ValidateInputWord {inputWord}\n");
         //return "TRUE";
 
         // add 1  to length for Q or LL (spanish)
-        var wordLength = inputWordString.Contains("#") || inputWordString.Contains("*")
-            ? inputWordString.Length + 1
-            : inputWordString.Length;
+        var wordLength = inputWord.Contains("#") || inputWord.Contains("*")
+            ? inputWord.Length + 1
+            : inputWord.Length;
 
         if (wordLength < 3) {
-            MonoBehaviour.print($"~ValidatorManager.ValidateInputWord is Length <3 {inputWordString.Length} \n");
+            MonoBehaviour.print($"~ValidatorManager.ValidateInputWord is Length <3 {inputWord.Length} \n");
             return "Words must be at least 3 letters long";
         }
 
@@ -32,7 +32,7 @@ public class ValidatorManager {
             return "You must use at least one letter from the rack";
         }
 
-        var letter = IsLettersContained(inputWordString, selectedWord.GetWord(), betterRack.GetWord());
+        var letter = IsLettersContained(inputWord, selectedWord.GetWord(), betterRack.GetWord());
         if (letter != ' ') {
             MonoBehaviour.print($"~ValidatorManager.ValidateInputWord isLettersAvailable false letter {letter} \n");
             return "The letter {letter} is not in the selected word or the rack";
@@ -40,10 +40,10 @@ public class ValidatorManager {
 
         MonoBehaviour.print("~ValidatorManager.ValidateInputWord IsRackLettersUsed true\n");
 
-        if (!IsInDictionary(inputWordString)) {
+        if (!IsInDictionary(inputWord)) {
             MonoBehaviour.print(
-                $"~ValidatorManager.ValidateInputWord {inputWordString} IsInDictionary  isValidNew false\n");
-            return inputWordString + " is not in the dictionary";
+                $"~ValidatorManager.ValidateInputWord {inputWord} IsInDictionary  isValidNew false\n");
+            return inputWord + " is not in the dictionary";
         }
 
         MonoBehaviour.print("~ValidatorManager.ValidateInputWord  isValidNew true \n");

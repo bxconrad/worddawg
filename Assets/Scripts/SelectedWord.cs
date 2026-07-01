@@ -47,8 +47,11 @@ public class SelectedWord : MonoBehaviour, IDragHandler, IEndDragHandler {
         return wordObject;
     }
 
-    public void SetWordObject(Word word) {
-        wordObject = word;
+    public void SetInteractable(bool isInteractable) {
+        //print("~BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
+        foreach (var tile in tiles) {
+            tile.SetInteractable(isInteractable);
+        }
     }
 
     private bool HasSelectedLetter() {

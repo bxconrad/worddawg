@@ -60,6 +60,13 @@ public class InputWord : MonoBehaviour, IPointerClickHandler, IDragHandler, IEnd
         }
     }
 
+    public void SetInteractable(bool isInteractable) {
+        //print("~BetterRack.InitializeTiles word {" + word + "} #tiles " + tiles.Length + "\n");
+        foreach (var tile in tiles) {
+            tile.SetInteractable(isInteractable);
+        }
+    }
+
     public void AddLetters(string letters) {
         for (var i = 0; i < tiles.Length; i++) {
             tiles[i].gameObject.SetActive(true);
